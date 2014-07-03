@@ -10263,11 +10263,15 @@ www.macom.com</description>
 <part name="C6" library="rcl" deviceset="C-EU" device="C0603" value="100n"/>
 <part name="C14" library="rcl" deviceset="C-EU" device="C0603" value="100n"/>
 <part name="X1" library="con-coax" deviceset="B35N57" device=""/>
+<part name="GND23" library="supply1" deviceset="GND" device=""/>
 </parts>
 <sheets>
 <sheet>
 <plain>
 <text x="-58.42" y="78.74" size="1.778" layer="91">18 Mhz filter</text>
+<text x="-35.306" y="23.368" size="1.778" layer="95">AD0</text>
+<text x="-35.306" y="18.288" size="1.778" layer="95">AD1</text>
+<text x="-35.306" y="13.208" size="1.778" layer="95">AD2</text>
 </plain>
 <instances>
 <instance part="IC1" gate="A" x="35.56" y="63.5" rot="MR0"/>
@@ -10423,6 +10427,7 @@ www.macom.com</description>
 <instance part="C6" gate="G$1" x="-30.48" y="58.42" rot="R90"/>
 <instance part="C14" gate="G$1" x="101.6" y="-7.62"/>
 <instance part="X1" gate="G$1" x="-83.82" y="55.88"/>
+<instance part="GND23" gate="1" x="-40.64" y="10.16"/>
 </instances>
 <busses>
 </busses>
@@ -10703,6 +10708,12 @@ www.macom.com</description>
 <junction x="-55.88" y="48.26"/>
 <junction x="-38.1" y="48.26"/>
 <junction x="-17.78" y="48.26"/>
+</segment>
+<segment>
+<pinref part="X3" gate="-4" pin="1"/>
+<wire x1="-30.48" y1="12.7" x2="-35.56" y2="12.7" width="0.1524" layer="91"/>
+<pinref part="GND23" gate="1" pin="GND"/>
+<wire x1="-35.56" y1="12.7" x2="-40.64" y2="12.7" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$1" class="0">
@@ -11113,6 +11124,14 @@ www.macom.com</description>
 <wire x1="-30.48" y1="27.94" x2="-33.02" y2="27.94" width="0.1524" layer="91"/>
 <wire x1="-33.02" y1="27.94" x2="-33.02" y2="30.48" width="0.1524" layer="91"/>
 <pinref part="P+11" gate="VCC" pin="VCC"/>
+<pinref part="X3" gate="-3" pin="1"/>
+<wire x1="-30.48" y1="17.78" x2="-35.56" y2="17.78" width="0.1524" layer="91"/>
+<pinref part="X3" gate="-2" pin="1"/>
+<wire x1="-30.48" y1="22.86" x2="-35.56" y2="22.86" width="0.1524" layer="91"/>
+<wire x1="-35.56" y1="17.78" x2="-35.56" y2="22.86" width="0.1524" layer="91"/>
+<wire x1="-35.56" y1="22.86" x2="-35.56" y2="27.94" width="0.1524" layer="91"/>
+<wire x1="-35.56" y1="27.94" x2="-33.02" y2="27.94" width="0.1524" layer="91"/>
+<junction x="-33.02" y="27.94"/>
 </segment>
 <segment>
 <pinref part="X2" gate="-1" pin="1"/>
@@ -11208,27 +11227,6 @@ www.macom.com</description>
 <pinref part="X2" gate="-7" pin="1"/>
 <wire x1="-71.12" y1="-2.54" x2="-81.28" y2="-2.54" width="0.1524" layer="91"/>
 <label x="-84.074" y="-2.032" size="1.778" layer="95"/>
-</segment>
-</net>
-<net name="AD0" class="0">
-<segment>
-<pinref part="X3" gate="-2" pin="1"/>
-<wire x1="-30.48" y1="22.86" x2="-35.56" y2="22.86" width="0.1524" layer="91"/>
-<label x="-35.306" y="23.368" size="1.778" layer="95"/>
-</segment>
-</net>
-<net name="AD1" class="0">
-<segment>
-<pinref part="X3" gate="-3" pin="1"/>
-<wire x1="-30.48" y1="17.78" x2="-35.56" y2="17.78" width="0.1524" layer="91"/>
-<label x="-35.306" y="18.288" size="1.778" layer="95"/>
-</segment>
-</net>
-<net name="AD2" class="0">
-<segment>
-<pinref part="X3" gate="-4" pin="1"/>
-<wire x1="-30.48" y1="12.7" x2="-35.56" y2="12.7" width="0.1524" layer="91"/>
-<label x="-35.306" y="13.208" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="AD3" class="0">
