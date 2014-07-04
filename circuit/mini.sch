@@ -9996,80 +9996,6 @@ Grid 2.54 mm&lt;p&gt;
 </deviceset>
 </devicesets>
 </library>
-<library name="con-coax">
-<description>&lt;b&gt;Coax Connectors&lt;/b&gt;&lt;p&gt;
-Radiall  and M/A COM.&lt;p&gt;
-&lt;author&gt;Created by librarian@cadsoft.de&lt;/author&gt;</description>
-<packages>
-<package name="B35N57">
-<description>&lt;b&gt;BNC CONNECTOR&lt;/b&gt;&lt;p&gt;
-M/A COM&lt;p&gt;
-www.macom.com</description>
-<wire x1="-8.49" y1="-8.54" x2="8.49" y2="-8.54" width="0.254" layer="21"/>
-<wire x1="8.54" y1="-8.49" x2="8.54" y2="8.49" width="0.254" layer="21"/>
-<wire x1="8.49" y1="8.54" x2="-8.49" y2="8.54" width="0.254" layer="21"/>
-<wire x1="-8.54" y1="8.49" x2="-8.54" y2="-8.49" width="0.254" layer="21"/>
-<wire x1="-1.5" y1="0.5" x2="1.5" y2="0.5" width="0.3048" layer="51" curve="-143.130102"/>
-<wire x1="-1.5" y1="-0.5" x2="1.5" y2="-0.5" width="0.3048" layer="51" curve="143.130102"/>
-<wire x1="-4.572" y1="1.016" x2="-5.461" y2="1.016" width="0.254" layer="21"/>
-<wire x1="-5.461" y1="1.016" x2="-5.461" y2="-1.016" width="0.254" layer="21"/>
-<wire x1="-5.461" y1="-1.016" x2="-4.572" y2="-1.016" width="0.254" layer="21"/>
-<wire x1="4.572" y1="-1.016" x2="5.461" y2="-1.016" width="0.254" layer="21"/>
-<wire x1="5.461" y1="-1.016" x2="5.461" y2="1.016" width="0.254" layer="21"/>
-<wire x1="5.461" y1="1.016" x2="4.572" y2="1.016" width="0.254" layer="21"/>
-<circle x="0" y="0" radius="4.5961" width="0.254" layer="21"/>
-<pad name="1" x="0" y="0" drill="1.7"/>
-<pad name="2" x="6.35" y="6.35" drill="1.7"/>
-<pad name="3" x="-6.35" y="6.35" drill="1.7"/>
-<pad name="4" x="-6.35" y="-6.35" drill="1.7"/>
-<pad name="5" x="6.35" y="-6.35" drill="1.7"/>
-<text x="-7.62" y="8.89" size="1.27" layer="25">&gt;NAME</text>
-<text x="-7.62" y="-10.16" size="1.27" layer="27">&gt;VALUE</text>
-<text x="-2.54" y="-6.35" size="0.6096" layer="51">B35 N57</text>
-</package>
-</packages>
-<symbols>
-<symbol name="BU-BNC">
-<wire x1="-2.54" y1="2.54" x2="-2.54" y2="-2.54" width="0.254" layer="94" curve="-180" cap="flat"/>
-<wire x1="0" y1="-2.54" x2="-0.762" y2="-1.778" width="0.254" layer="94"/>
-<wire x1="0" y1="0" x2="-0.508" y2="0" width="0.1524" layer="94"/>
-<wire x1="-2.54" y1="0.254" x2="-0.762" y2="0.254" width="0.254" layer="94"/>
-<wire x1="-0.762" y1="0.254" x2="-0.508" y2="0" width="0.254" layer="94"/>
-<wire x1="-0.508" y1="0" x2="-0.762" y2="-0.254" width="0.254" layer="94"/>
-<wire x1="-0.762" y1="-0.254" x2="-2.54" y2="-0.254" width="0.254" layer="94"/>
-<text x="-2.54" y="-5.08" size="1.778" layer="96">&gt;VALUE</text>
-<text x="-2.54" y="3.302" size="1.778" layer="95">&gt;NAME</text>
-<pin name="1" x="2.54" y="0" visible="off" length="short" direction="pas" rot="R180"/>
-<pin name="2" x="2.54" y="-2.54" visible="off" length="short" direction="pas" rot="R180"/>
-</symbol>
-</symbols>
-<devicesets>
-<deviceset name="B35N57" prefix="X">
-<description>&lt;b&gt;BNC CONNECTOR&lt;/b&gt;&lt;p&gt;
-M/A COM&lt;p&gt;
-www.macom.com</description>
-<gates>
-<gate name="G$1" symbol="BU-BNC" x="0" y="0"/>
-</gates>
-<devices>
-<device name="" package="B35N57">
-<connects>
-<connect gate="G$1" pin="1" pad="1"/>
-<connect gate="G$1" pin="2" pad="2 3 4 5"/>
-</connects>
-<technologies>
-<technology name="">
-<attribute name="MF" value="" constant="no"/>
-<attribute name="MPN" value="" constant="no"/>
-<attribute name="OC_FARNELL" value="unknown" constant="no"/>
-<attribute name="OC_NEWARK" value="unknown" constant="no"/>
-</technology>
-</technologies>
-</device>
-</devices>
-</deviceset>
-</devicesets>
-</library>
 <library name="balmer">
 <packages>
 <package name="SOT223">
@@ -10125,6 +10051,106 @@ www.macom.com</description>
 </connects>
 <technologies>
 <technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
+<library name="con-coax">
+<description>&lt;b&gt;Coax Connectors&lt;/b&gt;&lt;p&gt;
+Radiall  and M/A COM.&lt;p&gt;
+&lt;author&gt;Created by librarian@cadsoft.de&lt;/author&gt;</description>
+<packages>
+<package name="AMP_227161">
+<description>&lt;b&gt;JACK,  RIGHT ANGLE, 50 OHM, PCB, BNC&lt;/b&gt;&lt;p&gt;
+Source: amp_227161.pdf</description>
+<wire x1="-7.275" y1="-6.875" x2="7.275" y2="-6.875" width="0.2032" layer="21"/>
+<wire x1="7.275" y1="-6.875" x2="7.275" y2="7.275" width="0.2032" layer="21"/>
+<wire x1="7.275" y1="7.275" x2="-7.275" y2="7.275" width="0.2032" layer="21"/>
+<wire x1="-7.275" y1="7.275" x2="-7.275" y2="-6.875" width="0.2032" layer="21"/>
+<wire x1="-6.4" y1="7.375" x2="-6.4" y2="16.025" width="0.2032" layer="21"/>
+<wire x1="-6.4" y1="16.025" x2="6.4" y2="16.025" width="0.2032" layer="21"/>
+<wire x1="6.4" y1="16.025" x2="6.4" y2="7.35" width="0.2032" layer="21"/>
+<wire x1="-4.9" y1="16.15" x2="-4.9" y2="28.475" width="0.2032" layer="21"/>
+<wire x1="-4.9" y1="28.475" x2="4.9" y2="28.475" width="0.2032" layer="21"/>
+<wire x1="4.9" y1="28.475" x2="4.9" y2="16.125" width="0.2032" layer="21"/>
+<circle x="0" y="23.94" radius="1.26" width="0" layer="21"/>
+<pad name="1" x="0" y="-5.08" drill="0.9" diameter="1.27"/>
+<pad name="2" x="-2.54" y="-5.08" drill="0.9" diameter="1.27"/>
+<text x="-6.985" y="-8.89" size="1.27" layer="25">&gt;NAME</text>
+<text x="-0.635" y="-8.89" size="1.27" layer="27">&gt;VALUE</text>
+<hole x="-5.08" y="0" drill="2"/>
+<hole x="5.08" y="0" drill="2"/>
+</package>
+</packages>
+<symbols>
+<symbol name="BU-BNC">
+<wire x1="-2.54" y1="2.54" x2="-2.54" y2="-2.54" width="0.254" layer="94" curve="-180" cap="flat"/>
+<wire x1="0" y1="-2.54" x2="-0.762" y2="-1.778" width="0.254" layer="94"/>
+<wire x1="0" y1="0" x2="-0.508" y2="0" width="0.1524" layer="94"/>
+<wire x1="-2.54" y1="0.254" x2="-0.762" y2="0.254" width="0.254" layer="94"/>
+<wire x1="-0.762" y1="0.254" x2="-0.508" y2="0" width="0.254" layer="94"/>
+<wire x1="-0.508" y1="0" x2="-0.762" y2="-0.254" width="0.254" layer="94"/>
+<wire x1="-0.762" y1="-0.254" x2="-2.54" y2="-0.254" width="0.254" layer="94"/>
+<text x="-2.54" y="-5.08" size="1.778" layer="96">&gt;VALUE</text>
+<text x="-2.54" y="3.302" size="1.778" layer="95">&gt;NAME</text>
+<pin name="1" x="2.54" y="0" visible="off" length="short" direction="pas" rot="R180"/>
+<pin name="2" x="2.54" y="-2.54" visible="off" length="short" direction="pas" rot="R180"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="?227161*" prefix="X">
+<description>&lt;b&gt;JACK,  RIGHT ANGLE, 50 OHM, PCB, BNC&lt;/b&gt;&lt;p&gt;
+Source: amp_227161.pdf</description>
+<gates>
+<gate name="G$1" symbol="BU-BNC" x="0" y="0"/>
+</gates>
+<devices>
+<device name="1-" package="AMP_227161">
+<connects>
+<connect gate="G$1" pin="1" pad="1"/>
+<connect gate="G$1" pin="2" pad="2"/>
+</connects>
+<technologies>
+<technology name="-0">
+<attribute name="MF" value="TYCO ELECTRONICS" constant="no"/>
+<attribute name="MPN" value="1-227161" constant="no"/>
+<attribute name="OC_FARNELL" value="unknown" constant="no"/>
+<attribute name="OC_NEWARK" value="33B3200" constant="no"/>
+</technology>
+<technology name="-2">
+<attribute name="MF" value="" constant="no"/>
+<attribute name="MPN" value="" constant="no"/>
+<attribute name="OC_FARNELL" value="unknown" constant="no"/>
+<attribute name="OC_NEWARK" value="unknown" constant="no"/>
+</technology>
+<technology name="-6">
+<attribute name="MF" value="TYCO ELECTRONICS" constant="no"/>
+<attribute name="MPN" value="1-227161-6" constant="no"/>
+<attribute name="OC_FARNELL" value="unknown" constant="no"/>
+<attribute name="OC_NEWARK" value="09H7854" constant="no"/>
+</technology>
+<technology name="-7">
+<attribute name="MF" value="TYCO ELECTRONICS" constant="no"/>
+<attribute name="MPN" value="1-227161-7" constant="no"/>
+<attribute name="OC_FARNELL" value="unknown" constant="no"/>
+<attribute name="OC_NEWARK" value="09H7855" constant="no"/>
+</technology>
+</technologies>
+</device>
+<device name="" package="AMP_227161">
+<connects>
+<connect gate="G$1" pin="1" pad="1"/>
+<connect gate="G$1" pin="2" pad="2"/>
+</connects>
+<technologies>
+<technology name="-8">
+<attribute name="MF" value="" constant="no"/>
+<attribute name="MPN" value="" constant="no"/>
+<attribute name="OC_FARNELL" value="unknown" constant="no"/>
+<attribute name="OC_NEWARK" value="unknown" constant="no"/>
+</technology>
 </technologies>
 </device>
 </devices>
@@ -10262,8 +10288,8 @@ www.macom.com</description>
 <part name="L2" library="rcl" deviceset="L-US" device="L3225M" value="470nH"/>
 <part name="C6" library="rcl" deviceset="C-EU" device="C0603" value="100n"/>
 <part name="C14" library="rcl" deviceset="C-EU" device="C0603" value="100n"/>
-<part name="X1" library="con-coax" deviceset="B35N57" device=""/>
 <part name="GND23" library="supply1" deviceset="GND" device=""/>
+<part name="X1" library="con-coax" deviceset="?227161*" device="1-" technology="-0"/>
 </parts>
 <sheets>
 <sheet>
@@ -10272,6 +10298,11 @@ www.macom.com</description>
 <text x="-35.306" y="23.368" size="1.778" layer="95">AD0</text>
 <text x="-35.306" y="18.288" size="1.778" layer="95">AD1</text>
 <text x="-35.306" y="13.208" size="1.778" layer="95">AD2</text>
+<text x="-35.306" y="8.128" size="1.778" layer="95">AD3</text>
+<text x="-35.306" y="3.302" size="1.778" layer="95">AD4</text>
+<text x="-35.306" y="-2.032" size="1.778" layer="95">AD5</text>
+<text x="-35.306" y="-6.858" size="1.778" layer="95">AD6</text>
+<text x="-35.56" y="-11.938" size="1.778" layer="95">AD7</text>
 </plain>
 <instances>
 <instance part="IC1" gate="A" x="35.56" y="63.5" rot="MR0"/>
@@ -10403,7 +10434,7 @@ www.macom.com</description>
 <instance part="X3" gate="-9" x="-27.94" y="-12.7"/>
 <instance part="X3" gate="-10" x="-27.94" y="-17.78"/>
 <instance part="GND19" gate="1" x="-33.02" y="-22.86"/>
-<instance part="P+11" gate="VCC" x="-33.02" y="33.02"/>
+<instance part="P+11" gate="VCC" x="-35.56" y="33.02"/>
 <instance part="P+12" gate="VCC" x="-73.66" y="33.02"/>
 <instance part="GND20" gate="1" x="-73.66" y="0"/>
 <instance part="Q1" gate="G$1" x="-2.54" y="58.42"/>
@@ -10426,8 +10457,8 @@ www.macom.com</description>
 <instance part="L2" gate="G$1" x="-45.72" y="71.12" rot="R90"/>
 <instance part="C6" gate="G$1" x="-30.48" y="58.42" rot="R90"/>
 <instance part="C14" gate="G$1" x="101.6" y="-7.62"/>
-<instance part="X1" gate="G$1" x="-83.82" y="55.88"/>
 <instance part="GND23" gate="1" x="-40.64" y="10.16"/>
+<instance part="X1" gate="G$1" x="-83.82" y="55.88"/>
 </instances>
 <busses>
 </busses>
@@ -10701,19 +10732,35 @@ www.macom.com</description>
 <pinref part="C5" gate="G$1" pin="2"/>
 <wire x1="-55.88" y1="48.26" x2="-38.1" y2="48.26" width="0.1524" layer="91"/>
 <wire x1="-38.1" y1="48.26" x2="-17.78" y2="48.26" width="0.1524" layer="91"/>
-<pinref part="X1" gate="G$1" pin="2"/>
 <wire x1="-71.12" y1="48.26" x2="-81.28" y2="48.26" width="0.1524" layer="91"/>
 <wire x1="-81.28" y1="48.26" x2="-81.28" y2="53.34" width="0.1524" layer="91"/>
 <junction x="-71.12" y="48.26"/>
 <junction x="-55.88" y="48.26"/>
 <junction x="-38.1" y="48.26"/>
 <junction x="-17.78" y="48.26"/>
+<pinref part="X1" gate="G$1" pin="2"/>
 </segment>
 <segment>
 <pinref part="X3" gate="-4" pin="1"/>
 <wire x1="-30.48" y1="12.7" x2="-35.56" y2="12.7" width="0.1524" layer="91"/>
 <pinref part="GND23" gate="1" pin="GND"/>
 <wire x1="-35.56" y1="12.7" x2="-40.64" y2="12.7" width="0.1524" layer="91"/>
+<pinref part="X3" gate="-5" pin="1"/>
+<wire x1="-30.48" y1="7.62" x2="-35.56" y2="7.62" width="0.1524" layer="91"/>
+<wire x1="-35.56" y1="12.7" x2="-35.56" y2="7.62" width="0.1524" layer="91"/>
+<pinref part="X3" gate="-6" pin="1"/>
+<wire x1="-30.48" y1="2.54" x2="-35.56" y2="2.54" width="0.1524" layer="91"/>
+<wire x1="-35.56" y1="7.62" x2="-35.56" y2="2.54" width="0.1524" layer="91"/>
+<pinref part="X3" gate="-7" pin="1"/>
+<wire x1="-30.48" y1="-2.54" x2="-35.56" y2="-2.54" width="0.1524" layer="91"/>
+<wire x1="-35.56" y1="2.54" x2="-35.56" y2="-2.54" width="0.1524" layer="91"/>
+<pinref part="X3" gate="-8" pin="1"/>
+<wire x1="-30.48" y1="-7.62" x2="-35.56" y2="-7.62" width="0.1524" layer="91"/>
+<wire x1="-35.56" y1="-2.54" x2="-35.56" y2="-7.62" width="0.1524" layer="91"/>
+<junction x="-35.56" y="-2.54"/>
+<junction x="-35.56" y="2.54"/>
+<junction x="-35.56" y="7.62"/>
+<junction x="-35.56" y="12.7"/>
 </segment>
 </net>
 <net name="N$1" class="0">
@@ -11120,24 +11167,24 @@ www.macom.com</description>
 <junction x="93.98" y="-35.56"/>
 </segment>
 <segment>
+<pinref part="X2" gate="-1" pin="1"/>
+<wire x1="-71.12" y1="27.94" x2="-73.66" y2="27.94" width="0.1524" layer="91"/>
+<wire x1="-73.66" y1="27.94" x2="-73.66" y2="30.48" width="0.1524" layer="91"/>
+<pinref part="P+12" gate="VCC" pin="VCC"/>
+</segment>
+<segment>
 <pinref part="X3" gate="-1" pin="1"/>
-<wire x1="-30.48" y1="27.94" x2="-33.02" y2="27.94" width="0.1524" layer="91"/>
-<wire x1="-33.02" y1="27.94" x2="-33.02" y2="30.48" width="0.1524" layer="91"/>
-<pinref part="P+11" gate="VCC" pin="VCC"/>
 <pinref part="X3" gate="-3" pin="1"/>
 <wire x1="-30.48" y1="17.78" x2="-35.56" y2="17.78" width="0.1524" layer="91"/>
 <pinref part="X3" gate="-2" pin="1"/>
 <wire x1="-30.48" y1="22.86" x2="-35.56" y2="22.86" width="0.1524" layer="91"/>
 <wire x1="-35.56" y1="17.78" x2="-35.56" y2="22.86" width="0.1524" layer="91"/>
 <wire x1="-35.56" y1="22.86" x2="-35.56" y2="27.94" width="0.1524" layer="91"/>
-<wire x1="-35.56" y1="27.94" x2="-33.02" y2="27.94" width="0.1524" layer="91"/>
-<junction x="-33.02" y="27.94"/>
-</segment>
-<segment>
-<pinref part="X2" gate="-1" pin="1"/>
-<wire x1="-71.12" y1="27.94" x2="-73.66" y2="27.94" width="0.1524" layer="91"/>
-<wire x1="-73.66" y1="27.94" x2="-73.66" y2="30.48" width="0.1524" layer="91"/>
-<pinref part="P+12" gate="VCC" pin="VCC"/>
+<wire x1="-35.56" y1="27.94" x2="-30.48" y2="27.94" width="0.1524" layer="91"/>
+<junction x="-35.56" y="22.86"/>
+<pinref part="P+11" gate="VCC" pin="VCC"/>
+<wire x1="-35.56" y1="30.48" x2="-35.56" y2="27.94" width="0.1524" layer="91"/>
+<junction x="-35.56" y="27.94"/>
 </segment>
 </net>
 <net name="+3V3" class="0">
@@ -11229,44 +11276,16 @@ www.macom.com</description>
 <label x="-84.074" y="-2.032" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="AD3" class="0">
-<segment>
-<pinref part="X3" gate="-5" pin="1"/>
-<wire x1="-30.48" y1="7.62" x2="-35.56" y2="7.62" width="0.1524" layer="91"/>
-<label x="-35.306" y="8.382" size="1.778" layer="95"/>
-</segment>
-</net>
-<net name="AD4" class="0">
-<segment>
-<pinref part="X3" gate="-6" pin="1"/>
-<wire x1="-30.48" y1="2.54" x2="-35.56" y2="2.54" width="0.1524" layer="91"/>
-<label x="-35.306" y="3.302" size="1.778" layer="95"/>
-</segment>
-</net>
-<net name="AD5" class="0">
-<segment>
-<pinref part="X3" gate="-7" pin="1"/>
-<wire x1="-30.48" y1="-2.54" x2="-35.56" y2="-2.54" width="0.1524" layer="91"/>
-<label x="-35.56" y="-2.032" size="1.778" layer="95"/>
-</segment>
-</net>
-<net name="AD6" class="0">
-<segment>
-<pinref part="X3" gate="-8" pin="1"/>
-<wire x1="-30.48" y1="-7.62" x2="-35.56" y2="-7.62" width="0.1524" layer="91"/>
-<label x="-35.56" y="-6.858" size="1.778" layer="95"/>
-</segment>
-</net>
 <net name="AD7" class="0">
-<segment>
-<pinref part="X3" gate="-9" pin="1"/>
-<wire x1="-30.48" y1="-12.7" x2="-35.56" y2="-12.7" width="0.1524" layer="91"/>
-<label x="-35.56" y="-12.192" size="1.778" layer="95"/>
-</segment>
 <segment>
 <pinref part="X2" gate="-4" pin="1"/>
 <wire x1="-71.12" y1="12.7" x2="-78.74" y2="12.7" width="0.1524" layer="91"/>
 <label x="-78.486" y="12.954" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="IC3" gate="PORTA_L" pin="PA5"/>
+<wire x1="-81.28" y1="-43.18" x2="-88.9" y2="-43.18" width="0.1524" layer="91"/>
+<label x="-90.932" y="-42.926" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="W_CLK" class="0">
@@ -11275,6 +11294,11 @@ www.macom.com</description>
 <wire x1="-71.12" y1="22.86" x2="-78.74" y2="22.86" width="0.1524" layer="91"/>
 <label x="-79.756" y="23.876" size="1.778" layer="95"/>
 </segment>
+<segment>
+<pinref part="IC3" gate="PORTA_L" pin="PA3"/>
+<wire x1="-81.28" y1="-38.1" x2="-88.9" y2="-38.1" width="0.1524" layer="91"/>
+<label x="-90.678" y="-37.592" size="1.778" layer="95"/>
+</segment>
 </net>
 <net name="FQ_UD" class="0">
 <segment>
@@ -11282,12 +11306,22 @@ www.macom.com</description>
 <wire x1="-71.12" y1="17.78" x2="-78.74" y2="17.78" width="0.1524" layer="91"/>
 <label x="-79.756" y="18.796" size="1.778" layer="95"/>
 </segment>
+<segment>
+<pinref part="IC3" gate="PORTA_L" pin="PA4"/>
+<wire x1="-81.28" y1="-40.64" x2="-88.9" y2="-40.64" width="0.1524" layer="91"/>
+<label x="-90.932" y="-40.132" size="1.778" layer="95"/>
+</segment>
 </net>
 <net name="A_RESET" class="0">
 <segment>
 <pinref part="X2" gate="-5" pin="1"/>
 <wire x1="-71.12" y1="7.62" x2="-78.74" y2="7.62" width="0.1524" layer="91"/>
 <label x="-82.042" y="8.128" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="IC3" gate="PORTA_L" pin="PA6"/>
+<wire x1="-81.28" y1="-45.72" x2="-88.9" y2="-45.72" width="0.1524" layer="91"/>
+<label x="-92.964" y="-45.466" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="J_OUT" class="0">
@@ -11364,9 +11398,9 @@ www.macom.com</description>
 <wire x1="-71.12" y1="60.96" x2="-71.12" y2="71.12" width="0.1524" layer="91"/>
 <wire x1="-66.04" y1="60.96" x2="-71.12" y2="60.96" width="0.1524" layer="91"/>
 <junction x="-71.12" y="60.96"/>
-<pinref part="X1" gate="G$1" pin="1"/>
 <wire x1="-71.12" y1="60.96" x2="-81.28" y2="60.96" width="0.1524" layer="91"/>
 <wire x1="-81.28" y1="60.96" x2="-81.28" y2="55.88" width="0.1524" layer="91"/>
+<pinref part="X1" gate="G$1" pin="1"/>
 </segment>
 </net>
 <net name="N$41" class="0">
@@ -11395,6 +11429,12 @@ www.macom.com</description>
 <junction x="-17.78" y="58.42"/>
 <pinref part="C6" gate="G$1" pin="2"/>
 <wire x1="-17.78" y1="58.42" x2="-25.4" y2="58.42" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$36" class="0">
+<segment>
+<pinref part="X3" gate="-9" pin="1"/>
+<wire x1="-30.48" y1="-12.7" x2="-35.56" y2="-12.7" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>
