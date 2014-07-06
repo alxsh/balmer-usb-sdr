@@ -10219,8 +10219,6 @@ Source: amp_227161.pdf</description>
 <part name="IC1" library="40xx" deviceset="4053" device="D" value="74AC4053D"/>
 <part name="IC2" library="74xx-eu" deviceset="74*74" device="D" technology="AC"/>
 <part name="P+1" library="supply1" deviceset="+5V" device=""/>
-<part name="GND1" library="supply1" deviceset="GND" device=""/>
-<part name="C10" library="rcl" deviceset="C-EU" device="C0603" value="100n"/>
 <part name="R10" library="rcl" deviceset="R-EU_" device="R0603" value="10"/>
 <part name="R11" library="rcl" deviceset="R-EU_" device="R0603" value="10"/>
 <part name="IC5" library="linear" deviceset="NE5534" device="D"/>
@@ -10337,6 +10335,11 @@ Source: amp_227161.pdf</description>
 <part name="GND24" library="supply1" deviceset="GND" device=""/>
 <part name="+3V5" library="supply1" deviceset="+3V3" device=""/>
 <part name="C31" library="rcl" deviceset="C-EU" device="C0603" value="100n"/>
+<part name="X5" library="con-phoenix-254" deviceset="MPT4" device=""/>
+<part name="GND13" library="supply1" deviceset="GND" device=""/>
+<part name="GND25" library="supply1" deviceset="GND" device=""/>
+<part name="C32" library="rcl" deviceset="C-EU" device="C0603" value="1mk"/>
+<part name="GND26" library="supply1" deviceset="GND" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -10358,8 +10361,6 @@ Source: amp_227161.pdf</description>
 <instance part="IC2" gate="B" x="35.56" y="-5.08"/>
 <instance part="IC2" gate="P" x="93.98" y="-7.62"/>
 <instance part="P+1" gate="1" x="17.78" y="27.94"/>
-<instance part="GND1" gate="1" x="17.78" y="-22.86"/>
-<instance part="C10" gate="G$1" x="17.78" y="-15.24"/>
 <instance part="R10" gate="G$1" x="55.88" y="22.86"/>
 <instance part="R11" gate="G$1" x="55.88" y="-10.16"/>
 <instance part="IC5" gate="A" x="132.08" y="91.44"/>
@@ -10506,6 +10507,14 @@ Source: amp_227161.pdf</description>
 <instance part="GND24" gate="1" x="119.38" y="-73.66"/>
 <instance part="+3V5" gate="G$1" x="119.38" y="-48.26"/>
 <instance part="C31" gate="G$1" x="109.22" y="-7.62"/>
+<instance part="X5" gate="-1" x="167.64" y="76.2"/>
+<instance part="X5" gate="-2" x="167.64" y="71.12"/>
+<instance part="X5" gate="-3" x="167.64" y="66.04"/>
+<instance part="X5" gate="-4" x="167.64" y="60.96"/>
+<instance part="GND13" gate="1" x="162.56" y="55.88"/>
+<instance part="GND25" gate="1" x="160.02" y="68.58"/>
+<instance part="C32" gate="G$1" x="142.24" y="101.6" rot="R90"/>
+<instance part="GND26" gate="1" x="149.86" y="99.06"/>
 </instances>
 <busses>
 </busses>
@@ -10528,9 +10537,6 @@ Source: amp_227161.pdf</description>
 <junction x="17.78" y="0"/>
 <junction x="17.78" y="12.7"/>
 <junction x="17.78" y="22.86"/>
-<pinref part="C10" gate="G$1" pin="1"/>
-<wire x1="17.78" y1="-12.7" x2="17.78" y2="-10.16" width="0.1524" layer="91"/>
-<junction x="17.78" y="-10.16"/>
 </segment>
 <segment>
 <pinref part="IC1" gate="P" pin="VCC"/>
@@ -10551,6 +10557,9 @@ Source: amp_227161.pdf</description>
 <pinref part="IC5" gate="A" pin="V+"/>
 <wire x1="129.54" y1="99.06" x2="129.54" y2="101.6" width="0.1524" layer="91"/>
 <pinref part="P+2" gate="1" pin="+5V"/>
+<pinref part="C32" gate="G$1" pin="1"/>
+<wire x1="139.7" y1="101.6" x2="129.54" y2="101.6" width="0.1524" layer="91"/>
+<junction x="129.54" y="101.6"/>
 </segment>
 <segment>
 <pinref part="R8" gate="G$1" pin="2"/>
@@ -10586,10 +10595,6 @@ Source: amp_227161.pdf</description>
 </segment>
 </net>
 <net name="GND" class="0">
-<segment>
-<pinref part="C10" gate="G$1" pin="2"/>
-<pinref part="GND1" gate="1" pin="GND"/>
-</segment>
 <segment>
 <pinref part="IC5" gate="A" pin="V-"/>
 <pinref part="GND2" gate="1" pin="GND"/>
@@ -10796,6 +10801,22 @@ Source: amp_227161.pdf</description>
 <pinref part="GND24" gate="1" pin="GND"/>
 <wire x1="121.92" y1="-68.58" x2="119.38" y2="-68.58" width="0.1524" layer="91"/>
 <wire x1="119.38" y1="-68.58" x2="119.38" y2="-71.12" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="X5" gate="-2" pin="1"/>
+<pinref part="GND25" gate="1" pin="GND"/>
+<wire x1="165.1" y1="71.12" x2="160.02" y2="71.12" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="X5" gate="-4" pin="1"/>
+<pinref part="GND13" gate="1" pin="GND"/>
+<wire x1="165.1" y1="60.96" x2="162.56" y2="60.96" width="0.1524" layer="91"/>
+<wire x1="162.56" y1="60.96" x2="162.56" y2="58.42" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="GND26" gate="1" pin="GND"/>
+<pinref part="C32" gate="G$1" pin="2"/>
+<wire x1="149.86" y1="101.6" x2="147.32" y2="101.6" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$1" class="0">
@@ -11461,6 +11482,24 @@ Source: amp_227161.pdf</description>
 <segment>
 <pinref part="X3" gate="-9" pin="1"/>
 <wire x1="-30.48" y1="-12.7" x2="-35.56" y2="-12.7" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$38" class="0">
+<segment>
+<pinref part="C37" gate="G$1" pin="2"/>
+<wire x1="154.94" y1="91.44" x2="157.48" y2="91.44" width="0.1524" layer="91"/>
+<wire x1="157.48" y1="91.44" x2="157.48" y2="76.2" width="0.1524" layer="91"/>
+<pinref part="X5" gate="-1" pin="1"/>
+<wire x1="157.48" y1="76.2" x2="165.1" y2="76.2" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$39" class="0">
+<segment>
+<pinref part="X5" gate="-3" pin="1"/>
+<wire x1="165.1" y1="66.04" x2="157.48" y2="66.04" width="0.1524" layer="91"/>
+<wire x1="157.48" y1="66.04" x2="157.48" y2="43.18" width="0.1524" layer="91"/>
+<pinref part="C38" gate="G$1" pin="2"/>
+<wire x1="157.48" y1="43.18" x2="154.94" y2="43.18" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>
