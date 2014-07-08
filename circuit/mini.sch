@@ -9960,6 +9960,22 @@ Grid 2.54 mm&lt;p&gt;
 <text x="-5.334" y="1.778" size="1.27" layer="25">&gt;NAME</text>
 <text x="-5.334" y="-3.048" size="1.27" layer="27">&gt;VALUE</text>
 </package>
+<package name="2POL254">
+<description>&lt;b&gt;PHOENIX CONNECTOR&lt;/b&gt;</description>
+<wire x1="-2.67" y1="-1.45" x2="2.67" y2="-1.45" width="0.254" layer="21"/>
+<wire x1="2.67" y1="-1.45" x2="2.67" y2="1.45" width="0.254" layer="21"/>
+<wire x1="2.67" y1="1.45" x2="-2.67" y2="1.45" width="0.254" layer="21"/>
+<wire x1="-2.67" y1="1.45" x2="-2.67" y2="-1.45" width="0.254" layer="21"/>
+<wire x1="-2.56" y1="1.1" x2="2.56" y2="1.1" width="0.1524" layer="21"/>
+<wire x1="-1.905" y1="-0.508" x2="-0.762" y2="0.635" width="0.1524" layer="51"/>
+<wire x1="0.508" y1="-0.254" x2="2.032" y2="0.127" width="0.1524" layer="51"/>
+<circle x="-1.27" y="0" radius="0.889" width="0.1524" layer="51"/>
+<circle x="1.27" y="0" radius="0.889" width="0.1524" layer="51"/>
+<pad name="1" x="-1.27" y="0" drill="1.2" shape="long" rot="R90"/>
+<pad name="2" x="1.27" y="0" drill="1.2" shape="long" rot="R90"/>
+<text x="-2.794" y="1.778" size="1.27" layer="25">&gt;NAME</text>
+<text x="-2.794" y="-3.048" size="1.27" layer="27">&gt;VALUE</text>
+</package>
 </packages>
 <symbols>
 <symbol name="SKB">
@@ -10031,6 +10047,29 @@ Grid 2.54 mm&lt;p&gt;
 <connect gate="-2" pin="1" pad="2"/>
 <connect gate="-3" pin="1" pad="3"/>
 <connect gate="-4" pin="1" pad="4"/>
+</connects>
+<technologies>
+<technology name="">
+<attribute name="MF" value="" constant="no"/>
+<attribute name="MPN" value="" constant="no"/>
+<attribute name="OC_FARNELL" value="unknown" constant="no"/>
+<attribute name="OC_NEWARK" value="unknown" constant="no"/>
+</technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="MPT2" prefix="X" uservalue="yes">
+<description>&lt;b&gt;PHOENIX CONNECTOR&lt;/b&gt;</description>
+<gates>
+<gate name="-1" symbol="SKB" x="0" y="0" addlevel="always"/>
+<gate name="-2" symbol="SKBV" x="0" y="-5.08" addlevel="always"/>
+</gates>
+<devices>
+<device name="" package="2POL254">
+<connects>
+<connect gate="-1" pin="1" pad="1"/>
+<connect gate="-2" pin="1" pad="2"/>
 </connects>
 <technologies>
 <technology name="">
@@ -10336,6 +10375,7 @@ Source: amp_227161.pdf</description>
 <part name="GND25" library="supply1" deviceset="GND" device=""/>
 <part name="C32" library="rcl" deviceset="C-EU" device="C0603" value="1mk"/>
 <part name="GND26" library="supply1" deviceset="GND" device=""/>
+<part name="X7" library="con-phoenix-254" deviceset="MPT2" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -10507,6 +10547,8 @@ Source: amp_227161.pdf</description>
 <instance part="GND25" gate="1" x="160.02" y="68.58"/>
 <instance part="C32" gate="G$1" x="142.24" y="101.6" rot="R90"/>
 <instance part="GND26" gate="1" x="149.86" y="99.06"/>
+<instance part="X7" gate="-1" x="63.5" y="10.16"/>
+<instance part="X7" gate="-2" x="63.5" y="5.08"/>
 </instances>
 <busses>
 </busses>
@@ -10848,6 +10890,9 @@ Source: amp_227161.pdf</description>
 <wire x1="68.58" y1="22.86" x2="68.58" y2="48.26" width="0.1524" layer="91"/>
 <pinref part="IC1" gate="A" pin="C"/>
 <wire x1="68.58" y1="48.26" x2="48.26" y2="48.26" width="0.1524" layer="91"/>
+<pinref part="X7" gate="-1" pin="1"/>
+<wire x1="60.96" y1="10.16" x2="60.96" y2="22.86" width="0.1524" layer="91"/>
+<junction x="60.96" y="22.86"/>
 </segment>
 </net>
 <net name="Q-LO" class="0">
@@ -10858,6 +10903,9 @@ Source: amp_227161.pdf</description>
 <wire x1="73.66" y1="-10.16" x2="73.66" y2="50.8" width="0.1524" layer="91"/>
 <pinref part="IC1" gate="A" pin="B"/>
 <wire x1="73.66" y1="50.8" x2="48.26" y2="50.8" width="0.1524" layer="91"/>
+<pinref part="X7" gate="-2" pin="1"/>
+<wire x1="60.96" y1="5.08" x2="60.96" y2="-10.16" width="0.1524" layer="91"/>
+<junction x="60.96" y="-10.16"/>
 </segment>
 </net>
 <net name="N$6" class="0">
@@ -11298,9 +11346,8 @@ Source: amp_227161.pdf</description>
 <label x="-78.486" y="12.954" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="IC3" gate="PORTB_L" pin="PB4"/>
-<wire x1="-48.26" y1="-40.64" x2="-43.18" y2="-40.64" width="0.1524" layer="91"/>
-<label x="-48.26" y="-40.64" size="1.778" layer="95"/>
+<pinref part="IC3" gate="PORTA_L" pin="PA4"/>
+<wire x1="-81.28" y1="-40.64" x2="-88.9" y2="-40.64" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="W_CLK" class="0">
@@ -11310,9 +11357,8 @@ Source: amp_227161.pdf</description>
 <label x="-79.756" y="23.876" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="IC3" gate="PORTB_L" pin="PB6"/>
-<wire x1="-48.26" y1="-45.72" x2="-43.18" y2="-45.72" width="0.1524" layer="91"/>
-<label x="-48.26" y="-45.72" size="1.778" layer="95"/>
+<pinref part="IC3" gate="PORTA_L" pin="PA6"/>
+<wire x1="-81.28" y1="-45.72" x2="-88.9" y2="-45.72" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="FQ_UD" class="0">
@@ -11322,9 +11368,8 @@ Source: amp_227161.pdf</description>
 <label x="-79.756" y="18.796" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="IC3" gate="PORTB_L" pin="PB5"/>
-<wire x1="-48.26" y1="-43.18" x2="-43.18" y2="-43.18" width="0.1524" layer="91"/>
-<label x="-48.26" y="-43.18" size="1.778" layer="95"/>
+<pinref part="IC3" gate="PORTA_L" pin="PA5"/>
+<wire x1="-81.28" y1="-43.18" x2="-88.9" y2="-43.18" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="A_RESET" class="0">
@@ -11334,9 +11379,8 @@ Source: amp_227161.pdf</description>
 <label x="-82.042" y="8.128" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="IC3" gate="PORTB_L" pin="PB3"/>
-<wire x1="-48.26" y1="-38.1" x2="-43.18" y2="-38.1" width="0.1524" layer="91"/>
-<label x="-48.26" y="-38.1" size="1.778" layer="95"/>
+<pinref part="IC3" gate="PORTA_L" pin="PA3"/>
+<wire x1="-81.28" y1="-38.1" x2="-88.9" y2="-38.1" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="J_OUT" class="0">
