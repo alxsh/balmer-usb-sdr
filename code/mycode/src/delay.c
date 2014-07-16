@@ -11,7 +11,7 @@ void DelayInit()
 	TIM_Cmd(TIM6, DISABLE);
 	TIM_DeInit(TIM6);
 
-	tim_init.TIM_Prescaler = RCC_Clocks.PCLK1_Frequency/200000-1; //5 us per tick
+	tim_init.TIM_Prescaler = RCC_Clocks.PCLK1_Frequency/1000000-1; //1 us per tick
 	tim_init.TIM_CounterMode = TIM_CounterMode_Up;
 	tim_init.TIM_Period = 0xFFFF;
 	tim_init.TIM_ClockDivision = TIM_CKD_DIV1;
@@ -21,8 +21,8 @@ void DelayInit()
 	TIM_Cmd(TIM6, ENABLE);
 }
 
-void Delay5us(uint16_t count5us)
+void DelayUs(uint16_t countUs)
 {
 	uint16_t start = TIM6->CNT;
-	while(TIM6->CNT-start < count5us);
+	while(TIM6->CNT-start < countUs);
 }

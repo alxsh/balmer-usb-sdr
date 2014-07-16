@@ -24,7 +24,6 @@ int main(void)
   UsbInitClockAndSystem();
   while(1)
   {
-      Delay5us(10);
   }
 
 }

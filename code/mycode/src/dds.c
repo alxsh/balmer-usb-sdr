@@ -8,7 +8,9 @@
 #define DDS_RESET GPIO_Pin_3
 #define DDS_DATA GPIO_Pin_4 //AD7
 #define DDS_FQ_UD GPIO_Pin_5
-#define DDS_W_CLK GPIO_Pin_6 
+#define DDS_W_CLK GPIO_Pin_6
+
+#define DELAY_COUNT 1
 
 void DdsInit()
 {
@@ -32,7 +34,7 @@ void DdsInit()
 	GPIO_ResetBits(DDS_GPIO, DDS_FQ_UD);
 	GPIO_ResetBits(DDS_GPIO, DDS_W_CLK);
 
-	Delay5us(2);
+	DelayUs(20);
 	GPIO_ResetBits(DDS_GPIO, DDS_RESET);
 }
 
@@ -43,9 +45,9 @@ static void DdsByte(uint8_t data)
 	{
 		uint8_t bit = (data >> i) & 1;
 		GPIO_WriteBit(DDS_GPIO, DDS_DATA, bit);
-		Delay5us(1);
+		DelayUs(DELAY_COUNT);
 		GPIO_SetBits(DDS_GPIO, DDS_W_CLK);
-		Delay5us(1);
+		DelayUs(DELAY_COUNT);
 		GPIO_ResetBits(DDS_GPIO, DDS_W_CLK);
 	}
 }
@@ -53,13 +55,13 @@ static void DdsByte(uint8_t data)
 void DdsSetWord(uint32_t data)
 {
 	GPIO_SetBits(DDS_GPIO, DDS_W_CLK);
-	Delay5us(1);
+	DelayUs(DELAY_COUNT);
 	GPIO_ResetBits(DDS_GPIO, DDS_W_CLK);
-	Delay5us(1);
+	DelayUs(DELAY_COUNT);
 	GPIO_SetBits(DDS_GPIO, DDS_FQ_UD);
-	Delay5us(1);
+	DelayUs(DELAY_COUNT);
 	GPIO_ResetBits(DDS_GPIO, DDS_FQ_UD);
-	
+
 	DdsByte((uint8_t)data);
 	DdsByte((uint8_t)(data>>8));
 	DdsByte((uint8_t)(data>>16));
@@ -67,6 +69,6 @@ void DdsSetWord(uint32_t data)
 	DdsByte(0); //control word
 
 	GPIO_SetBits(DDS_GPIO, DDS_FQ_UD);
-	Delay5us(1);
+	DelayUs(DELAY_COUNT);
 	GPIO_ResetBits(DDS_GPIO, DDS_FQ_UD);
 }

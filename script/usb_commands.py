@@ -96,6 +96,9 @@ def hello():
     pass
 
 def setFreq(f):
+    if f>35e6:
+        print "bad freq=", f
+        return
     wrd = int(f*FMUL)
     print "wrd=", hex(wrd)
     dwrite(struct.pack("=BI", COMMAND_DDS_WORD, wrd))
@@ -107,7 +110,7 @@ def main():
         return
 
     hello()
-    setFreq(2000)
+    setFreq(2.2e6*2)
 
 
     log('Query complete.')
