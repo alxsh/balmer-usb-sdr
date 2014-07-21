@@ -96,7 +96,7 @@ def hello():
     pass
 
 def setFreq(f):
-    if f>35e6:
+    if f>37e6:
         print "bad freq=", f
         return
     wrd = int(f*FMUL)
