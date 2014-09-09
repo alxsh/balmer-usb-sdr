@@ -10,10 +10,27 @@
 #include <math.h>
 
 #include "process_data.h"
+#include "chebyshev_10KHz.h"
 
 #define LAST_MAX_SIZE 10
 
+//FREQ_SAMPLES - подбирается так, чтобы достаточно точно попасть в период сигнала
+#define FREQ 9800
+#define FREQ_SAMPLES 6480
+
 float lastMax[LAST_MAX_SIZE];
+float freq_sin[FREQ_SAMPLES];
+float freq_cos[FREQ_SAMPLES];
+uint32_t freq_idx = 0;
+
+IirData data_I;
+IirData data_Q;
+
+uint32_t quant_idx = 0;
+
+
+void IQ_decoder_init();
+float IQ_decoder(float I, float Q);
 
 void processDataInit()
 {
@@ -21,6 +38,8 @@ void processDataInit()
     {
         lastMax[i] = 1.0f;
     }
+
+    IQ_decoder_init();
 }
 
 float famax(float m1, float m2)
@@ -60,6 +79,9 @@ float calcMul()
 void processData(float* sampleBlockInput, float* sampleBlockOutput, int frames)
 {
     float curMax = 0;
+    float outMax = 0;
+    float outMid = 0;
+    float outDelta = 0;
     float mul = calcMul();
     
     for(int i=0; i<frames; i++)
@@ -72,9 +94,61 @@ void processData(float* sampleBlockInput, float* sampleBlockOutput, int frames)
             curMax = mx;
         
         I *= mul;
+        Q *= mul;
         
-        sampleBlockOutput[i] = I;
+        float out = IQ_decoder(I,Q);
+        
+        float om = fabs(out);
+        if(om>outMax)
+            outMax = om;
+        
+        outMid += out;
+        
+        sampleBlockOutput[i] = out;
+        //sampleBlockOutput[i] = I;
+    }
+    
+    outMid /= frames;
+    
+    for(int i=0; i<frames; i++)
+    {
+        float d = sampleBlockOutput[i] - outMid;
+        outDelta += d*d;
+    }
+    
+    outDelta = sqrt(outDelta)/frames;
+    
+    if((quant_idx++%100)==0)
+    {
+        printf("mul=%e, max=%e , mid=%e delta=%e\n", mul, outMax/mul, outMid/mul, outDelta/mul);
+        //printf("max=%e\n" ,curMax);
     }
 
     pushLastMax(curMax);
 }
+
+void IQ_decoder_init()
+{
+    double df = (2*M_PI*FREQ)/SAMPLE_RATE;
+    for(int i=0; i<FREQ_SAMPLES; i++)
+    {
+        freq_sin[i] = sin(df*i);
+        freq_cos[i] = cos(df*i);
+    }
+    iirInit(&data_I);
+    iirInit(&data_Q);
+}
+
+float IQ_decoder(float I, float Q)
+{
+    I = iir(I, &data_I);
+    Q = iir(Q, &data_Q);
+    
+    uint32_t idx = freq_idx%FREQ_SAMPLES;
+    
+    float out = I*freq_cos[idx] + Q*freq_sin[idx];//SSB Upper Side Band
+    
+    freq_idx++;
+    return out;
+}
+

@@ -9,6 +9,13 @@
 #ifndef sdr_audio_process_data_h
 #define sdr_audio_process_data_h
 
+#ifndef M_PI
+#define M_PI		3.14159265358979323846
+#endif
+
+#define SAMPLE_RATE  (48000)
+
+void processDataInit();
 /*
  sampleBlockInput = 2 channel
  sampleBlockOutput = 1 channel

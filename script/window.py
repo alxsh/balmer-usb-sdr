@@ -28,13 +28,15 @@ class FormMain(QtGui.QMainWindow):
 		hbox.addWidget(self.freq_label);
 
 		self.serial_combo_box = QtGui.QComboBox()
+		self.serial_combo_box.addItem('980')
 		self.serial_combo_box.addItem('3592')
 		self.serial_combo_box.addItem('5322')
 		self.serial_combo_box.addItem('7117')
 		self.serial_combo_box.addItem('10092')
-		self.serial_combo_box.addItem('14142')
+		#self.serial_combo_box.addItem('14142')
+		self.serial_combo_box.addItem('14130')
 		self.serial_combo_box.addItem('18102')
-		self.serial_combo_box.setCurrentIndex(4)
+		self.serial_combo_box.setCurrentIndex(0)
 		self.serial_combo_box.currentIndexChanged.connect(self.OnDiapazon)
 		hbox.addWidget(self.serial_combo_box)
 
@@ -83,12 +85,14 @@ class FormMain(QtGui.QMainWindow):
 		F = int(self.serial_combo_box.currentText())*1000
 		F += index1KHz*1000
 		F += index10Hz*10
+		Fcor = +9800
+		#Fcor = 0
 
 		if self.F>0 and self.F==F:
 			return
 		self.freq_label.setText(str(int(F))+' Hz');
 		print "freq=", F
-		usb_commands.setFreq(F*2)
+		usb_commands.setFreq((F-Fcor)*2)
 
 		self.F = F
 		pass
