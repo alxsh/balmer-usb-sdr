@@ -46,14 +46,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <mach/mach_time.h>
+
 #include "portaudio.h"
 #include "process_data.h"
+#include "chebyshev_10KHz.h"
 
 int pa_devs_main(void);
-
-/* #define SAMPLE_RATE  (17932) // Test failure to open with this value. */
-//#define SAMPLE_RATE  (44100)
-#define SAMPLE_RATE  (48000)
+void profile();
 
 #define FRAMES_PER_BUFFER (1024)
 #define NUM_CHANNELS    (2)
@@ -115,6 +115,7 @@ int main(void)
     PaError err;
     
     int i;
+    processDataInit();
     
     
     printf("patest_read_write_wire.c\n"); fflush(stdout);
@@ -135,6 +136,8 @@ int main(void)
 
     err = Pa_Initialize();
     if( err != paNoError ) goto error;
+    
+    //profile();
 
     //inputParameters.device = Pa_GetDefaultInputDevice(); /* default input device */
     inputParameters.device = 4;//USB Asus
@@ -225,3 +228,36 @@ error:
     return -1;
 }
 
+static double machSecondsConversionScaler_ = 0.0;
+
+static void InitializeClock( void )
+{
+    mach_timebase_info_data_t info;
+    kern_return_t err = mach_timebase_info( &info );
+    if( err == 0  )
+        machSecondsConversionScaler_ = 1e-9 * (double) info.numer / (double) info.denom;
+}
+
+
+static double GetTime( void )
+{
+    return mach_absolute_time() * machSecondsConversionScaler_;
+}
+
+void profile()
+{
+    InitializeClock();
+    IirData data;
+    iirInit(&data);
+#define COUNT 100000
+    float input[COUNT];
+    float output[COUNT];
+    for(int i=0; i<COUNT; i++)
+        input[i] = rand()*1e-5;
+    PaTime start = GetTime();
+    for(int i=0; i<COUNT; i++)
+        output[i] = iir(input[i], &data);
+    PaTime end = GetTime();
+    printf("profile time=%e\n", end-start);
+    printf("scale=%e\n", machSecondsConversionScaler_);
+}
