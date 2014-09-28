@@ -9738,7 +9738,7 @@ Grid 2.54 mm&lt;p&gt;
 <junction x="182.88" y="88.9"/>
 </segment>
 </net>
-<net name="N$13" class="0">
+<net name="SDIO_1" class="0">
 <segment>
 <pinref part="IC4" gate="G$1" pin="SDIO_1"/>
 <pinref part="R9" gate="G$1" pin="2"/>
@@ -9746,7 +9746,7 @@ Grid 2.54 mm&lt;p&gt;
 <wire x1="5.08" y1="33.02" x2="5.08" y2="30.48" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$21" class="0">
+<net name="SDIO_2" class="0">
 <segment>
 <pinref part="IC4" gate="G$1" pin="SDIO_2"/>
 <wire x1="12.7" y1="30.48" x2="7.62" y2="30.48" width="0.1524" layer="91"/>
@@ -9755,7 +9755,7 @@ Grid 2.54 mm&lt;p&gt;
 <wire x1="7.62" y1="22.86" x2="5.08" y2="22.86" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$22" class="0">
+<net name="SDIO_3" class="0">
 <segment>
 <pinref part="IC4" gate="G$1" pin="SDIO_3"/>
 <wire x1="12.7" y1="27.94" x2="10.16" y2="27.94" width="0.1524" layer="91"/>
