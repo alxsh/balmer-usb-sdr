@@ -249,3 +249,34 @@ Vpit = 4.95
 		100000 samples
 		- debug profile time=2.777720e-02
 		- release profile time=8.771736e-03
+
+
+- STM32F405RGT6 LQFP64
+	SPI2 - через него будет идти i2s поток
+	команды будем через софтварный SPI пересылать,
+	так ка SPI1 нужен для общения с другим процессором, а на SPI3 не хватает нормальных ножек
+
+	PA13/PA14 не занимать
+
+	SPI2_MISO / 2S2ext_SD- PC2 10
+	SPI2_MOSI / I2S2_SD  - PC3 11
+	SPI1_NSS / SPI3_NSS  - PA4 20 *
+	SPI1_SCK             - PA5 21 *
+	SPI1_MISO            - PA6 22 *
+	SPI1_MOSI            - PA7 23 *
+	SPI2_SCK             - PB10 29
+
+	SPI2_NSS             - PB12 33 *
+	SPI2_SCK             - PB13 34 *
+	SPI2_MISO            - PB14 35 *
+	SPI2_MOSI            - PB15 36 *
+
+	SPI3_NSS             - PA15 (JTDI) 50
+	SPI3_SCK             - PC10 51
+	SPI3_MISO            - PC11 52
+	SPI3_MOSI            - PC12 53
+	SPI3_SCK / SPI1_SCK  - PB3 (JTDO) 55
+	SPI3_MISO / SPI1_MISO- PB4 (NJTRST) 56
+	SPI3_MOSI / SPI1_MOSI- PB5 57
+	SPI2_NSS             - PB9 62
+
