@@ -7777,6 +7777,12 @@ Source: http://www.murata.com .. GRM43DR72E224KW01.pdf</description>
 <text x="-2.54" y="-5.08" size="1.778" layer="96" rot="R90">&gt;VALUE</text>
 <pin name="+5V" x="0" y="-2.54" visible="off" length="short" direction="sup" rot="R90"/>
 </symbol>
+<symbol name="AGND">
+<wire x1="-1.905" y1="0" x2="1.905" y2="0" width="0.254" layer="94"/>
+<wire x1="-1.0922" y1="-0.508" x2="1.0922" y2="-0.508" width="0.254" layer="94"/>
+<text x="-2.54" y="-5.08" size="1.778" layer="96" rot="R90">&gt;VALUE</text>
+<pin name="AGND" x="0" y="2.54" visible="off" length="short" direction="sup" rot="R270"/>
+</symbol>
 </symbols>
 <devicesets>
 <deviceset name="GND" prefix="GND">
@@ -7822,6 +7828,19 @@ Source: http://www.murata.com .. GRM43DR72E224KW01.pdf</description>
 <description>&lt;b&gt;SUPPLY SYMBOL&lt;/b&gt;</description>
 <gates>
 <gate name="1" symbol="+5V" x="0" y="0"/>
+</gates>
+<devices>
+<device name="">
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="AGND" prefix="AGND">
+<description>&lt;b&gt;SUPPLY SYMBOL&lt;/b&gt;</description>
+<gates>
+<gate name="VR1" symbol="AGND" x="0" y="0"/>
 </gates>
 <devices>
 <device name="">
@@ -9517,16 +9536,13 @@ Source: http://www.analog.com/static/imported-files/data_sheets/AD8603_8607_8609
 <part name="L2" library="rcl" deviceset="L-US" device="0207/12" value="100u"/>
 <part name="C23" library="rcl" deviceset="C-EU" device="C0805" value="10u"/>
 <part name="C24" library="rcl" deviceset="C-EU" device="C0805" value="47n"/>
-<part name="GND20" library="supply1" deviceset="GND" device=""/>
 <part name="C21" library="rcl" deviceset="C-EU" device="C0805" value="10u"/>
 <part name="C20" library="rcl" deviceset="C-EU" device="C0603" value="1u"/>
 <part name="C22" library="rcl" deviceset="C-EU" device="C0603" value="100n"/>
-<part name="GND19" library="supply1" deviceset="GND" device=""/>
 <part name="C25" library="rcl" deviceset="C-EU" device="C0805" value="10u"/>
 <part name="C26" library="rcl" deviceset="C-EU" device="C0603" value="1u"/>
 <part name="P+5" library="supply1" deviceset="+5V" device=""/>
 <part name="X4" library="con-phoenix-254" deviceset="MPT7" device=""/>
-<part name="GND21" library="supply1" deviceset="GND" device=""/>
 <part name="X1" library="con-phoenix-254" deviceset="MPT4" device=""/>
 <part name="P+1" library="supply1" deviceset="V+" device=""/>
 <part name="P+2" library="supply1" deviceset="+5V" device=""/>
@@ -9549,6 +9565,17 @@ Source: http://www.analog.com/static/imported-files/data_sheets/AD8603_8607_8609
 <part name="R1" library="rcl" deviceset="R-EU_" device="R0603" value="22k"/>
 <part name="R2" library="rcl" deviceset="R-EU_" device="R0603" value="4.7k"/>
 <part name="GND5" library="supply1" deviceset="GND" device=""/>
+<part name="AGND1" library="supply1" deviceset="AGND" device=""/>
+<part name="AGND2" library="supply1" deviceset="AGND" device=""/>
+<part name="L3" library="rcl" deviceset="L-US" device="L2012C"/>
+<part name="GND19" library="supply1" deviceset="GND" device=""/>
+<part name="AGND3" library="supply1" deviceset="AGND" device=""/>
+<part name="AGND4" library="supply1" deviceset="AGND" device=""/>
+<part name="C27" library="rcl" deviceset="C-EU" device="C0805"/>
+<part name="C28" library="rcl" deviceset="C-EU" device="C0805"/>
+<part name="C29" library="rcl" deviceset="C-EU" device="C0805"/>
+<part name="C30" library="rcl" deviceset="C-EU" device="C0805"/>
+<part name="AGND5" library="supply1" deviceset="AGND" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -9615,11 +9642,9 @@ Source: http://www.analog.com/static/imported-files/data_sheets/AD8603_8607_8609
 <instance part="L2" gate="G$1" x="226.06" y="10.16"/>
 <instance part="C23" gate="G$1" x="193.04" y="12.7"/>
 <instance part="C24" gate="G$1" x="200.66" y="12.7"/>
-<instance part="GND20" gate="1" x="193.04" y="5.08"/>
 <instance part="C21" gate="G$1" x="185.42" y="12.7"/>
 <instance part="C20" gate="G$1" x="180.34" y="-15.24"/>
 <instance part="C22" gate="G$1" x="187.96" y="-15.24"/>
-<instance part="GND19" gate="1" x="180.34" y="-22.86"/>
 <instance part="C25" gate="G$1" x="208.28" y="12.7"/>
 <instance part="C26" gate="G$1" x="215.9" y="12.7"/>
 <instance part="P+5" gate="1" x="226.06" y="20.32"/>
@@ -9630,7 +9655,6 @@ Source: http://www.analog.com/static/imported-files/data_sheets/AD8603_8607_8609
 <instance part="X4" gate="-5" x="241.3" y="-12.7"/>
 <instance part="X4" gate="-6" x="241.3" y="-17.78"/>
 <instance part="X4" gate="-7" x="241.3" y="-22.86"/>
-<instance part="GND21" gate="1" x="236.22" y="5.08"/>
 <instance part="X1" gate="-1" x="-48.26" y="48.26"/>
 <instance part="X1" gate="-2" x="-48.26" y="43.18"/>
 <instance part="X1" gate="-3" x="-48.26" y="38.1"/>
@@ -9657,6 +9681,17 @@ Source: http://www.analog.com/static/imported-files/data_sheets/AD8603_8607_8609
 <instance part="R1" gate="G$1" x="-5.08" y="81.28" rot="R270"/>
 <instance part="R2" gate="G$1" x="2.54" y="81.28" rot="R270"/>
 <instance part="GND5" gate="1" x="2.54" y="73.66"/>
+<instance part="AGND1" gate="VR1" x="180.34" y="-22.86"/>
+<instance part="AGND2" gate="VR1" x="208.28" y="5.08"/>
+<instance part="L3" gate="G$1" x="142.24" y="-25.4" rot="R90"/>
+<instance part="GND19" gate="1" x="134.62" y="-27.94"/>
+<instance part="AGND3" gate="VR1" x="152.4" y="-27.94"/>
+<instance part="AGND4" gate="VR1" x="236.22" y="5.08"/>
+<instance part="C27" gate="G$1" x="203.2" y="-17.78"/>
+<instance part="C28" gate="G$1" x="208.28" y="-17.78"/>
+<instance part="C29" gate="G$1" x="213.36" y="-17.78"/>
+<instance part="C30" gate="G$1" x="218.44" y="-17.78"/>
+<instance part="AGND5" gate="VR1" x="203.2" y="-25.4"/>
 </instances>
 <busses>
 </busses>
@@ -9759,37 +9794,6 @@ Source: http://www.analog.com/static/imported-files/data_sheets/AD8603_8607_8609
 <wire x1="142.24" y1="-7.62" x2="137.16" y2="-7.62" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="C23" gate="G$1" pin="2"/>
-<pinref part="GND20" gate="1" pin="GND"/>
-<pinref part="IC4" gate="G$1" pin="AGND"/>
-<wire x1="177.8" y1="5.08" x2="185.42" y2="5.08" width="0.1524" layer="91"/>
-<wire x1="185.42" y1="5.08" x2="185.42" y2="7.62" width="0.1524" layer="91"/>
-<wire x1="185.42" y1="7.62" x2="193.04" y2="7.62" width="0.1524" layer="91"/>
-<pinref part="C24" gate="G$1" pin="2"/>
-<wire x1="193.04" y1="7.62" x2="200.66" y2="7.62" width="0.1524" layer="91"/>
-<junction x="193.04" y="7.62"/>
-<pinref part="C21" gate="G$1" pin="2"/>
-<junction x="185.42" y="7.62"/>
-<pinref part="C25" gate="G$1" pin="2"/>
-<wire x1="200.66" y1="7.62" x2="208.28" y2="7.62" width="0.1524" layer="91"/>
-<pinref part="C26" gate="G$1" pin="2"/>
-<wire x1="208.28" y1="7.62" x2="215.9" y2="7.62" width="0.1524" layer="91"/>
-<junction x="208.28" y="7.62"/>
-<junction x="200.66" y="7.62"/>
-</segment>
-<segment>
-<pinref part="C20" gate="G$1" pin="2"/>
-<pinref part="GND19" gate="1" pin="GND"/>
-<pinref part="C22" gate="G$1" pin="2"/>
-<wire x1="180.34" y1="-20.32" x2="187.96" y2="-20.32" width="0.1524" layer="91"/>
-<junction x="180.34" y="-20.32"/>
-</segment>
-<segment>
-<pinref part="X4" gate="-1" pin="1"/>
-<pinref part="GND21" gate="1" pin="GND"/>
-<wire x1="238.76" y1="7.62" x2="236.22" y2="7.62" width="0.1524" layer="91"/>
-</segment>
-<segment>
 <pinref part="X1" gate="-4" pin="1"/>
 <pinref part="GND1" gate="1" pin="GND"/>
 </segment>
@@ -9816,6 +9820,10 @@ Source: http://www.analog.com/static/imported-files/data_sheets/AD8603_8607_8609
 <segment>
 <pinref part="R2" gate="G$1" pin="2"/>
 <pinref part="GND5" gate="1" pin="GND"/>
+</segment>
+<segment>
+<pinref part="L3" gate="G$1" pin="1"/>
+<pinref part="GND19" gate="1" pin="GND"/>
 </segment>
 </net>
 <net name="+3V3" class="0">
@@ -10150,7 +10158,7 @@ Source: http://www.analog.com/static/imported-files/data_sheets/AD8603_8607_8609
 <junction x="185.42" y="15.24"/>
 </segment>
 </net>
-<net name="N$13" class="0">
+<net name="VCOM" class="0">
 <segment>
 <pinref part="C22" gate="G$1" pin="1"/>
 <pinref part="C20" gate="G$1" pin="1"/>
@@ -10166,7 +10174,7 @@ Source: http://www.analog.com/static/imported-files/data_sheets/AD8603_8607_8609
 <junction x="187.96" y="-12.7"/>
 </segment>
 </net>
-<net name="N$14" class="0">
+<net name="AVCC" class="0">
 <segment>
 <pinref part="C25" gate="G$1" pin="1"/>
 <pinref part="C26" gate="G$1" pin="1"/>
@@ -10207,36 +10215,52 @@ Source: http://www.analog.com/static/imported-files/data_sheets/AD8603_8607_8609
 <net name="N$15" class="0">
 <segment>
 <pinref part="IC4" gate="G$1" pin="AINB-"/>
-<wire x1="177.8" y1="0" x2="238.76" y2="0" width="0.1524" layer="91"/>
+<wire x1="177.8" y1="0" x2="218.44" y2="0" width="0.1524" layer="91"/>
 <pinref part="X4" gate="-3" pin="1"/>
+<wire x1="218.44" y1="0" x2="238.76" y2="0" width="0.1524" layer="91"/>
 <wire x1="238.76" y1="0" x2="238.76" y2="-2.54" width="0.1524" layer="91"/>
+<pinref part="C30" gate="G$1" pin="1"/>
+<wire x1="218.44" y1="-15.24" x2="218.44" y2="0" width="0.1524" layer="91"/>
+<junction x="218.44" y="0"/>
 </segment>
 </net>
 <net name="N$16" class="0">
 <segment>
 <pinref part="IC4" gate="G$1" pin="AINB+"/>
-<wire x1="177.8" y1="-2.54" x2="236.22" y2="-2.54" width="0.1524" layer="91"/>
+<wire x1="177.8" y1="-2.54" x2="213.36" y2="-2.54" width="0.1524" layer="91"/>
+<wire x1="213.36" y1="-2.54" x2="236.22" y2="-2.54" width="0.1524" layer="91"/>
 <wire x1="236.22" y1="-2.54" x2="236.22" y2="-7.62" width="0.1524" layer="91"/>
 <pinref part="X4" gate="-4" pin="1"/>
 <wire x1="236.22" y1="-7.62" x2="238.76" y2="-7.62" width="0.1524" layer="91"/>
+<pinref part="C29" gate="G$1" pin="1"/>
+<wire x1="213.36" y1="-15.24" x2="213.36" y2="-2.54" width="0.1524" layer="91"/>
+<junction x="213.36" y="-2.54"/>
 </segment>
 </net>
 <net name="N$17" class="0">
 <segment>
 <pinref part="IC4" gate="G$1" pin="AINA+"/>
-<wire x1="177.8" y1="-5.08" x2="233.68" y2="-5.08" width="0.1524" layer="91"/>
+<wire x1="177.8" y1="-5.08" x2="208.28" y2="-5.08" width="0.1524" layer="91"/>
+<wire x1="208.28" y1="-5.08" x2="233.68" y2="-5.08" width="0.1524" layer="91"/>
 <wire x1="233.68" y1="-5.08" x2="233.68" y2="-12.7" width="0.1524" layer="91"/>
 <pinref part="X4" gate="-5" pin="1"/>
 <wire x1="233.68" y1="-12.7" x2="238.76" y2="-12.7" width="0.1524" layer="91"/>
+<pinref part="C28" gate="G$1" pin="1"/>
+<wire x1="208.28" y1="-15.24" x2="208.28" y2="-5.08" width="0.1524" layer="91"/>
+<junction x="208.28" y="-5.08"/>
 </segment>
 </net>
 <net name="N$18" class="0">
 <segment>
 <pinref part="IC4" gate="G$1" pin="AINA-"/>
-<wire x1="177.8" y1="-7.62" x2="231.14" y2="-7.62" width="0.1524" layer="91"/>
+<wire x1="177.8" y1="-7.62" x2="203.2" y2="-7.62" width="0.1524" layer="91"/>
+<wire x1="203.2" y1="-7.62" x2="231.14" y2="-7.62" width="0.1524" layer="91"/>
 <wire x1="231.14" y1="-7.62" x2="231.14" y2="-17.78" width="0.1524" layer="91"/>
 <pinref part="X4" gate="-6" pin="1"/>
 <wire x1="231.14" y1="-17.78" x2="238.76" y2="-17.78" width="0.1524" layer="91"/>
+<pinref part="C27" gate="G$1" pin="1"/>
+<wire x1="203.2" y1="-15.24" x2="203.2" y2="-7.62" width="0.1524" layer="91"/>
+<junction x="203.2" y="-7.62"/>
 </segment>
 </net>
 <net name="N$19" class="0">
@@ -10297,6 +10321,57 @@ Source: http://www.analog.com/static/imported-files/data_sheets/AD8603_8607_8609
 <pinref part="R2" gate="G$1" pin="1"/>
 <wire x1="2.54" y1="86.36" x2="-5.08" y2="86.36" width="0.1524" layer="91"/>
 <junction x="-5.08" y="86.36"/>
+</segment>
+</net>
+<net name="AGND" class="0">
+<segment>
+<pinref part="C20" gate="G$1" pin="2"/>
+<pinref part="C22" gate="G$1" pin="2"/>
+<wire x1="180.34" y1="-20.32" x2="187.96" y2="-20.32" width="0.1524" layer="91"/>
+<pinref part="AGND1" gate="VR1" pin="AGND"/>
+<junction x="180.34" y="-20.32"/>
+</segment>
+<segment>
+<pinref part="C23" gate="G$1" pin="2"/>
+<pinref part="IC4" gate="G$1" pin="AGND"/>
+<wire x1="177.8" y1="5.08" x2="185.42" y2="5.08" width="0.1524" layer="91"/>
+<wire x1="185.42" y1="5.08" x2="185.42" y2="7.62" width="0.1524" layer="91"/>
+<wire x1="185.42" y1="7.62" x2="193.04" y2="7.62" width="0.1524" layer="91"/>
+<pinref part="C24" gate="G$1" pin="2"/>
+<wire x1="193.04" y1="7.62" x2="200.66" y2="7.62" width="0.1524" layer="91"/>
+<junction x="193.04" y="7.62"/>
+<pinref part="C21" gate="G$1" pin="2"/>
+<junction x="185.42" y="7.62"/>
+<pinref part="C25" gate="G$1" pin="2"/>
+<wire x1="200.66" y1="7.62" x2="208.28" y2="7.62" width="0.1524" layer="91"/>
+<pinref part="C26" gate="G$1" pin="2"/>
+<wire x1="208.28" y1="7.62" x2="215.9" y2="7.62" width="0.1524" layer="91"/>
+<junction x="208.28" y="7.62"/>
+<junction x="200.66" y="7.62"/>
+<pinref part="AGND2" gate="VR1" pin="AGND"/>
+</segment>
+<segment>
+<pinref part="L3" gate="G$1" pin="2"/>
+<pinref part="AGND3" gate="VR1" pin="AGND"/>
+<wire x1="152.4" y1="-25.4" x2="149.86" y2="-25.4" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="X4" gate="-1" pin="1"/>
+<wire x1="238.76" y1="7.62" x2="236.22" y2="7.62" width="0.1524" layer="91"/>
+<pinref part="AGND4" gate="VR1" pin="AGND"/>
+</segment>
+<segment>
+<pinref part="C30" gate="G$1" pin="2"/>
+<pinref part="C29" gate="G$1" pin="2"/>
+<wire x1="218.44" y1="-22.86" x2="213.36" y2="-22.86" width="0.1524" layer="91"/>
+<pinref part="C28" gate="G$1" pin="2"/>
+<wire x1="213.36" y1="-22.86" x2="208.28" y2="-22.86" width="0.1524" layer="91"/>
+<pinref part="C27" gate="G$1" pin="2"/>
+<wire x1="208.28" y1="-22.86" x2="203.2" y2="-22.86" width="0.1524" layer="91"/>
+<pinref part="AGND5" gate="VR1" pin="AGND"/>
+<junction x="203.2" y="-22.86"/>
+<junction x="208.28" y="-22.86"/>
+<junction x="213.36" y="-22.86"/>
 </segment>
 </net>
 </nets>
