@@ -353,7 +353,4 @@ Vpit = 4.95
 	SPI1_MISO- PA6 22 *
 	SPI1_MOSI- PA7 23 *
 
-- стереть 
-	gr-osmosdr
-	gqrx
-	gnuradio
+- разделить аналоговую и цифровую земли около CS4272
