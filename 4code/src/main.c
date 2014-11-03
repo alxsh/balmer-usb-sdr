@@ -1,6 +1,7 @@
 #include "main.h"
 #include "dac.h"
 #include "delay.h"
+#include "spi.h"
 
 RCC_ClocksTypeDef RCC_Clocks;
 
@@ -11,6 +12,8 @@ int main(void)
   SysTick_Config(RCC_Clocks.HCLK_Frequency / 1000);
 
   //DacTestInit();
+
+  SpiInit();
 
   DacInit();
   //DacSetFrequency(1000);

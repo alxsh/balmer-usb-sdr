@@ -31,6 +31,8 @@ int main(void)
 
     DelayInit();
 
+    SpiInit();
+
     UsbInitClockAndSystem();
 
     HwLcdInit();
@@ -47,10 +49,6 @@ int main(void)
 
     UTFT_setFont(BigFont);
     UTFT_print("SDR!", UTFT_CENTER, 16, 0);
-
-    SpiInit();
-
-    UTFT_print("Spi Init", UTFT_CENTER, 32, 0);
 
     int i = 0;
 

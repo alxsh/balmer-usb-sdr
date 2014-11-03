@@ -1,5 +1,7 @@
 #include "main.h"
 
+void SpiOnReceive();
+
 /******************************************************************************/
 /*            Cortex-M4 Processor Exceptions Handlers                         */
 /******************************************************************************/
@@ -108,4 +110,9 @@ void SysTick_Handler(void)
 /*  available peripheral interrupt handler's name please refer to the startup */
 /*  file (startup_stm32f4xx.s).                                               */
 /******************************************************************************/
+
+void SPI2_IRQHandler(void)
+{
+    SpiOnReceive();
+}
 
