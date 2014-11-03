@@ -28,6 +28,7 @@
 #include "usb_lib.h"
 #include "usb_istr.h"
 
+void SpiOnReceive();
 
 /** @addtogroup Template_Project
   * @{
@@ -153,10 +154,15 @@ void SysTick_Handler(void)
   * @param  None
   * @retval None
   */
-void DMA1_Channel1_IRQHandler    (void)
+void DMA1_Channel1_IRQHandler(void)
 {
-  //DMA_ClearFlag(DMA1_IT_TC1);
-  //setADCDMA_TransferComplete();  /* set flag_ADCDMA_TransferComplete global flag */
+    //DMA_ClearFlag(DMA1_IT_TC1);
+    //setADCDMA_TransferComplete();  /* set flag_ADCDMA_TransferComplete global flag */
+}
+
+void SPI1_IRQHandler(void)
+{
+    SpiOnReceive();
 }
 
 
@@ -212,7 +218,7 @@ void USB_LP_IRQHandler(void)
 void USB_LP_CAN1_RX0_IRQHandler(void)
 #endif
 {
-  USB_Istr();
+    USB_Istr();
 }
 #endif /* STM32F10X_CL */
 
@@ -227,7 +233,7 @@ void USB_LP_CAN1_RX0_IRQHandler(void)
 *******************************************************************************/
 void OTG_FS_IRQHandler(void)
 {
-  STM32_PCD_OTG_ISR_Handler(); 
+    STM32_PCD_OTG_ISR_Handler(); 
 }
 #endif /* STM32F10X_CL */
 
