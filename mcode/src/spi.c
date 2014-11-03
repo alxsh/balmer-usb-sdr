@@ -1,5 +1,6 @@
 
 #include "delay.h"
+#include "spi.h"
 
 /*
 	Use
@@ -41,7 +42,7 @@ void SpiInit()
 	SPI_NSSInternalSoftwareConfig(SPI1, SPI_NSSInternalSoft_Set);
 	NVIC_EnableIRQ(SPI1_IRQn);
 
-	SPI_I2S_SendData(SPI1, 1234);
+	//SPI_I2S_SendData(SPI1, 1234);
 }
 
 void SpiOnReceive()

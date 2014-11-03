@@ -46,7 +46,7 @@ void DelayUs(uint16_t countUs)
 void DelayMs(uint16_t countMs)
 {
 	uint16_t start = TIM7->CNT;
-	countUs *= 8;
+	countMs *= 8;
 	while(((uint16_t)(TIM7->CNT-start)) < countMs);
 }
 
