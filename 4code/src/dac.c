@@ -5,7 +5,7 @@
 //#include "SysTick/systick.h"
 #include "dac.h"
 
-/*
+
 #define DAC_ZERO 2047
 #define DAC_AMPLITUDE 1200
 
@@ -58,7 +58,6 @@ void DacInit(void)
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_DMA1, ENABLE);
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
-	RCC_APB1PeriphClockCmd(RCC_APB1Periph_DAC, ENABLE);	
 
 	GPIO_InitTypeDef GPIO_InitStructure;
 	GPIO_InitStructure.GPIO_Pin =  GPIO_Pin_4;
@@ -67,15 +66,13 @@ void DacInit(void)
 	GPIO_Init(GPIOA, &GPIO_InitStructure);
 
   	DAC_InitTypeDef DAC_InitStructure;
-	DAC_InitStructure.DAC_Trigger = DAC_Trigger_None;
+	DAC_InitStructure.DAC_Trigger = DAC_Trigger_T2_TRGO;
 	DAC_InitStructure.DAC_WaveGeneration = DAC_WaveGeneration_None;
 	DAC_InitStructure.DAC_OutputBuffer = DAC_OutputBuffer_Enable;
 	
 	DAC_Init(DAC_Channel_1, &DAC_InitStructure);
-	//delay_us(100);
 	DAC_Cmd(DAC_Channel_1, ENABLE);
 	DAC_SetChannel1Data(DAC_Align_12b_R, DAC_ZERO);
-
 }
 
 
@@ -94,7 +91,7 @@ void DacSetPeriod(uint32_t sinusPeriod, uint16_t amplitude)
 	if(sinusPeriod<MIN_SINUS_PERIOD)
 		sinusPeriod = MIN_SINUS_PERIOD;
 	//assert_param(frequency>=100 && frequency<=200000);
-	DMA_Cmd(DMA1_Stream2, DISABLE);
+	DMA_DeInit(DMA1_Stream5);
 	TIM_Cmd(TIM2, DISABLE);
 
 	DAC_SetChannel1Data(DAC_Align_12b_R, DAC_ZERO);
@@ -130,6 +127,7 @@ void DacSetPeriod(uint32_t sinusPeriod, uint16_t amplitude)
 	DacSinusCalculate();
 
 	DMA_InitTypeDef DMA_InitStructure;
+	DMA_InitStructure.DMA_Channel = DMA_Channel_7;
 	DMA_InitStructure.DMA_PeripheralBaseAddr = (uint32_t)&DAC->DHR12R1;
 	DMA_InitStructure.DMA_Memory0BaseAddr = (uint32_t)&g_sinusBuffer;
 	DMA_InitStructure.DMA_DIR = DMA_DIR_MemoryToPeripheral;
@@ -144,7 +142,11 @@ void DacSetPeriod(uint32_t sinusPeriod, uint16_t amplitude)
 	DMA_InitStructure.DMA_FIFOThreshold = DMA_FIFOThreshold_HalfFull;
 	DMA_InitStructure.DMA_MemoryBurst = DMA_MemoryBurst_Single;
 	DMA_InitStructure.DMA_PeripheralBurst = DMA_PeripheralBurst_Single;
-	DMA_Cmd(DMA1_Channel2, ENABLE);
+
+	DMA_Init(DMA1_Stream5, &DMA_InitStructure);	
+	DMA_Cmd(DMA1_Stream5, ENABLE);
+	DAC_Cmd(DAC_Channel_1, ENABLE);
+	DAC_DMACmd(DAC_Channel_1, ENABLE);
 
 
 	//72 MHz / TIM_Prescaler / TIM_Period
@@ -156,24 +158,9 @@ void DacSetPeriod(uint32_t sinusPeriod, uint16_t amplitude)
 	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
 	TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStructure);
 	TIM_SetCounter(TIM2, 0);
+	TIM_SelectOutputTrigger(TIM2, TIM_TRGOSource_Update);
 
-	TIM_DMACmd(TIM2, TIM_DMA_Update, ENABLE);
-
-#ifdef USE_ADC12
-	TIM_OCInitTypeDef TIM_OCInitStructure;
-	TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;
-	TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
-	TIM_OCInitStructure.TIM_Pulse = 1;
-	TIM_OCInitStructure.TIM_OCPolarity=TIM_OCPolarity_Low;
-	TIM_OC2Init(TIM2, &TIM_OCInitStructure);//ADC1 EXT3
-#else
-	TIM_OCInitTypeDef TIM_OCInitStructure;
-	TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;
-	TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
-	TIM_OCInitStructure.TIM_Pulse = 1;
-	TIM_OCInitStructure.TIM_OCPolarity=TIM_OCPolarity_Low;
-	TIM_OC3Init(TIM2, &TIM_OCInitStructure);//ADC3 EXT1
-#endif
+	//TIM_DMACmd(TIM2, TIM_DMA_Update, ENABLE);
 
 	g_dac_period = period * prescaler * SinusBufferSize;
 }
@@ -182,7 +169,7 @@ void DacStart()
 {
 	TIM_Cmd(TIM2, ENABLE);
 }
-*/
+/*
 
 #define   OUT_FREQ          5000                                 // Output waveform frequency
 #define   SINE_RES          128                                  // Waveform resolution
@@ -226,19 +213,19 @@ void DacTestInit()
 
 static void TIM6_Config(void)
 {
-  TIM_TimeBaseInitTypeDef TIM6_TimeBase;
+  TIM_TimeBaseInitTypeDef TIM_TimeBase;
 
-  RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM6, ENABLE);
+  RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
  
-  TIM_TimeBaseStructInit(&TIM6_TimeBase); 
-  TIM6_TimeBase.TIM_Period        = (uint16_t)TIM_PERIOD;          
-  TIM6_TimeBase.TIM_Prescaler     = 10;       
-  TIM6_TimeBase.TIM_ClockDivision = 0;    
-  TIM6_TimeBase.TIM_CounterMode   = TIM_CounterMode_Up;  
-  TIM_TimeBaseInit(TIM6, &TIM6_TimeBase);
-  TIM_SelectOutputTrigger(TIM6, TIM_TRGOSource_Update);
+  TIM_TimeBaseStructInit(&TIM_TimeBase); 
+  TIM_TimeBase.TIM_Period        = (uint16_t)TIM_PERIOD;          
+  TIM_TimeBase.TIM_Prescaler     = 10;       
+  TIM_TimeBase.TIM_ClockDivision = 0;    
+  TIM_TimeBase.TIM_CounterMode   = TIM_CounterMode_Up;  
+  TIM_TimeBaseInit(TIM2, &TIM_TimeBase);
+  TIM_SelectOutputTrigger(TIM2, TIM_TRGOSource_Update);
 
-  TIM_Cmd(TIM6, ENABLE);
+  TIM_Cmd(TIM2, ENABLE);
 }
 
 static void DAC1_Config(void)
@@ -246,14 +233,14 @@ static void DAC1_Config(void)
   DAC_InitTypeDef DAC_INIT;
   DMA_InitTypeDef DMA_INIT;
   
-  DAC_INIT.DAC_Trigger        = DAC_Trigger_T6_TRGO;
+  DAC_INIT.DAC_Trigger        = DAC_Trigger_T2_TRGO;
   DAC_INIT.DAC_WaveGeneration = DAC_WaveGeneration_None;
   DAC_INIT.DAC_OutputBuffer   = DAC_OutputBuffer_Enable;
   DAC_Init(DAC_Channel_1, &DAC_INIT);
 
   DMA_DeInit(DMA1_Stream5);
   DMA_INIT.DMA_Channel            = DMA_Channel_7;  
-  DMA_INIT.DMA_PeripheralBaseAddr = (uint32_t)DAC_DHR12R1_ADDR;
+  DMA_INIT.DMA_PeripheralBaseAddr = (uint32_t)&DAC->DHR12R1;
   DMA_INIT.DMA_Memory0BaseAddr    = (uint32_t)&function;
   DMA_INIT.DMA_DIR                = DMA_DIR_MemoryToPeripheral;
   DMA_INIT.DMA_BufferSize         = SINE_RES;
@@ -273,3 +260,4 @@ static void DAC1_Config(void)
   DAC_Cmd(DAC_Channel_1, ENABLE);
   DAC_DMACmd(DAC_Channel_1, ENABLE);
 }
+*/

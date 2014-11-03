@@ -9,19 +9,17 @@ int main(void)
   /* SysTick end of count event each 1ms */
   RCC_GetClocksFreq(&RCC_Clocks);
   SysTick_Config(RCC_Clocks.HCLK_Frequency / 1000);
-  /*
-  RCC_HSEConfig(RCC_HSE_ON);
-  while(!RCC_WaitForHSEStartUp())
-  {
-  }
-  */
-/*
-  DacTestInit();
+
+  //DacTestInit();
+
+  DacInit();
+  DacSetFrequency(1000);
+  DacStart();
 
   while (1)
   {
   }
-*/
+
   DelayInit();
 
   RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
