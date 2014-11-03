@@ -10,6 +10,7 @@ DEPS += \
 	output/base/src/delay.d \
 	output/base/src/main.d \
 	output/base/src/my_hardware.d \
+	output/base/src/spi.d \
 	output/base/src/stm32l1xx_it.d \
 	output/base/src/syscalls.d \
 	output/base/src/system_stm32l1xx.d \
@@ -54,6 +55,7 @@ OBJS += \
 	output/base/src/delay.o \
 	output/base/src/main.o \
 	output/base/src/my_hardware.o \
+	output/base/src/spi.o \
 	output/base/src/stm32l1xx_it.o \
 	output/base/src/syscalls.o \
 	output/base/src/system_stm32l1xx.o \
@@ -113,6 +115,10 @@ output/base/src/main.o: ./src/main.c
 
 output/base/src/my_hardware.o: ./src/my_hardware.c
 	@echo 'Building target: my_hardware.c'
+	@$(CC) $(C_FLAGS) -o "$@" "$<"
+
+output/base/src/spi.o: ./src/spi.c
+	@echo 'Building target: spi.c'
 	@$(CC) $(C_FLAGS) -o "$@" "$<"
 
 output/base/src/stm32l1xx_it.o: ./src/stm32l1xx_it.c

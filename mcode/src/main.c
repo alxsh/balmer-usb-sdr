@@ -9,6 +9,7 @@
 #include "ili/UTFT.h"
 
 #include "data_process.h"
+#include "spi.h"
 
 
 RCC_ClocksTypeDef RCC_Clocks;
@@ -46,6 +47,10 @@ int main(void)
 
     UTFT_setFont(BigFont);
     UTFT_print("SDR!", UTFT_CENTER, 16, 0);
+
+    SpiInit();
+
+    UTFT_print("Spi Init", UTFT_CENTER, 32, 0);
 
     int i = 0;
 
