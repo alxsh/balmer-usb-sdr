@@ -9,8 +9,8 @@
 #define DAC_ZERO 2047
 #define DAC_AMPLITUDE 1200
 
-//max 375 khz
-#define MIN_SINUS_PERIOD 192
+//max 12 khz
+#define MIN_SINUS_PERIOD 4
 
 static uint16_t g_dac_amplitude = DAC_AMPLITUDE;
 static uint16_t g_sinusBuffer[SINUS_BUFFER_SIZE];
@@ -76,12 +76,9 @@ void DacInit(void)
 }
 
 
-//If frequency<=1 khz
-//	SinusBufferSize maximal
-//	TIM_Period = SystemCoreClock / SINUS_BUFFER_SIZE / frequency
 void DacSetFrequency(uint32_t frequency)
 {
-	DacSetPeriod(SystemCoreClock/frequency, DAC_AMPLITUDE);
+	DacSetPeriod(48000/frequency, DAC_AMPLITUDE);
 }
 
 //	sinusPeriod in SystemCoreClock quants
@@ -90,7 +87,8 @@ void DacSetPeriod(uint32_t sinusPeriod, uint16_t amplitude)
 	g_dac_amplitude = amplitude;
 	if(sinusPeriod<MIN_SINUS_PERIOD)
 		sinusPeriod = MIN_SINUS_PERIOD;
-	//assert_param(frequency>=100 && frequency<=200000);
+	if(sinusPeriod>SINUS_BUFFER_SIZE)
+		sinusPeriod = SINUS_BUFFER_SIZE;
 	DMA_DeInit(DMA1_Stream5);
 	TIM_Cmd(TIM2, DISABLE);
 
@@ -99,30 +97,9 @@ void DacSetPeriod(uint32_t sinusPeriod, uint16_t amplitude)
 	uint32_t prescaler;
 	uint32_t period;
 	prescaler = 1;
-	period = 24;
+	period = 3500/2;
 
-	//Нужно чтобы SinusBufferSize был кратен 4
-	sinusPeriod = (sinusPeriod/(period*4))*(period*4);
-
-	//Пусть будет не кратным 4, попробуем частоту 100 КГц
-	//sinusPeriod = (sinusPeriod/period)*period;
-
-	SinusBufferSize = sinusPeriod/period;
-
-	if(SinusBufferSize>SINUS_BUFFER_SIZE)
-	{
-		//period = 72;
-		prescaler = sinusPeriod/period/SINUS_BUFFER_SIZE;
-		while(SINUS_BUFFER_SIZE*prescaler*period<sinusPeriod)
-		{
-			prescaler++;
-		}
-
-		uint32_t p4 = period*prescaler*4;
-		sinusPeriod = (sinusPeriod/p4)*p4;
-
-		SinusBufferSize = sinusPeriod/period/prescaler;
-	}
+	SinusBufferSize = sinusPeriod;
 
 	DacSinusCalculate();
 
@@ -159,8 +136,6 @@ void DacSetPeriod(uint32_t sinusPeriod, uint16_t amplitude)
 	TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStructure);
 	TIM_SetCounter(TIM2, 0);
 	TIM_SelectOutputTrigger(TIM2, TIM_TRGOSource_Update);
-
-	//TIM_DMACmd(TIM2, TIM_DMA_Update, ENABLE);
 
 	g_dac_period = period * prescaler * SinusBufferSize;
 }
