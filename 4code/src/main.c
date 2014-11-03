@@ -13,7 +13,8 @@ int main(void)
   //DacTestInit();
 
   DacInit();
-  DacSetFrequency(1000);
+  //DacSetFrequency(1000);
+  DacSetPeriod(48, 600);
   DacStart();
 
   while (1)
