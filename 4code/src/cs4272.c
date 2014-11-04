@@ -5,13 +5,23 @@
 
 //	CCLK - PB6
 //	CDIN - PB7
-//  RST - PD0
+//  RST - PB8
 
-#define RST_HIGH		GPIO_SetBits(GPIOD, GPIO_Pin_0)
-#define RST_LOW			GPIO_ResetBits(GPIOD, GPIO_Pin_0)
+// SPI3_NSS PA15
+// SPI3_SCK PC10
+// I2S3_SD  PC12
+
+#define RST_HIGH		GPIO_SetBits(GPIOB, GPIO_Pin_8)
+#define RST_LOW			GPIO_ResetBits(GPIOB, GPIO_Pin_8)
 
 
 #define SLAVE_ADDRESS 0x20
+
+#define BUFFER_SIZE 2048
+static uint8_t x4count = 0;
+static int buffer_pos = 0;
+uint16_t sound_buffer[BUFFER_SIZE];
+
 
 static void init_GPIO_I2S()
 {
@@ -213,19 +223,19 @@ uint8_t cs4272_i2c_read_reg(uint8_t reg)
 }
 
 
-bool cs4272_i2c_Init()
+bool cs4272_Init()
 {
 	GPIO_InitTypeDef gpio;
 
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA | RCC_AHB1Periph_GPIOB | RCC_AHB1Periph_GPIOC, ENABLE);
 
 	//RST_
-	gpio.GPIO_Pin = GPIO_Pin_0;
+	gpio.GPIO_Pin = GPIO_Pin_8;
 	gpio.GPIO_Mode = GPIO_Mode_OUT;
 	gpio.GPIO_OType = GPIO_OType_PP;
 	gpio.GPIO_PuPd = GPIO_PuPd_UP;
 	gpio.GPIO_Speed = GPIO_Speed_2MHz;
-	GPIO_Init(GPIOD, &gpio);
+	GPIO_Init(GPIOB, &gpio);
 
 	gpio.GPIO_Pin = GPIO_Pin_11;
 	gpio.GPIO_Mode = GPIO_Mode_OUT;
@@ -238,10 +248,10 @@ bool cs4272_i2c_Init()
 	init_GPIO_I2S();
 
 	RST_LOW;
-	Delay(10);
+	DelayMs(10);
 	RST_HIGH;
 
-	Delay(1);
+	DelayMs(1);
 	//for(volatile int j=0; j<32; j++);
 	//GPIO_SetBits(GPIOC, GPIO_Pin_11);
 	cs4272_i2c_write_reg(0x7, 0x3); //Control Port Enable + Power Down
@@ -259,21 +269,16 @@ bool cs4272_i2c_Init()
 	return true;
 }
 
-int SPI3_call_count = 0;
-
-uint8_t x4count = 0;
 
 void startReadSound()
 {
 	x4count = 0;
 	buffer_pos = 0;
-	STM_EVAL_LEDOff(LED5);
-	STM_EVAL_LEDOn(LED4);
 	start();
 }
 
 
-void SPI3_IRQHandler()
+void OnSoundReceive()
 {
 	/* Check if data are available in SPI Data register */
 	if (SPI_GetITStatus(SPI3, SPI_I2S_IT_RXNE) != RESET)
@@ -287,8 +292,6 @@ void SPI3_IRQHandler()
 			} else
 			{
 				stop();
-				STM_EVAL_LEDOn(LED5);
-				STM_EVAL_LEDOff(LED4);
 			}
 		}
 		x4count++;
