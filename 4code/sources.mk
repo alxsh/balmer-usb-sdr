@@ -5,6 +5,7 @@
 
 DEPS += \
 	output/CMSIS/startup_stm32f4xx.d \
+	output/base/src/cs4272.d \
 	output/base/src/dac.d \
 	output/base/src/delay.d \
 	output/base/src/main.d \
@@ -25,6 +26,7 @@ DEPS += \
 
 OBJS += \
 	output/CMSIS/startup_stm32f4xx.o \
+	output/base/src/cs4272.o \
 	output/base/src/dac.o \
 	output/base/src/delay.o \
 	output/base/src/main.o \
@@ -46,6 +48,10 @@ OBJS += \
 output/CMSIS/startup_stm32f4xx.o: ../../SoundCard/code/Libraries/CMSIS/ST/STM32F4xx/Source/Templates/gcc_ride7/startup_stm32f4xx.S
 	@echo 'Building target: startup_stm32f4xx.S'
 	@$(CC) $(ASM_FLAGS) -o "$@" "$<"
+
+output/base/src/cs4272.o: ./src/cs4272.c
+	@echo 'Building target: cs4272.c'
+	@$(CC) $(C_FLAGS) -o "$@" "$<"
 
 output/base/src/dac.o: ./src/dac.c
 	@echo 'Building target: dac.c'

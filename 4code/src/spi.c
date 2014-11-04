@@ -36,13 +36,10 @@ void SpiInit()
 	SPI_InitStructure.SPI_CRCPolynomial = 15;
 	SPI_Init(SPI2, &SPI_InitStructure);
 
-	//SPI2->CR1 |= SPI_CR1_SSM | SPI_CR1_SSI; //Software slave select
-
 	SPI_I2S_ITConfig(SPI2, SPI_I2S_IT_RXNE,ENABLE);
 	SPI_Cmd(SPI2, ENABLE);
 	NVIC_EnableIRQ(SPI2_IRQn);
 
-	//SPI_I2S_SendData(SPI2, 1234);
 	SPI2->DR = 0x4000;
 }
 
