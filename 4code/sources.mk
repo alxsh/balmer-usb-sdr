@@ -9,6 +9,7 @@ DEPS += \
 	output/base/src/dac.d \
 	output/base/src/delay.d \
 	output/base/src/main.d \
+	output/base/src/process_sound.d \
 	output/base/src/spi.d \
 	output/base/src/stm32f4xx_it.d \
 	output/base/src/system_stm32f4xx.d \
@@ -30,6 +31,7 @@ OBJS += \
 	output/base/src/dac.o \
 	output/base/src/delay.o \
 	output/base/src/main.o \
+	output/base/src/process_sound.o \
 	output/base/src/spi.o \
 	output/base/src/stm32f4xx_it.o \
 	output/base/src/system_stm32f4xx.o \
@@ -63,6 +65,10 @@ output/base/src/delay.o: ./src/delay.c
 
 output/base/src/main.o: ./src/main.c
 	@echo 'Building target: main.c'
+	@$(CC) $(C_FLAGS) -o "$@" "$<"
+
+output/base/src/process_sound.o: ./src/process_sound.c
+	@echo 'Building target: process_sound.c'
 	@$(CC) $(C_FLAGS) -o "$@" "$<"
 
 output/base/src/spi.o: ./src/spi.c

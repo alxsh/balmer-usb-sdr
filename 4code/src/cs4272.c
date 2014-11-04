@@ -11,10 +11,10 @@
 // SPI3_SCK PC10
 // I2S3_SD  PC12
 
+void OnSoundData(int32_t sample);
+
 #define RST_HIGH		GPIO_SetBits(GPIOB, GPIO_Pin_8)
 #define RST_LOW			GPIO_ResetBits(GPIOB, GPIO_Pin_8)
-
-
 #define SLAVE_ADDRESS 0x20
 
 #define BUFFER_SIZE 2048
@@ -270,11 +270,16 @@ bool cs4272_Init()
 }
 
 
-void startReadSound()
+void cs4272_start()
 {
 	x4count = 0;
 	buffer_pos = 0;
 	start();
+}
+
+void cs4272_stop()
+{
+	stop();
 }
 
 
@@ -284,16 +289,14 @@ void OnSoundReceive()
 	if (SPI_GetITStatus(SPI3, SPI_I2S_IT_RXNE) != RESET)
 	{
 		uint16_t app = SPI_I2S_ReceiveData(SPI3);
-		if((x4count%(4*6))==1)
+		static uint16_t data4[4];
+		data4[x4count++] = app;
+		if(x4count==4)
 		{
-			if(buffer_pos<BUFFER_SIZE)
-			{
-				sound_buffer[buffer_pos++] = app;
-			} else
-			{
-				stop();
-			}
+			int32_t sample = (((int32_t)data4[0])<<16)+data4[1];
+			//int32_t sample = *(int32_t*)data4;
+			OnSoundData(sample);
+			x4count = 0;
 		}
-		x4count++;
 	}
 }
