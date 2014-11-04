@@ -262,7 +262,8 @@ bool cs4272_Init()
 	cs4272_i2c_write_reg(0x1, (1<<3)); //Master mode 48 KHz
 
 	cs4272_i2c_write_reg(0x3, 0);//Mute DAC
-	cs4272_i2c_write_reg(0x6, (1<<5)|(1<<4));//16 bit dither + I2S format
+	//cs4272_i2c_write_reg(0x6, (1<<5)|(1<<4));//16 bit dither + I2S format
+	cs4272_i2c_write_reg(0x6, (1<<4));//I2S format
 
 	cs4272_i2c_write_reg(0x7, 0x2); //Clear Power Down
 
