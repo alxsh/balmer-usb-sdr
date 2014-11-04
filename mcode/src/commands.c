@@ -1,6 +1,9 @@
 #include "hw_config.h"
 #include "data_process.h"
 #include "ili/UTFT.h"
+#include "spi.h"
+
+uint16_t g_spi_sended = 0;
 
 void PacketReceive(volatile uint8_t* data, uint32_t size)
 {
@@ -19,6 +22,13 @@ void PacketReceive(volatile uint8_t* data, uint32_t size)
 			UTFT_printNumI(value,
 						   x,
 						   y, 0, ' ');
+		}
+		return;
+
+	case 2://COMMAND_SEND_SPI
+		{
+			g_spi_sended = *(uint16_t*)(data+0);
+			SpiSend(g_spi_sended);
 		}
 		return;
 

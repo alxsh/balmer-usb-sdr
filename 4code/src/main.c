@@ -11,12 +11,14 @@ int main(void)
   RCC_GetClocksFreq(&RCC_Clocks);
   SysTick_Config(RCC_Clocks.HCLK_Frequency / 1000);
 
-  //DacTestInit();
+  DelayInit();
+  DelayMs(100);
 
   SpiInit();
 
   DacInit();
   //DacSetFrequency(1000);
+  //DacSetPeriod(48, 2000);
   DacSetPeriod(48, 600);
   DacStart();
 

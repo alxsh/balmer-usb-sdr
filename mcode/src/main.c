@@ -19,6 +19,8 @@ extern __IO uint32_t packet_receive;
 extern __IO uint8_t Receive_Buffer[64];
 extern uint32_t Receive_length;
 
+extern uint16_t g_spi_sended;
+
 /*******************************************************************************/
                                   
 int main(void)
@@ -72,6 +74,9 @@ int main(void)
           }
         }
 
+        UTFT_setFont(BigFont);
+        UTFT_printNumI(g_spi_sended, 16, 32, 5, ' ');
+        UTFT_printNumI(g_spi_rx_data, 16, 48, 5, ' ');
         i++;
         UTFT_setFont(SevenSegNumFont);
         UTFT_setColor(0, 128, 255);
