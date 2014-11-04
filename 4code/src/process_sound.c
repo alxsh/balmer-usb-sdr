@@ -8,6 +8,7 @@ void OnSoundData(int32_t sample)
 {
 	uint16_t* out_buffer = DacGetBuffer();
 	out_buffer[g_cur_pos] = (sample>>(14))+DAC_ZERO;
+	//out_buffer[g_cur_pos] = (sample>>(8))+DAC_ZERO;
 
 	g_cur_pos = (g_cur_pos+1)%SINUS_BUFFER_SIZE;
 }
