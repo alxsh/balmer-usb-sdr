@@ -8,6 +8,8 @@
 //#define SINUS_BUFFER_SIZE 1000
 #define SINUS_BUFFER_SIZE 2000
 #define DEFAULT_DAC_AMPLITUDE 1200
+#define DAC_ZERO 2047
+
 
 extern float g_sinusBufferFloat[SINUS_BUFFER_SIZE];
 
@@ -18,6 +20,13 @@ void DacInit(void);
 */
 void DacSetFrequency(uint32_t frequency);
 void DacSetPeriod(uint32_t sinusPeriod, uint16_t amplitude);
+
+/*
+	Stop DAC and max buffer size
+*/
+void DacInitFullBuffer();
+
+//Запуск, до него должно быть вызванно DacSetFrequency или DacSetPeriod или DacInitFullBuffer()
 void DacStart();
 
 uint32_t DacPeriod(void);
@@ -25,6 +34,9 @@ float DacFrequency();
 uint32_t DacSamplesPerPeriod(void);
 uint32_t DacSampleTicks(void);
 
-void DacTestInit();
+uint16_t* DacGetBuffer();
+uint16_t DacGetBufferSize();
+//Play position
+uint16_t DacGetPos();
 
 #endif//_DAC_H_

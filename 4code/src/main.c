@@ -14,16 +14,16 @@ int main(void)
 
   DelayInit();
   cs4272_Init();
-  
+
   DelayMs(100);
 
   SpiInit();
 
   DacInit();
-  //DacSetFrequency(1000);
-  //DacSetPeriod(48, 2000);
-  DacSetPeriod(48, 600);
+  //DacSetPeriod(48, 600);
+  DacInitFullBuffer();
   DacStart();
+  cs4272_start();
 
   while (1)
   {

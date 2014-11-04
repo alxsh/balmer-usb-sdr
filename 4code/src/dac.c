@@ -6,7 +6,6 @@
 #include "dac.h"
 
 
-#define DAC_ZERO 2047
 #define DAC_AMPLITUDE 1200
 
 //max 12 khz
@@ -17,6 +16,17 @@ static uint16_t g_sinusBuffer[SINUS_BUFFER_SIZE];
 static uint32_t SinusBufferSize = SINUS_BUFFER_SIZE;
 static uint32_t g_dac_period = 0; // * 1/SystemCoreClock sec SystemCoreClock==72000000
 float g_sinusBufferFloat[SINUS_BUFFER_SIZE];
+
+uint16_t* DacGetBuffer()
+{
+	return g_sinusBuffer;
+}
+
+uint16_t DacGetBufferSize()
+{
+	return SINUS_BUFFER_SIZE;
+}
+
 
 uint32_t DacPeriod(void)
 {
@@ -81,27 +91,20 @@ void DacSetFrequency(uint32_t frequency)
 	DacSetPeriod(48000/frequency, DAC_AMPLITUDE);
 }
 
-//	sinusPeriod in SystemCoreClock quants
-void DacSetPeriod(uint32_t sinusPeriod, uint16_t amplitude)
+static void DacDeinitDmaAndTimer()
 {
-	g_dac_amplitude = amplitude;
-	if(sinusPeriod<MIN_SINUS_PERIOD)
-		sinusPeriod = MIN_SINUS_PERIOD;
-	if(sinusPeriod>SINUS_BUFFER_SIZE)
-		sinusPeriod = SINUS_BUFFER_SIZE;
 	DMA_DeInit(DMA1_Stream5);
 	TIM_Cmd(TIM2, DISABLE);
 
 	DAC_SetChannel1Data(DAC_Align_12b_R, DAC_ZERO);
+}
 
+static void DacInitDmaAndTimer()
+{
 	uint32_t prescaler;
 	uint32_t period;
 	prescaler = 1;
 	period = 3500/2;
-
-	SinusBufferSize = sinusPeriod;
-
-	DacSinusCalculate();
 
 	DMA_InitTypeDef DMA_InitStructure;
 	DMA_InitStructure.DMA_Channel = DMA_Channel_7;
@@ -140,99 +143,42 @@ void DacSetPeriod(uint32_t sinusPeriod, uint16_t amplitude)
 	g_dac_period = period * prescaler * SinusBufferSize;
 }
 
+//	sinusPeriod in SystemCoreClock quants
+void DacSetPeriod(uint32_t sinusPeriod, uint16_t amplitude)
+{
+	g_dac_amplitude = amplitude;
+	if(sinusPeriod<MIN_SINUS_PERIOD)
+		sinusPeriod = MIN_SINUS_PERIOD;
+	if(sinusPeriod>SINUS_BUFFER_SIZE)
+		sinusPeriod = SINUS_BUFFER_SIZE;
+
+	DacDeinitDmaAndTimer();
+
+
+	SinusBufferSize = sinusPeriod;
+
+	DacSinusCalculate();
+	DacInitDmaAndTimer();
+}
+
+void DacInitFullBuffer()
+{
+	SinusBufferSize = SINUS_BUFFER_SIZE;
+	DacDeinitDmaAndTimer();
+
+	for(int i=0; i<SinusBufferSize; i++)
+		g_sinusBuffer[i] = DAC_ZERO;
+
+	DacInitDmaAndTimer();
+}
+
+
 void DacStart()
 {
 	TIM_Cmd(TIM2, ENABLE);
 }
-/*
 
-#define   OUT_FREQ          5000                                 // Output waveform frequency
-#define   SINE_RES          128                                  // Waveform resolution
-#define   DAC_DHR12R1_ADDR  0x40007408                           // DMA writes into this reg on every request
-#define   CNT_FREQ          42000000                             // TIM6 counter clock (prescaled APB1)
-#define   TIM_PERIOD        ((CNT_FREQ)/((SINE_RES)*(OUT_FREQ))) // Autoreload reg value
-
-const uint16_t function[SINE_RES] = { 2048, 2145, 2242, 2339, 2435, 2530, 2624, 2717, 2808, 2897, 
-                                      2984, 3069, 3151, 3230, 3307, 3381, 3451, 3518, 3581, 3640, 
-                                      3696, 3748, 3795, 3838, 3877, 3911, 3941, 3966, 3986, 4002, 
-                                      4013, 4019, 4020, 4016, 4008, 3995, 3977, 3954, 3926, 3894, 
-                                      3858, 3817, 3772, 3722, 3669, 3611, 3550, 3485, 3416, 3344, 
-                                      3269, 3191, 3110, 3027, 2941, 2853, 2763, 2671, 2578, 2483, 
-                                      2387, 2291, 2194, 2096, 1999, 1901, 1804, 1708, 1612, 1517, 
-                                      1424, 1332, 1242, 1154, 1068, 985, 904, 826, 751, 679, 
-                                      610, 545, 484, 426, 373, 323, 278, 237, 201, 169, 
-                                      141, 118, 100, 87, 79, 75, 76, 82, 93, 109, 
-                                      129, 154, 184, 218, 257, 300, 347, 399, 455, 514, 
-                                      577, 644, 714, 788, 865, 944, 1026, 1111, 1198, 1287, 
-                                      1378, 1471, 1565, 1660, 1756, 1853, 1950, 2047 };           
-
-static void TIM6_Config(void);
-static void DAC1_Config(void);           
-
-void DacTestInit()
+uint16_t DacGetPos()
 {
-  GPIO_InitTypeDef gpio_A;
- 
-  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);                  
-  RCC_APB1PeriphClockCmd(RCC_APB1Periph_DAC, ENABLE);
-  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_DMA1, ENABLE);
-
-  gpio_A.GPIO_Pin  = GPIO_Pin_4;
-  gpio_A.GPIO_Mode = GPIO_Mode_AN;
-  gpio_A.GPIO_PuPd = GPIO_PuPd_NOPULL;
-  GPIO_Init(GPIOA, &gpio_A);
-
-  TIM6_Config();  
-  DAC1_Config(); 
+	return 0;
 }
-
-static void TIM6_Config(void)
-{
-  TIM_TimeBaseInitTypeDef TIM_TimeBase;
-
-  RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
- 
-  TIM_TimeBaseStructInit(&TIM_TimeBase); 
-  TIM_TimeBase.TIM_Period        = (uint16_t)TIM_PERIOD;          
-  TIM_TimeBase.TIM_Prescaler     = 10;       
-  TIM_TimeBase.TIM_ClockDivision = 0;    
-  TIM_TimeBase.TIM_CounterMode   = TIM_CounterMode_Up;  
-  TIM_TimeBaseInit(TIM2, &TIM_TimeBase);
-  TIM_SelectOutputTrigger(TIM2, TIM_TRGOSource_Update);
-
-  TIM_Cmd(TIM2, ENABLE);
-}
-
-static void DAC1_Config(void)
-{
-  DAC_InitTypeDef DAC_INIT;
-  DMA_InitTypeDef DMA_INIT;
-  
-  DAC_INIT.DAC_Trigger        = DAC_Trigger_T2_TRGO;
-  DAC_INIT.DAC_WaveGeneration = DAC_WaveGeneration_None;
-  DAC_INIT.DAC_OutputBuffer   = DAC_OutputBuffer_Enable;
-  DAC_Init(DAC_Channel_1, &DAC_INIT);
-
-  DMA_DeInit(DMA1_Stream5);
-  DMA_INIT.DMA_Channel            = DMA_Channel_7;  
-  DMA_INIT.DMA_PeripheralBaseAddr = (uint32_t)&DAC->DHR12R1;
-  DMA_INIT.DMA_Memory0BaseAddr    = (uint32_t)&function;
-  DMA_INIT.DMA_DIR                = DMA_DIR_MemoryToPeripheral;
-  DMA_INIT.DMA_BufferSize         = SINE_RES;
-  DMA_INIT.DMA_PeripheralInc      = DMA_PeripheralInc_Disable;
-  DMA_INIT.DMA_MemoryInc          = DMA_MemoryInc_Enable;
-  DMA_INIT.DMA_PeripheralDataSize = DMA_PeripheralDataSize_HalfWord;
-  DMA_INIT.DMA_MemoryDataSize     = DMA_MemoryDataSize_HalfWord;
-  DMA_INIT.DMA_Mode               = DMA_Mode_Circular;
-  DMA_INIT.DMA_Priority           = DMA_Priority_High;
-  DMA_INIT.DMA_FIFOMode           = DMA_FIFOMode_Disable;         
-  DMA_INIT.DMA_FIFOThreshold      = DMA_FIFOThreshold_HalfFull;
-  DMA_INIT.DMA_MemoryBurst        = DMA_MemoryBurst_Single;
-  DMA_INIT.DMA_PeripheralBurst    = DMA_PeripheralBurst_Single;
-  DMA_Init(DMA1_Stream5, &DMA_INIT);
-
-  DMA_Cmd(DMA1_Stream5, ENABLE);
-  DAC_Cmd(DAC_Channel_1, ENABLE);
-  DAC_DMACmd(DAC_Channel_1, ENABLE);
-}
-*/
