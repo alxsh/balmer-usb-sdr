@@ -77,12 +77,16 @@ int main(void)
         UTFT_setFont(BigFont);
         UTFT_printNumI(g_spi_sended, 16, 32, 5, ' ');
         UTFT_printNumI(g_spi_rx_data, 16, 48, 5, ' ');
+        UTFT_print("EXTI", 0, 64, 0);
+        UTFT_printNumI(g_spi_exti, 16*4, 64, 4, ' ');
         i++;
         UTFT_setFont(SevenSegNumFont);
         UTFT_setColor(0, 128, 255);
         UTFT_printNumI(i, 40, 190, 0, ' ');
         UTFT_setColor(255, 255, 0);
         UTFT_printNumI(i*3, 40, 240, 0, ' ');
+        DelayMs(300);
+        SpiSend(1);
     }
 }
 

@@ -29,6 +29,7 @@
 #include "usb_istr.h"
 
 void SpiOnReceive();
+void SpiSlaveEvent();
 
 /** @addtogroup Template_Project
   * @{
@@ -163,6 +164,15 @@ void DMA1_Channel1_IRQHandler(void)
 void SPI1_IRQHandler(void)
 {
     SpiOnReceive();
+}
+
+void EXTI4_IRQHandler()
+{
+    if(EXTI_GetITStatus(EXTI_Line4) != RESET)
+    {
+        SpiSlaveEvent();
+        EXTI_ClearITPendingBit(EXTI_Line4);
+    }   
 }
 
 

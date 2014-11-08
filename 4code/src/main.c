@@ -14,9 +14,6 @@ int main(void)
 
   DelayInit();
   cs4272_Init();
-
-  DelayMs(100);
-
   SpiInit();
 
   DacInit();
@@ -27,8 +24,10 @@ int main(void)
 
   while (1)
   {
+    SpiComplete();
+    DelayMs(1000);
   }
-
+/*
   DelayInit();
 
   RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
@@ -40,7 +39,6 @@ int main(void)
   gpio_A.GPIO_OType = GPIO_OType_PP;
   GPIO_Init(GPIOA, &gpio_A);
 
-
   while (1)
   {
     GPIO_SetBits(GPIOA, GPIO_Pin_4);
@@ -50,6 +48,7 @@ int main(void)
     //DelayUs(1000);
     DelayMs(1);
   }
+*/
 }
 
 #ifdef  USE_FULL_ASSERT

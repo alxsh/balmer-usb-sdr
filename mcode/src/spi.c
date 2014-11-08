@@ -4,8 +4,10 @@
 
 uint16_t g_spi_rx_data = 0;
 bool g_spi_rx_complete = false;
+uint16_t g_spi_exti = 0;
 /*
 	Use
+	EXTI Slave - PA4
 	SPI1_SCK   - PA5 21 *
 	SPI1_MISO  - PA6 22 *
 	SPI1_MOSI  - PA7 23 *
@@ -18,15 +20,16 @@ void SpiInit()
 	SPI_InitTypeDef SPI_InitStructure;
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1, ENABLE);
 	RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE);
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE); //For exti
 
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_7;
+	//SPI lines
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_7;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;//GPIO_Speed_40MHz;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
 	GPIO_Init(GPIOA, &GPIO_InitStructure);
 
-	GPIO_PinAFConfig(GPIOA, GPIO_PinSource4, GPIO_AF_SPI1);
 	GPIO_PinAFConfig(GPIOA, GPIO_PinSource5, GPIO_AF_SPI1);
 	GPIO_PinAFConfig(GPIOA, GPIO_PinSource6, GPIO_AF_SPI1);
 	GPIO_PinAFConfig(GPIOA, GPIO_PinSource7, GPIO_AF_SPI1);
@@ -43,12 +46,34 @@ void SpiInit()
 	SPI_Init(SPI1, &SPI_InitStructure);
 	SPI_I2S_ITConfig(SPI1,SPI_I2S_IT_RXNE,ENABLE);
 	SPI_NSSInternalSoftwareConfig(SPI1, SPI_NSSInternalSoft_Set);
-	SPI_SSOutputCmd(SPI1, ENABLE);
+	//SPI_SSOutputCmd(SPI1, ENABLE);
 	SPI_Cmd(SPI1, ENABLE);
 	NVIC_EnableIRQ(SPI1_IRQn);
 
 	//SPI_I2S_SendData(SPI1, 1234);
+
+	//Init EXTI
+
+	//EXTI line
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;//GPIO_Speed_40MHz;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN;
+	GPIO_Init(GPIOA, &GPIO_InitStructure);
+
+	SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOA, EXTI_PinSource4);
+
+	EXTI_InitTypeDef exti;
+	exti.EXTI_Line = EXTI_Line4;
+	exti.EXTI_Mode = EXTI_Mode_Interrupt;
+	exti.EXTI_Trigger = EXTI_Trigger_Rising_Falling;
+	exti.EXTI_LineCmd = ENABLE;
+	EXTI_Init(&exti);
+
+	NVIC_EnableIRQ(EXTI4_IRQn);
 }
+
 
 void SpiOnReceive()
 {
@@ -64,4 +89,9 @@ void SpiSend(uint16_t data)
 {
 	while( SPI1->SR & SPI_I2S_FLAG_BSY );
 	SPI1->DR = data;
+}
+
+void SpiSlaveEvent()
+{
+	g_spi_exti++;
 }
