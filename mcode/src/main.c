@@ -9,6 +9,7 @@
 #include "ili/UTFT.h"
 
 #include "data_process.h"
+#include "spi_data_process.h"
 #include "spi.h"
 
 
@@ -20,6 +21,12 @@ extern __IO uint8_t Receive_Buffer[64];
 extern uint32_t Receive_length;
 
 extern uint16_t g_spi_sended;
+
+extern uint8_t last_command;
+extern uint8_t last_receive_length;
+extern uint32_t last_receive_data;
+
+extern uint8_t g_slave_ready;
 
 /*******************************************************************************/
                                   
@@ -75,10 +82,25 @@ int main(void)
         }
 
         UTFT_setFont(BigFont);
+        
         UTFT_printNumI(g_spi_sended, 16, 32, 5, ' ');
-        UTFT_printNumI(g_spi_rx_data, 16, 48, 5, ' ');
-        UTFT_print("EXTI", 0, 64, 0);
-        UTFT_printNumI(g_spi_exti, 16*4, 64, 4, ' ');
+        UTFT_print("Cmd", 0, 48, 0);
+        UTFT_printNumI(last_command, 16*4, 48, 3, ' ');
+        UTFT_print("Len", 0, 16*4, 0);
+        UTFT_printNumI(last_receive_length, 16*4, 16*4, 3, ' ');
+
+        UTFT_printNumI(g_slave_ready, 16*11, 64, 2, ' ');
+
+        UTFT_print("D=", 0, 16*5, 0);
+        UTFT_printNumI(last_receive_data, 16*4, 16*5, 3, ' ');
+        
+
+        if(SpiBusy())
+        {
+          UTFT_setColor(255, 255, 0);
+          UTFT_print("B", 16*10, 48, 0); 
+        }
+        
         i++;
         UTFT_setFont(SevenSegNumFont);
         UTFT_setColor(0, 128, 255);
@@ -86,7 +108,6 @@ int main(void)
         UTFT_setColor(255, 255, 0);
         UTFT_printNumI(i*3, 40, 240, 0, ' ');
         DelayMs(300);
-        SpiSend(1);
     }
 }
 

@@ -1,10 +1,10 @@
 
 #include "delay.h"
 #include "spi.h"
+#include "spi_data_process.h"
 
-uint16_t g_spi_rx_data = 0;
-bool g_spi_rx_complete = false;
-uint16_t g_spi_exti = 0;
+uint8_t g_slave_ready = 0;
+
 /*
 	Use
 	EXTI Slave - PA4
@@ -67,22 +67,11 @@ void SpiInit()
 	EXTI_InitTypeDef exti;
 	exti.EXTI_Line = EXTI_Line4;
 	exti.EXTI_Mode = EXTI_Mode_Interrupt;
-	exti.EXTI_Trigger = EXTI_Trigger_Rising_Falling;
+	exti.EXTI_Trigger = EXTI_Trigger_Rising;
 	exti.EXTI_LineCmd = ENABLE;
 	EXTI_Init(&exti);
 
 	NVIC_EnableIRQ(EXTI4_IRQn);
-}
-
-
-void SpiOnReceive()
-{
-	if (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE)==SET) {
-		volatile uint16_t data = SPI1->DR; //Читаем то что пришло
-		g_spi_rx_complete = true;
-		g_spi_rx_data = data;
-		//SPI1->DR = 1234;
-	}
 }
 
 void SpiSend(uint16_t data)
@@ -91,7 +80,17 @@ void SpiSend(uint16_t data)
 	SPI1->DR = data;
 }
 
+void SpiOnReceive()
+{
+	if (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE)==SET) {
+		volatile uint16_t data = SPI1->DR; //Читаем то что пришло
+		SpiDataReceive(data);
+		//SPI1->DR = 1234;
+	}
+}
+
 void SpiSlaveEvent()
 {
-	g_spi_exti++;
+	g_slave_ready++;
+	SpiSlaveReady();
 }

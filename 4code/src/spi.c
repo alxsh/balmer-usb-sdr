@@ -1,5 +1,6 @@
 #include "delay.h"
 #include "spi.h"
+#include "spi_data_process.h"
 /*
 	EXTI Slave 			 - PB12
 	SPI2_SCK             - PB13 34 *
@@ -47,8 +48,15 @@ void SpiInit()
 	SPI_Cmd(SPI2, ENABLE);
 	NVIC_EnableIRQ(SPI2_IRQn);
 
-	SPI2->DR = 0x4000;
+	SPI2->DR = 0x4003;
 }
+
+void SpiSend(uint16_t data)
+{
+	while( SPI2->SR & SPI_I2S_FLAG_BSY );
+	SPI2->DR = data;
+}
+
 
 extern int g_sound_min;
 extern int g_sound_max;
@@ -58,7 +66,8 @@ void SpiOnReceive()
 {
 	if (SPI_I2S_GetFlagStatus(SPI2, SPI_I2S_FLAG_RXNE)==SET) {
 		volatile uint16_t data = SPI2->DR; //Читаем то что пришло
-
+		SpiDataReceive(data);
+/*
 		if(g_sound_min <= g_sound_max)
 		{
 			data = g_sound_max-g_sound_min;
@@ -67,12 +76,16 @@ void SpiOnReceive()
 		}
 
 		SPI2->DR = data;
+*/
 	}
 }
 
-void SpiComplete()
+void SpiStartSend()
 {
 	GPIO_SetBits(GPIOB, GPIO_Pin_12);
-	DelayUs(2);
+}
+
+void SpiEndSend()
+{
 	GPIO_ResetBits(GPIOB, GPIO_Pin_12);
 }

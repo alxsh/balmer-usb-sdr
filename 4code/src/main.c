@@ -3,6 +3,7 @@
 #include "delay.h"
 #include "spi.h"
 #include "cs4272.h"
+#include "spi_data_process.h"
 
 RCC_ClocksTypeDef RCC_Clocks;
 
@@ -24,8 +25,8 @@ int main(void)
 
   while (1)
   {
-    SpiComplete();
     DelayMs(1);
+    SpiQuant();
   }
 /*
   DelayInit();
