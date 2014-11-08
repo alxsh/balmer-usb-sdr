@@ -11,6 +11,8 @@ DEPS += \
 	output/base/src/main.d \
 	output/base/src/process_sound.d \
 	output/base/src/spi.d \
+	output/base/src/spi_commands.d \
+	output/base/src/spi_data_process.d \
 	output/base/src/stm32f4xx_it.d \
 	output/base/src/system_stm32f4xx.d \
 	output/StdPeriph_Driver/misc.d \
@@ -33,6 +35,8 @@ OBJS += \
 	output/base/src/main.o \
 	output/base/src/process_sound.o \
 	output/base/src/spi.o \
+	output/base/src/spi_commands.o \
+	output/base/src/spi_data_process.o \
 	output/base/src/stm32f4xx_it.o \
 	output/base/src/system_stm32f4xx.o \
 	output/StdPeriph_Driver/misc.o \
@@ -73,6 +77,14 @@ output/base/src/process_sound.o: ./src/process_sound.c
 
 output/base/src/spi.o: ./src/spi.c
 	@echo 'Building target: spi.c'
+	@$(CC) $(C_FLAGS) -o "$@" "$<"
+
+output/base/src/spi_commands.o: ./src/spi_commands.c
+	@echo 'Building target: spi_commands.c'
+	@$(CC) $(C_FLAGS) -o "$@" "$<"
+
+output/base/src/spi_data_process.o: ./src/spi_data_process.c
+	@echo 'Building target: spi_data_process.c'
 	@$(CC) $(C_FLAGS) -o "$@" "$<"
 
 output/base/src/stm32f4xx_it.o: ./src/stm32f4xx_it.c
