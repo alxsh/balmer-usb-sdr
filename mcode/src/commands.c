@@ -4,6 +4,7 @@
 #include "spi_data_process.h"
 
 uint16_t g_spi_sended = 0;
+uint16_t g_spi_retry = 0;
 
 void PacketReceive(volatile uint8_t* data, uint32_t size)
 {
@@ -28,7 +29,8 @@ void PacketReceive(volatile uint8_t* data, uint32_t size)
 	case 2://COMMAND_SEND_SPI
 		{
 			g_spi_sended = *(uint16_t*)(data+0);
-			//SpiAdd16(g_spi_sended);
+			g_spi_retry = 10;
+			SpiAdd16(g_spi_sended);
 			SpiSendCommand(2);
 		}
 		return;

@@ -41,7 +41,7 @@ def main():
 
 	#command_none()
 	#command_print_int(123, 17, 38)
-	command_spi_send(69)
+	command_spi_send(1277)
 
 	serial_protocol.close()
 	pass
