@@ -25,7 +25,7 @@ int main(void)
   while (1)
   {
     SpiComplete();
-    DelayMs(1000);
+    DelayMs(1);
   }
 /*
   DelayInit();
