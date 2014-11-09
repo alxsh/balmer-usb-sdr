@@ -2,6 +2,7 @@
 #include "cs4272.h"
 #include "stm32f4xx_conf.h"
 #include "delay.h"
+#include "process_sound.h"
 
 //	CCLK - PB6
 //	CDIN - PB7
@@ -11,68 +12,25 @@
 // SPI3_SCK PC10
 // I2S3_SD  PC12
 
-void OnSoundData(int32_t sample);
+
 
 #define RST_HIGH		GPIO_SetBits(GPIOB, GPIO_Pin_8)
 #define RST_LOW			GPIO_ResetBits(GPIOB, GPIO_Pin_8)
 #define SLAVE_ADDRESS 0x20
 
-#define BUFFER_SIZE 2048
 static uint8_t x4count = 0;
-static int buffer_pos = 0;
-uint16_t sound_buffer[BUFFER_SIZE];
-
-
-static void init_GPIO_I2S()
-{
-	GPIO_InitTypeDef GPIO_InitStruct;
-	I2S_InitTypeDef I2S_InitStruct;
-
-	//I2S3 used
-	//PA15 - NSS
-	//PC10 - SCK
-	//PC12 - MOSI
-	RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI3, ENABLE);
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA|RCC_AHB1Periph_GPIOC, ENABLE);
-
-	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF;
-	GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
-	GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_NOPULL;
-
-	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_15;
-	GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_10 | GPIO_Pin_12;
-	GPIO_Init(GPIOC, &GPIO_InitStruct);
-
-	GPIO_PinAFConfig(GPIOA, GPIO_PinSource15, GPIO_AF_SPI3);
-	GPIO_PinAFConfig(GPIOC, GPIO_PinSource10, GPIO_AF_SPI3);
-	GPIO_PinAFConfig(GPIOC, GPIO_PinSource12, GPIO_AF_SPI3);
-
-	I2S_InitStruct.I2S_Mode = I2S_Mode_SlaveRx;
-	I2S_InitStruct.I2S_Standard = I2S_Standard_Phillips;
-	I2S_InitStruct.I2S_DataFormat = I2S_DataFormat_24b;
-	I2S_InitStruct.I2S_MCLKOutput = I2S_MCLKOutput_Disable;
-	I2S_InitStruct.I2S_AudioFreq = I2S_AudioFreq_48k;
-	I2S_InitStruct.I2S_CPOL = I2S_CPOL_Low;
-  	I2S_Init(SPI3, &I2S_InitStruct);
-
-
-	NVIC_InitTypeDef NVIC_InitStructure;
-
-	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_3); 
-	/* Configure the SPI interrupt priority */
-	NVIC_InitStructure.NVIC_IRQChannel = SPI3_IRQn;
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
-	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-	NVIC_Init(&NVIC_InitStructure);
-}
+uint16_t sound_buffer[SOUND_BUFFER_SIZE];
 
 static void start()
 {
-	SPI_I2S_ITConfig(SPI3, SPI_I2S_IT_RXNE, ENABLE);
+	if(g_i2s_dma)
+	{
+		DMA_Cmd(DMA1_Stream0, ENABLE);
+	} else
+	{
+		SPI_I2S_ITConfig(SPI3, SPI_I2S_IT_RXNE, ENABLE);
+	}
+
 	I2S_Cmd(SPI3, ENABLE);
 }
 
@@ -223,6 +181,101 @@ uint8_t cs4272_i2c_read_reg(uint8_t reg)
 }
 
 
+static void init_GPIO_I2S()
+{
+	GPIO_InitTypeDef GPIO_InitStruct;
+	I2S_InitTypeDef I2S_InitStruct;
+
+	//I2S3 used
+	//PA15 - NSS
+	//PC10 - SCK
+	//PC12 - MOSI
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI3, ENABLE);
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_DMA1, ENABLE);
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA|RCC_AHB1Periph_GPIOC, ENABLE);
+
+	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF;
+	GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
+	GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_NOPULL;
+
+	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_15;
+	GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_10 | GPIO_Pin_12;
+	GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+	GPIO_PinAFConfig(GPIOA, GPIO_PinSource15, GPIO_AF_SPI3);
+	GPIO_PinAFConfig(GPIOC, GPIO_PinSource10, GPIO_AF_SPI3);
+	GPIO_PinAFConfig(GPIOC, GPIO_PinSource12, GPIO_AF_SPI3);
+
+	I2S_InitStruct.I2S_Mode = I2S_Mode_SlaveRx;
+	I2S_InitStruct.I2S_Standard = I2S_Standard_Phillips;
+	I2S_InitStruct.I2S_DataFormat = I2S_DataFormat_24b;
+	I2S_InitStruct.I2S_MCLKOutput = I2S_MCLKOutput_Disable;
+	I2S_InitStruct.I2S_AudioFreq = I2S_AudioFreq_48k;
+	I2S_InitStruct.I2S_CPOL = I2S_CPOL_Low;
+  	I2S_Init(SPI3, &I2S_InitStruct);
+
+
+	NVIC_InitTypeDef NVIC_InitStructure;
+
+	if(g_i2s_dma)
+	{//use dma
+		SPI_I2S_ITConfig(SPI3, SPI_I2S_IT_RXNE, DISABLE);
+
+		DMA_Cmd(DMA1_Stream0, DISABLE);
+    	DMA_DeInit(DMA1_Stream0);
+
+    	DMA_InitTypeDef dma_init;
+		dma_init.DMA_Channel = DMA_Channel_0; 
+		dma_init.DMA_PeripheralBaseAddr = (uint32_t)&(SPI3->DR);
+		dma_init.DMA_Memory0BaseAddr = (uint32_t)sound_buffer;
+		dma_init.DMA_DIR = DMA_DIR_PeripheralToMemory;
+		dma_init.DMA_BufferSize = (uint32_t)SOUND_BUFFER_SIZE;
+		dma_init.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
+		dma_init.DMA_MemoryInc = DMA_MemoryInc_Enable;
+		dma_init.DMA_PeripheralDataSize = DMA_PeripheralDataSize_HalfWord;
+		dma_init.DMA_MemoryDataSize = DMA_MemoryDataSize_HalfWord;
+		dma_init.DMA_Mode = DMA_Mode_Circular;
+		dma_init.DMA_Priority = DMA_Priority_High;
+		dma_init.DMA_FIFOMode = DMA_FIFOMode_Disable;        
+		dma_init.DMA_FIFOThreshold = DMA_FIFOThreshold_1QuarterFull;
+		dma_init.DMA_MemoryBurst = DMA_MemoryBurst_Single;
+		dma_init.DMA_PeripheralBurst = DMA_PeripheralBurst_Single; 
+		DMA_Init(DMA1_Stream0, &dma_init);
+		/*
+  uint32_t DMA_Channel;
+  uint32_t DMA_PeripheralBaseAddr; 
+  uint32_t DMA_Memory0BaseAddr;
+  uint32_t DMA_DIR;
+  uint32_t DMA_BufferSize;
+  uint32_t DMA_PeripheralInc;
+  uint32_t DMA_MemoryInc;
+  uint32_t DMA_PeripheralDataSize;
+  uint32_t DMA_MemoryDataSize;
+  uint32_t DMA_Mode;
+  uint32_t DMA_Priority;
+  uint32_t DMA_FIFOMode;
+  uint32_t DMA_FIFOThreshold;
+  uint32_t DMA_MemoryBurst;
+  uint32_t DMA_PeripheralBurst;
+		*/
+		SPI_I2S_DMACmd(SPI3, SPI_I2S_DMAReq_Rx, ENABLE);
+
+		NVIC_EnableIRQ(DMA1_Stream0_IRQn);	
+	} else
+	{//use interrupt
+		NVIC_PriorityGroupConfig(NVIC_PriorityGroup_3); 
+		/* Configure the SPI interrupt priority */
+		NVIC_InitStructure.NVIC_IRQChannel = SPI3_IRQn;
+		NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
+		NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+		NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+		NVIC_Init(&NVIC_InitStructure);
+	}
+}
+
 bool cs4272_Init()
 {
 	GPIO_InitTypeDef gpio;
@@ -274,7 +327,6 @@ bool cs4272_Init()
 void cs4272_start()
 {
 	x4count = 0;
-	buffer_pos = 0;
 	start();
 }
 

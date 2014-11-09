@@ -4,6 +4,7 @@
 #include "spi.h"
 #include "cs4272.h"
 #include "spi_data_process.h"
+#include "process_sound.h"
 
 RCC_ClocksTypeDef RCC_Clocks;
 
@@ -25,7 +26,9 @@ int main(void)
 
   while (1)
   {
-    DelayMs(1);
+    //DelayMs(1);
+    //DelayUs(10);
+    SoundQuant();
     SpiQuant();
   }
 /*

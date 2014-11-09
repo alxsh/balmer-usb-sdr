@@ -7,3 +7,8 @@ uint8_t cs4272_read_reg(uint8_t addr);
 
 void cs4272_start();
 void cs4272_stop();
+
+#define g_i2s_dma true
+
+#define SOUND_BUFFER_SIZE 2048
+extern uint16_t sound_buffer[SOUND_BUFFER_SIZE];

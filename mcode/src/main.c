@@ -108,6 +108,7 @@ int main(void)
         UTFT_setColor(255, 255, 0);
         UTFT_printNumI(i*3, 40, 240, 0, ' ');
         DelayMs(300);
+        SpiSendCommand(1);
     }
 }
 
