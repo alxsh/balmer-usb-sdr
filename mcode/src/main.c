@@ -92,7 +92,7 @@ int main(void)
         UTFT_printNumI(g_slave_ready, 16*11, 64, 2, ' ');
 
         UTFT_print("D=", 0, 16*5, 0);
-        UTFT_printNumI(last_receive_data, 16*4, 16*5, 3, ' ');
+        UTFT_printNumI(last_receive_data, 16*3, 16*5, 5, ' ');
         
 
         if(SpiBusy())

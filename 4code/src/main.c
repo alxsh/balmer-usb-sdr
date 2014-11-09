@@ -26,7 +26,7 @@ int main(void)
 
   while (1)
   {
-    //DelayMs(1);
+    DelayMs(1);
     //DelayUs(10);
     SoundQuant();
     SpiQuant();
