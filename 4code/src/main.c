@@ -16,6 +16,7 @@ int main(void)
 
   DelayInit();
   cs4272_Init();
+  InitFft();
   SpiInit();
 
   DacInit();

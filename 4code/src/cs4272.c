@@ -244,26 +244,9 @@ static void init_GPIO_I2S()
 		dma_init.DMA_MemoryBurst = DMA_MemoryBurst_Single;
 		dma_init.DMA_PeripheralBurst = DMA_PeripheralBurst_Single; 
 		DMA_Init(DMA1_Stream0, &dma_init);
-		/*
-  uint32_t DMA_Channel;
-  uint32_t DMA_PeripheralBaseAddr; 
-  uint32_t DMA_Memory0BaseAddr;
-  uint32_t DMA_DIR;
-  uint32_t DMA_BufferSize;
-  uint32_t DMA_PeripheralInc;
-  uint32_t DMA_MemoryInc;
-  uint32_t DMA_PeripheralDataSize;
-  uint32_t DMA_MemoryDataSize;
-  uint32_t DMA_Mode;
-  uint32_t DMA_Priority;
-  uint32_t DMA_FIFOMode;
-  uint32_t DMA_FIFOThreshold;
-  uint32_t DMA_MemoryBurst;
-  uint32_t DMA_PeripheralBurst;
-		*/
 		SPI_I2S_DMACmd(SPI3, SPI_I2S_DMAReq_Rx, ENABLE);
 
-		//NVIC_EnableIRQ(DMA1_Stream0_IRQn);	
+		//NVIC_EnableIRQ(DMA1_Stream0_IRQn);
 	} else
 	{//use interrupt
 		NVIC_PriorityGroupConfig(NVIC_PriorityGroup_3); 

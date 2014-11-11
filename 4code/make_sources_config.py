@@ -35,6 +35,17 @@ sources = [
 		"stm32f4xx_syscfg.c",
 		"stm32f4xx_tim.c"
 		]
+},
+{
+	"base" : "../../SoundCard/code/Libraries/CMSIS/DSP_Lib/Source/TransformFunctions",
+	"output" : "FFT",
+	"files" : [
+		"../CommonTables/arm_common_tables.c",
+		"arm_cfft_radix4_f32.c",
+		"arm_cfft_radix4_init_f32.c",
+		"arm_rfft_init_f32.c",
+		"arm_rfft_f32.c"
+		]
 }
 ]
 
