@@ -246,7 +246,7 @@ static void init_GPIO_I2S()
 		DMA_Init(DMA1_Stream0, &dma_init);
 		SPI_I2S_DMACmd(SPI3, SPI_I2S_DMAReq_Rx, ENABLE);
 
-		//NVIC_EnableIRQ(DMA1_Stream0_IRQn);
+		NVIC_EnableIRQ(DMA1_Stream0_IRQn);
 	} else
 	{//use interrupt
 		NVIC_PriorityGroupConfig(NVIC_PriorityGroup_3); 
@@ -322,7 +322,8 @@ void cs4272_stop()
 void OnSoundReceive()
 {
 	/* Check if data are available in SPI Data register */
-	if (SPI_GetITStatus(SPI3, SPI_I2S_IT_RXNE) != RESET)
+	if(!g_i2s_dma)
+	if(SPI_GetITStatus(SPI3, SPI_I2S_IT_RXNE) != RESET)
 	{
 		uint16_t app = SPI_I2S_ReceiveData(SPI3);
 		static uint16_t data4[4];
@@ -330,7 +331,6 @@ void OnSoundReceive()
 		if(x4count==4)
 		{
 			int32_t sample = (((int32_t)data4[0])<<16)+data4[1];
-			//int32_t sample = *(int32_t*)data4;
 			OnSoundData(sample);
 			x4count = 0;
 		}
