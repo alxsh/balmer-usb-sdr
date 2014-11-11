@@ -9,7 +9,7 @@ uint16_t DacGetBufferSize();
 
 #define FFT_LENGTH 512
 
-static uint16_t g_cur_pos = 0;//SINUS_BUFFER_SIZE/2;
+static uint16_t g_cur_pos = DAC_BUFFER_SIZE/2;
 int g_sound_min = 1<<24;
 int g_sound_max = -(1<<24);
 static uint16_t g_dma_cur_pos = 0;
@@ -20,6 +20,11 @@ float32_t in_fft_buffer[FFT_LENGTH];
 float32_t out_fft_buffer[FFT_LENGTH];
 uint16_t fft_calculate_time = 0;
 
+uint16_t DacGetWritePos()
+{
+	return g_cur_pos;
+}
+
 void OnSoundData(int32_t sample)
 {
 	uint16_t* out_buffer = DacGetBuffer();
@@ -29,9 +34,8 @@ void OnSoundData(int32_t sample)
 	if(s>4095)
 		s=4095;
 	out_buffer[g_cur_pos] = s;
-	//out_buffer[g_cur_pos] = (sample>>(12))+DAC_ZERO;
 
-	g_cur_pos = (g_cur_pos+1)%SINUS_BUFFER_SIZE;
+	g_cur_pos = (g_cur_pos+1)%DAC_BUFFER_SIZE;
 }
 
 void CopySoundData(uint16_t start, uint16_t count)

@@ -12,10 +12,10 @@
 #define MIN_SINUS_PERIOD 4
 
 static uint16_t g_dac_amplitude = DAC_AMPLITUDE;
-static uint16_t g_sinusBuffer[SINUS_BUFFER_SIZE];
-static uint32_t SinusBufferSize = SINUS_BUFFER_SIZE;
+static uint16_t g_sinusBuffer[DAC_BUFFER_SIZE];
+static uint32_t SinusBufferSize = DAC_BUFFER_SIZE;
 static uint32_t g_dac_period = 0; // * 1/SystemCoreClock sec SystemCoreClock==72000000
-float g_sinusBufferFloat[SINUS_BUFFER_SIZE];
+float g_sinusBufferFloat[DAC_BUFFER_SIZE];
 
 uint16_t* DacGetBuffer()
 {
@@ -24,12 +24,12 @@ uint16_t* DacGetBuffer()
 
 uint16_t DacGetBufferSize()
 {
-	return SINUS_BUFFER_SIZE;
+	return DAC_BUFFER_SIZE;
 }
 
-uint16_t DacGetPos()
+uint16_t DacGetReadPos()
 {
-	return 0;
+	return DAC_BUFFER_SIZE - DMA1_Stream5->NDTR;
 }
 
 uint32_t DacPeriod(void)
@@ -153,8 +153,8 @@ void DacSetPeriod(uint32_t sinusPeriod, uint16_t amplitude)
 	g_dac_amplitude = amplitude;
 	if(sinusPeriod<MIN_SINUS_PERIOD)
 		sinusPeriod = MIN_SINUS_PERIOD;
-	if(sinusPeriod>SINUS_BUFFER_SIZE)
-		sinusPeriod = SINUS_BUFFER_SIZE;
+	if(sinusPeriod>DAC_BUFFER_SIZE)
+		sinusPeriod = DAC_BUFFER_SIZE;
 
 	DacDeinitDmaAndTimer();
 
@@ -167,7 +167,7 @@ void DacSetPeriod(uint32_t sinusPeriod, uint16_t amplitude)
 
 void DacInitFullBuffer()
 {
-	SinusBufferSize = SINUS_BUFFER_SIZE;
+	SinusBufferSize = DAC_BUFFER_SIZE;
 	DacDeinitDmaAndTimer();
 
 	for(int i=0; i<SinusBufferSize; i++)
