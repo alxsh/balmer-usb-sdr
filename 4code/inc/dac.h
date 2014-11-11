@@ -5,12 +5,12 @@
 #define _DAC_H_
 
 #define pi  3.14159f
-#define SINUS_BUFFER_SIZE 2000
+#define DAC_BUFFER_SIZE 2000
 #define DEFAULT_DAC_AMPLITUDE 1200
 #define DAC_ZERO 2047
 
 
-extern float g_sinusBufferFloat[SINUS_BUFFER_SIZE];
+extern float g_sinusBufferFloat[DAC_BUFFER_SIZE];
 
 void DacInit(void);
 
@@ -36,6 +36,6 @@ uint32_t DacSampleTicks(void);
 uint16_t* DacGetBuffer();
 uint16_t DacGetBufferSize();
 //Play position
-uint16_t DacGetPos();
+uint16_t DacGetReadPos();
 
 #endif//_DAC_H_
