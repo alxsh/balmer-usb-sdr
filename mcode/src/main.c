@@ -11,6 +11,7 @@
 #include "data_process.h"
 #include "spi_data_process.h"
 #include "spi.h"
+#include "../../4code/inc/spi_commands.h"
 
 
 RCC_ClocksTypeDef RCC_Clocks;
@@ -108,7 +109,7 @@ int main(void)
         UTFT_setColor(255, 255, 0);
         UTFT_printNumI(i*3, 40, 240, 0, ' ');
         DelayMs(300);
-        SpiSendCommand(1);
+        SpiSendCommand(SCOMMAND_SOUND_BUF_DELTA);
     }
 }
 

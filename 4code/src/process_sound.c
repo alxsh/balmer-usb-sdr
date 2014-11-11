@@ -9,7 +9,7 @@ uint16_t DacGetBufferSize();
 
 #define FFT_LENGTH 512
 
-static uint16_t g_cur_pos = SINUS_BUFFER_SIZE/2;
+static uint16_t g_cur_pos = 0;//SINUS_BUFFER_SIZE/2;
 int g_sound_min = 1<<24;
 int g_sound_max = -(1<<24);
 static uint16_t g_dma_cur_pos = 0;
@@ -22,14 +22,13 @@ uint16_t fft_calculate_time = 0;
 
 void OnSoundData(int32_t sample)
 {
-	int32_t s = (sample>>8);
-	if(s>g_sound_max)
-		g_sound_max = s;
-	if(s<g_sound_min)
-		g_sound_min = s;
-
 	uint16_t* out_buffer = DacGetBuffer();
-	out_buffer[g_cur_pos] = (sample>>(14))+DAC_ZERO;
+	int s = (sample>>(14))+DAC_ZERO;;
+	if(s<0)
+		s = 0;
+	if(s>4095)
+		s=4095;
+	out_buffer[g_cur_pos] = s;
 	//out_buffer[g_cur_pos] = (sample>>(12))+DAC_ZERO;
 
 	g_cur_pos = (g_cur_pos+1)%SINUS_BUFFER_SIZE;

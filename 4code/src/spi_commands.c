@@ -1,4 +1,5 @@
 #include "spi_data_process.h"
+#include "spi_commands.h"
 
 extern uint16_t fft_calculate_time;
 

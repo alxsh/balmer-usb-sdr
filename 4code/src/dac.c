@@ -27,6 +27,10 @@ uint16_t DacGetBufferSize()
 	return SINUS_BUFFER_SIZE;
 }
 
+uint16_t DacGetPos()
+{
+	return 0;
+}
 
 uint32_t DacPeriod(void)
 {
@@ -176,9 +180,4 @@ void DacInitFullBuffer()
 void DacStart()
 {
 	TIM_Cmd(TIM2, ENABLE);
-}
-
-uint16_t DacGetPos()
-{
-	return 0;
 }
