@@ -1,15 +1,24 @@
 #include "dac.h"
 #include "cs4272.h"
 #include "process_sound.h"
+#include "arm_math.h"
+#include "delay.h"
 
 uint16_t* DacGetBuffer();
 uint16_t DacGetBufferSize();
 
+#define FFT_LENGTH 512
+
 static uint16_t g_cur_pos = SINUS_BUFFER_SIZE/2;
 int g_sound_min = 1<<24;
 int g_sound_max = -(1<<24);
-
 static uint16_t g_dma_cur_pos = 0;
+
+static arm_rfft_instance_f32 S_RFFT;
+static arm_cfft_radix4_instance_f32 S_CFFT;
+float32_t in_fft_buffer[FFT_LENGTH];
+float32_t out_fft_buffer[FFT_LENGTH];
+uint16_t fft_calculate_time = 0;
 
 void OnSoundData(int32_t sample)
 {
@@ -60,4 +69,19 @@ void SoundQuant()
 	}
 
 	g_dma_cur_pos = pos;
+}
+
+void InitFft()
+{
+	arm_rfft_init_f32(&S_RFFT, &S_CFFT, FFT_LENGTH, 0, 0);
+
+	for(int i=0; i<FFT_LENGTH; i+=2)
+	{
+		in_fft_buffer[i] = 0.0f;
+		in_fft_buffer[i+1] = 1.0f;
+	}
+
+	uint16_t start = TimeUs();
+	arm_rfft_f32(&S_RFFT, in_fft_buffer, out_fft_buffer);
+	fft_calculate_time =  TimeUs()-start;
 }
