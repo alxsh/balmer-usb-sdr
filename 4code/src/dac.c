@@ -108,7 +108,7 @@ static void DacInitDmaAndTimer()
 	uint32_t prescaler;
 	uint32_t period;
 	prescaler = 1;
-	period = 3500/2;
+	period = (3500)/2;
 
 	DMA_InitTypeDef DMA_InitStructure;
 	DMA_InitStructure.DMA_Channel = DMA_Channel_7;
@@ -133,7 +133,7 @@ static void DacInitDmaAndTimer()
 	DAC_DMACmd(DAC_Channel_1, ENABLE);
 
 
-	//72 MHz / TIM_Prescaler / TIM_Period
+	//168 MHz / TIM_Prescaler / TIM_Period
 	TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
 	TIM_TimeBaseStructInit(&TIM_TimeBaseStructure);
 	TIM_TimeBaseStructure.TIM_Period = period-1;

@@ -20,9 +20,35 @@ float32_t in_fft_buffer[FFT_LENGTH];
 float32_t out_fft_buffer[FFT_LENGTH];
 uint16_t fft_calculate_time = 0;
 
+static uint16_t prev_time_ms = 0;
+
 uint16_t DacGetWritePos()
 {
 	return g_cur_pos;
+}
+
+uint16_t DacGetDeltaPos()
+{
+	uint16_t pos_in = DacGetWritePos();
+	uint16_t pos_out = DacGetReadPos();
+	uint16_t pos_delta;
+	if(pos_out>pos_in)
+	{
+		pos_delta = pos_out-pos_in;
+	} else
+	{
+		pos_delta = DAC_BUFFER_SIZE+pos_out-pos_in;
+	}
+
+	return pos_delta;
+}
+
+void DacCorrectWritePos()
+{
+	uint16_t pos_delta = DacGetDeltaPos();
+
+	g_cur_pos += pos_delta-DAC_BUFFER_SIZE/2;
+	g_cur_pos %= DAC_BUFFER_SIZE;
 }
 
 void OnSoundData(int32_t sample)
@@ -64,14 +90,31 @@ void SoundQuant()
 	} else
 	if(g_dma_cur_pos<pos)
 	{
-		CopySoundData(g_dma_cur_pos, pos-g_dma_cur_pos);
+		pos = (pos+SOUND_BUFFER_SIZE-4)%SOUND_BUFFER_SIZE;
+		if(g_dma_cur_pos<pos)
+		{
+			CopySoundData(g_dma_cur_pos, pos-g_dma_cur_pos);
+			g_dma_cur_pos = pos;
+		}
 	} else
 	{
-		CopySoundData(g_dma_cur_pos, SOUND_BUFFER_SIZE-g_dma_cur_pos);
-		CopySoundData(0, pos);
+		//pos = (pos+SOUND_BUFFER_SIZE-4)%SOUND_BUFFER_SIZE;
+		if(pos<g_dma_cur_pos)
+		{
+			CopySoundData(g_dma_cur_pos, SOUND_BUFFER_SIZE-g_dma_cur_pos);
+			CopySoundData(0, pos);
+			g_dma_cur_pos = pos;
+		}
 	}
 
-	g_dma_cur_pos = pos;
+	//Раз в секунду корректируем положение записи, чтобы была синхронизация частоты чтением и записью.
+	uint16_t cur_time = TimeMs();
+	if( ((uint16_t)(cur_time-prev_time_ms))>1000)
+	{
+		prev_time_ms = cur_time;
+		DacCorrectWritePos();
+	}
+
 }
 
 void InitFft()

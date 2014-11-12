@@ -246,7 +246,7 @@ static void init_GPIO_I2S()
 		DMA_Init(DMA1_Stream0, &dma_init);
 		SPI_I2S_DMACmd(SPI3, SPI_I2S_DMAReq_Rx, ENABLE);
 
-		NVIC_EnableIRQ(DMA1_Stream0_IRQn);
+		//NVIC_EnableIRQ(DMA1_Stream0_IRQn);
 	} else
 	{//use interrupt
 		NVIC_PriorityGroupConfig(NVIC_PriorityGroup_3); 
