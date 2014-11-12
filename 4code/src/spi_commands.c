@@ -14,17 +14,7 @@ void SpiCommandReceive(uint8_t command, uint8_t receive_length, uint8_t* receive
 	} else
 	if(command==SCOMMAND_SOUND_BUF_DELTA)
 	{
-		uint16_t pos_in = DacGetWritePos();
-		uint16_t pos_out = DacGetReadPos();
-		uint16_t pos_delta = 0;
-		if(pos_out>pos_in)
-		{
-			pos_delta = pos_out-pos_in;
-		} else
-		{
-			pos_delta = DAC_BUFFER_SIZE+pos_out-pos_in;
-		}
-
+		uint16_t pos_delta = DacGetDeltaPos();
 		SpiAdd16(pos_delta);
 	} else
 	{
