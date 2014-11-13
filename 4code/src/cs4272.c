@@ -336,3 +336,13 @@ void OnSoundReceive()
 		}
 	}
 }
+
+uint16_t cs4272_getPos()
+{
+	uint16_t ndtr = (uint16_t)DMA1_Stream0->NDTR;
+	if(ndtr>SOUND_BUFFER_SIZE)
+		return 0;
+	uint16_t pos = SOUND_BUFFER_SIZE - ndtr;
+	pos = pos & ~(uint16_t)3;
+	return pos;
+}

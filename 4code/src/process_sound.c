@@ -22,6 +22,15 @@ uint16_t fft_calculate_time = 0;
 
 static uint16_t prev_time_ms = 0;
 
+//Количество сэмплов, сгенерированных с ADC (мгновенное значение)
+static uint32_t summary_adc_samples = 0;
+//Количество сэмплов, воспроизведенных DAC (мгновенное значение)
+static uint32_t summary_dac_samples = 0;
+static uint16_t adc_cur_pos_momental = 0;
+static uint16_t dac_cur_pos_momental = 0;
+
+void UpdateSummarySamples(uint16_t adc_pos);
+
 uint16_t DacGetWritePos()
 {
 	return g_cur_pos;
@@ -39,16 +48,30 @@ uint16_t DacGetDeltaPos()
 	{
 		pos_delta = DAC_BUFFER_SIZE+pos_out-pos_in;
 	}
-
 	return pos_delta;
+	//return (uint16_t)summary_adc_samples-(uint16_t)summary_dac_samples;
 }
 
 void DacCorrectWritePos()
 {
-	uint16_t pos_delta = DacGetDeltaPos();
+	if(summary_adc_samples==summary_dac_samples)
+	{
+	} else
+	if(summary_adc_samples>summary_dac_samples)
+	{
+		uint16_t pos_delta = summary_adc_samples-summary_dac_samples;
 
-	g_cur_pos += pos_delta-DAC_BUFFER_SIZE/2;
-	g_cur_pos %= DAC_BUFFER_SIZE;
+		if(pos_delta>1)
+		{
+			g_cur_pos += DAC_BUFFER_SIZE-pos_delta;
+			g_cur_pos %= DAC_BUFFER_SIZE;
+			summary_dac_samples = summary_adc_samples;
+		}
+	} else
+	{
+		//Тут код еще не написали, надо проверить случай, когда таймер идет быстрее
+	}
+
 }
 
 void OnSoundData(int32_t sample)
@@ -78,12 +101,8 @@ void SoundQuant()
 {
 	if(!g_i2s_dma)
 		return;
-	//NDTR - количество байт в DMA буфере, которое еще осталось скопировать.
-	uint16_t ndtr = (uint16_t)DMA1_Stream0->NDTR;
-	if(ndtr>SOUND_BUFFER_SIZE)
-		return;
-	uint16_t pos = SOUND_BUFFER_SIZE - ndtr;
-	pos = pos & ~(uint16_t)3;
+	uint16_t pos = cs4272_getPos();
+	UpdateSummarySamples(pos);
 
 	if(g_dma_cur_pos==pos)
 	{
@@ -130,4 +149,40 @@ void InitFft()
 	uint16_t start = TimeUs();
 	arm_rfft_f32(&S_RFFT, in_fft_buffer, out_fft_buffer);
 	fft_calculate_time =  TimeUs()-start;
+}
+
+void UpdateSummarySamples(uint16_t adc_pos)
+{
+//summary_adc_samples
+//summary_dac_samples
+	uint16_t pos = adc_pos;
+	if(adc_cur_pos_momental==pos)
+	{
+	} else
+	if(adc_cur_pos_momental<pos)
+	{
+		summary_adc_samples += (pos-adc_cur_pos_momental)/4;
+	} else
+	{
+		summary_adc_samples += (SOUND_BUFFER_SIZE-adc_cur_pos_momental)/4;
+		summary_adc_samples += (pos)/4;
+	}
+	adc_cur_pos_momental = pos;
+
+	pos = DacGetReadPos();
+
+	if(dac_cur_pos_momental==pos)
+	{
+	} else
+	if(dac_cur_pos_momental<pos)
+	{
+		summary_dac_samples += pos-dac_cur_pos_momental;
+	} else
+	{
+		summary_dac_samples += DAC_BUFFER_SIZE-dac_cur_pos_momental;
+		summary_dac_samples += pos;
+	}
+
+	dac_cur_pos_momental = pos;
+
 }
