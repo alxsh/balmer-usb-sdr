@@ -12,3 +12,5 @@ void cs4272_stop();
 
 #define SOUND_BUFFER_SIZE 2048
 extern uint16_t sound_buffer[SOUND_BUFFER_SIZE];
+
+uint16_t cs4272_getPos();
