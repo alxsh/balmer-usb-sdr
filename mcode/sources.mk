@@ -21,6 +21,7 @@ DEPS += \
 	output/base/src/usb_istr.d \
 	output/base/src/usb_prop.d \
 	output/base/src/usb_pwr.d \
+	output/base/src/waterfall.d \
 	output/base/src/ili/DefaultFonts.d \
 	output/base/src/ili/UTFT.d \
 	output/base/src/ili/hw_ili9341.d \
@@ -68,6 +69,7 @@ OBJS += \
 	output/base/src/usb_istr.o \
 	output/base/src/usb_prop.o \
 	output/base/src/usb_pwr.o \
+	output/base/src/waterfall.o \
 	output/base/src/ili/DefaultFonts.o \
 	output/base/src/ili/UTFT.o \
 	output/base/src/ili/hw_ili9341.o \
@@ -163,6 +165,10 @@ output/base/src/usb_prop.o: ./src/usb_prop.c
 
 output/base/src/usb_pwr.o: ./src/usb_pwr.c
 	@echo 'Building target: usb_pwr.c'
+	@$(CC) $(C_FLAGS) -o "$@" "$<"
+
+output/base/src/waterfall.o: ./src/waterfall.c
+	@echo 'Building target: waterfall.c'
 	@$(CC) $(C_FLAGS) -o "$@" "$<"
 
 output/base/src/ili/DefaultFonts.o: ./src/ili/DefaultFonts.c

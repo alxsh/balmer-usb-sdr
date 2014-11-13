@@ -12,6 +12,7 @@
 #include "spi_data_process.h"
 #include "spi.h"
 #include "../../4code/inc/spi_commands.h"
+#include "waterfall.h"
 
 
 RCC_ClocksTypeDef RCC_Clocks;
@@ -82,6 +83,8 @@ int main(void)
           }
         }
 
+        WaterfallDraw();
+
         UTFT_setFont(BigFont);
         
         UTFT_printNumI(g_spi_sended, 16, 32, 5, ' ');
@@ -102,14 +105,17 @@ int main(void)
           UTFT_print("B", 16*10, 48, 0); 
         }
         
+        /*
         i++;
         UTFT_setFont(SevenSegNumFont);
         UTFT_setColor(0, 128, 255);
         UTFT_printNumI(i, 40, 190, 0, ' ');
         UTFT_setColor(255, 255, 0);
         UTFT_printNumI(i*3, 40, 240, 0, ' ');
-        DelayMs(300);
+        */
+        DelayMs(100);
         SpiSendCommand(SCOMMAND_SOUND_BUF_DELTA);
+
     }
 }
 
@@ -124,13 +130,13 @@ int main(void)
   */
 void assert_failed(uint8_t* file, uint32_t line)
 { 
-  /* User can add his own implementation to report the file name and line number,
-     ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+    /* User can add his own implementation to report the file name and line number,
+       ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
 
-  /* Infinite loop */
-  while (1)
-  {
-  }
+    /* Infinite loop */
+    while (1)
+    {
+    }
 }
 
 #endif
