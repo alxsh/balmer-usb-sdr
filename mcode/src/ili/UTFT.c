@@ -704,8 +704,8 @@ void UTFT_printChar(byte c, int x, int y)
 		{
 			UTFT_setXY(x,y,x+cfont.x_size-1,y+cfont.y_size-1);
 	  
-	    	TFT_DC_HIGH;
-    		TFT_CS_LOW;
+			TFT_DC_HIGH;
+			TFT_CS_LOW;
 			temp=((c-cfont.offset)*((cfont.x_size/8)*cfont.y_size))+4;
 			for(j=0;j<((cfont.x_size/8)*cfont.y_size);j++)
 			{
@@ -972,22 +972,30 @@ void UTFT_drawBitmap(int x, int y, int sx, int sy, bitmapdatatype data, int scal
 		{
 
 			UTFT_setXY(x, y, x+sx-1, y+sy-1);
+			TFT_DC_HIGH;
+			TFT_CS_LOW;
 			for (tc=0; tc<(sx*sy); tc++)
 			{
 				col=data[tc];
-				LCD_Write_DATA2(col>>8,col & 0xff);
+				HwLcdSend16NoWait(col);
 			}
+			HwLcdWait();
+			TFT_CS_HIGH;
 		}
 		else
 		{
 			for (ty=0; ty<sy; ty++)
 			{
 				UTFT_setXY(x, y+ty, x+sx-1, y+ty);
+				TFT_DC_HIGH;
+				TFT_CS_LOW;
 				for (tx=sx-1; tx>=0; tx--)
 				{
 					col=data[(ty*sx)+tx];
-					LCD_Write_DATA2(col>>8,col & 0xff);
+					HwLcdSend16NoWait(col);
 				}
+				HwLcdWait();
+				TFT_CS_HIGH;
 			}
 
 		}
@@ -1000,13 +1008,17 @@ void UTFT_drawBitmap(int x, int y, int sx, int sy, bitmapdatatype data, int scal
 			for (ty=0; ty<sy; ty++)
 			{
 				UTFT_setXY(x, y+(ty*scale), x+((sx*scale)-1), y+(ty*scale)+scale);
+				TFT_DC_HIGH;
+				TFT_CS_LOW;
 				for (tsy=0; tsy<scale; tsy++)
 					for (tx=0; tx<sx; tx++)
 					{
 						col=data[(ty*sx)+tx];
 						for (tsx=0; tsx<scale; tsx++)
-							LCD_Write_DATA2(col>>8,col & 0xff);
+							HwLcdSend16NoWait(col);
 					}
+				HwLcdWait();
+				TFT_CS_HIGH;
 			}
 
 		}
@@ -1018,12 +1030,16 @@ void UTFT_drawBitmap(int x, int y, int sx, int sy, bitmapdatatype data, int scal
 				for (tsy=0; tsy<scale; tsy++)
 				{
 					UTFT_setXY(x, y+(ty*scale)+tsy, x+((sx*scale)-1), y+(ty*scale)+tsy);
+					TFT_DC_HIGH;
+					TFT_CS_LOW;
 					for (tx=sx-1; tx>=0; tx--)
 					{
 						col=data[(ty*sx)+tx];
 						for (tsx=0; tsx<scale; tsx++)
-							LCD_Write_DATA2(col>>8,col & 0xff);
+							HwLcdSend16NoWait(col);
 					}
+					HwLcdWait();
+					TFT_CS_HIGH;
 				}
 			}
 
