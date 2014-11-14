@@ -1104,3 +1104,17 @@ int UTFT_getDisplayYSize()
 	else
 		return disp_x_size+1;
 }
+
+void UTFT_verticalScrollDefinition(uint16_t topFixedArea, uint16_t verticalScrollArea, uint16_t bottomFixedArea)
+{
+	sendCMD(0x33); //VSCRDEF (Vertical Scrolling Definition)
+	LCD_Write_DATA2(topFixedArea>>8, topFixedArea & 0xff);
+	LCD_Write_DATA2(verticalScrollArea>>8, verticalScrollArea & 0xff);
+	LCD_Write_DATA2(bottomFixedArea>>8, bottomFixedArea & 0xff);
+}
+
+void UTFT_verticalScroll(uint16_t vsp)
+{
+	sendCMD(0x37);
+	LCD_Write_DATA2(vsp>>8, vsp & 0xff);
+}

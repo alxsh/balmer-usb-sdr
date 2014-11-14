@@ -55,11 +55,20 @@ int main(void)
     UTFT_setBackColor(0, 0, 0);
     UTFT_clrScr();
 
+    WaterfallInit();
+    
     UTFT_setColor(0, 255, 0);
     UTFT_setBackColor(0, 0, 0);
 
     UTFT_setFont(BigFont);
+    //UTFT_verticalScrollDefinition(0, 320, 0);
     UTFT_print("SDR!", UTFT_CENTER, 16, 0);
+    /*
+    for(int i=0; i<160; i++)
+    {
+      WaterfallDraw();
+    }
+    */
 
     int i = 0;
 
@@ -81,6 +90,15 @@ int main(void)
             }
             Receive_length = 0;
           }
+        }
+
+        if(true)
+        {
+          WaterfallDraw();
+          //UTFT_verticalScroll(i);
+          i++;
+          DelayMs(100);
+          continue;
         }
 
         WaterfallDraw();
