@@ -111,6 +111,11 @@ void UTFT_setContrast(char c);
 int  UTFT_getDisplayXSize();
 int	 UTFT_getDisplayYSize();
 
+//topFixedArea + verticalScrollArea + bottomFixedArea == 320
+//default (0,320,0)
+void UTFT_verticalScrollDefinition(uint16_t topFixedArea, uint16_t verticalScrollArea, uint16_t bottomFixedArea);
+void UTFT_verticalScroll(uint16_t vsp);
+
 extern uint8_t SmallFont[];
 extern uint8_t BigFont[];
 extern uint8_t SevenSegNumFont[];
