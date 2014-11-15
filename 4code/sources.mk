@@ -9,6 +9,7 @@ DEPS += \
 	output/base/src/dac.d \
 	output/base/src/delay.d \
 	output/base/src/main.d \
+	output/base/src/process_fft.d \
 	output/base/src/process_sound.d \
 	output/base/src/spi.d \
 	output/base/src/spi_commands.d \
@@ -25,11 +26,12 @@ DEPS += \
 	output/StdPeriph_Driver/stm32f4xx_spi.d \
 	output/StdPeriph_Driver/stm32f4xx_syscfg.d \
 	output/StdPeriph_Driver/stm32f4xx_tim.d \
-	output/FFT/../CommonTables/arm_common_tables.d \
-	output/FFT/arm_cfft_radix4_f32.d \
-	output/FFT/arm_cfft_radix4_init_f32.d \
-	output/FFT/arm_rfft_init_f32.d \
-	output/FFT/arm_rfft_f32.d \
+	output/FFT/CommonTables/arm_common_tables.d \
+	output/FFT/ComplexMathFunctions/arm_cmplx_mag_f32.d \
+	output/FFT/TransformFunctions/arm_cfft_radix4_f32.d \
+	output/FFT/TransformFunctions/arm_cfft_radix4_init_f32.d \
+	output/FFT/TransformFunctions/arm_rfft_init_f32.d \
+	output/FFT/TransformFunctions/arm_rfft_f32.d \
 
 
 OBJS += \
@@ -38,6 +40,7 @@ OBJS += \
 	output/base/src/dac.o \
 	output/base/src/delay.o \
 	output/base/src/main.o \
+	output/base/src/process_fft.o \
 	output/base/src/process_sound.o \
 	output/base/src/spi.o \
 	output/base/src/spi_commands.o \
@@ -54,11 +57,12 @@ OBJS += \
 	output/StdPeriph_Driver/stm32f4xx_spi.o \
 	output/StdPeriph_Driver/stm32f4xx_syscfg.o \
 	output/StdPeriph_Driver/stm32f4xx_tim.o \
-	output/FFT/../CommonTables/arm_common_tables.o \
-	output/FFT/arm_cfft_radix4_f32.o \
-	output/FFT/arm_cfft_radix4_init_f32.o \
-	output/FFT/arm_rfft_init_f32.o \
-	output/FFT/arm_rfft_f32.o \
+	output/FFT/CommonTables/arm_common_tables.o \
+	output/FFT/ComplexMathFunctions/arm_cmplx_mag_f32.o \
+	output/FFT/TransformFunctions/arm_cfft_radix4_f32.o \
+	output/FFT/TransformFunctions/arm_cfft_radix4_init_f32.o \
+	output/FFT/TransformFunctions/arm_rfft_init_f32.o \
+	output/FFT/TransformFunctions/arm_rfft_f32.o \
 
 
 output/CMSIS/startup_stm32f4xx.o: ../../SoundCard/code/Libraries/CMSIS/ST/STM32F4xx/Source/Templates/gcc_ride7/startup_stm32f4xx.S
@@ -79,6 +83,10 @@ output/base/src/delay.o: ./src/delay.c
 
 output/base/src/main.o: ./src/main.c
 	@echo 'Building target: main.c'
+	@$(CC) $(C_FLAGS) -o "$@" "$<"
+
+output/base/src/process_fft.o: ./src/process_fft.c
+	@echo 'Building target: process_fft.c'
 	@$(CC) $(C_FLAGS) -o "$@" "$<"
 
 output/base/src/process_sound.o: ./src/process_sound.c
@@ -145,23 +153,27 @@ output/StdPeriph_Driver/stm32f4xx_tim.o: ../../SoundCard/code/Libraries/STM32F4x
 	@echo 'Building target: stm32f4xx_tim.c'
 	@$(CC) $(C_FLAGS) -o "$@" "$<"
 
-output/FFT/../CommonTables/arm_common_tables.o: ../../SoundCard/code/Libraries/CMSIS/DSP_Lib/Source/TransformFunctions/../CommonTables/arm_common_tables.c
+output/FFT/CommonTables/arm_common_tables.o: ../../SoundCard/code/Libraries/CMSIS/DSP_Lib/Source/CommonTables/arm_common_tables.c
 	@echo 'Building target: arm_common_tables.c'
 	@$(CC) $(C_FLAGS) -o "$@" "$<"
 
-output/FFT/arm_cfft_radix4_f32.o: ../../SoundCard/code/Libraries/CMSIS/DSP_Lib/Source/TransformFunctions/arm_cfft_radix4_f32.c
+output/FFT/ComplexMathFunctions/arm_cmplx_mag_f32.o: ../../SoundCard/code/Libraries/CMSIS/DSP_Lib/Source/ComplexMathFunctions/arm_cmplx_mag_f32.c
+	@echo 'Building target: arm_cmplx_mag_f32.c'
+	@$(CC) $(C_FLAGS) -o "$@" "$<"
+
+output/FFT/TransformFunctions/arm_cfft_radix4_f32.o: ../../SoundCard/code/Libraries/CMSIS/DSP_Lib/Source/TransformFunctions/arm_cfft_radix4_f32.c
 	@echo 'Building target: arm_cfft_radix4_f32.c'
 	@$(CC) $(C_FLAGS) -o "$@" "$<"
 
-output/FFT/arm_cfft_radix4_init_f32.o: ../../SoundCard/code/Libraries/CMSIS/DSP_Lib/Source/TransformFunctions/arm_cfft_radix4_init_f32.c
+output/FFT/TransformFunctions/arm_cfft_radix4_init_f32.o: ../../SoundCard/code/Libraries/CMSIS/DSP_Lib/Source/TransformFunctions/arm_cfft_radix4_init_f32.c
 	@echo 'Building target: arm_cfft_radix4_init_f32.c'
 	@$(CC) $(C_FLAGS) -o "$@" "$<"
 
-output/FFT/arm_rfft_init_f32.o: ../../SoundCard/code/Libraries/CMSIS/DSP_Lib/Source/TransformFunctions/arm_rfft_init_f32.c
+output/FFT/TransformFunctions/arm_rfft_init_f32.o: ../../SoundCard/code/Libraries/CMSIS/DSP_Lib/Source/TransformFunctions/arm_rfft_init_f32.c
 	@echo 'Building target: arm_rfft_init_f32.c'
 	@$(CC) $(C_FLAGS) -o "$@" "$<"
 
-output/FFT/arm_rfft_f32.o: ../../SoundCard/code/Libraries/CMSIS/DSP_Lib/Source/TransformFunctions/arm_rfft_f32.c
+output/FFT/TransformFunctions/arm_rfft_f32.o: ../../SoundCard/code/Libraries/CMSIS/DSP_Lib/Source/TransformFunctions/arm_rfft_f32.c
 	@echo 'Building target: arm_rfft_f32.c'
 	@$(CC) $(C_FLAGS) -o "$@" "$<"
 

@@ -14,8 +14,8 @@ void WaterfallInit()
     int top  = w_ymin;
     int bottom = 320-w_ymax;
     int center = w_ymax-w_ymin;
-    //UTFT_verticalScrollDefinition(top, center, bottom);
-    UTFT_verticalScrollDefinition(160, 160, 0);
+    UTFT_verticalScrollDefinition(top, center, bottom);
+    //UTFT_verticalScrollDefinition(160, 160, 0);
     //UTFT_verticalScrollDefinition(0, 320, 0);
 }
 
