@@ -26,9 +26,7 @@ void OnSoundDataFft(int32_t sample)
 {
 	if(in_fft_cur_pos<FFT_LENGTH)
 	{
-		in_fft_buffer32[in_fft_cur_pos*2] = (sample>>8);
-		in_fft_buffer32[in_fft_cur_pos*2+1] = 0.0f;
-		//in_fft_buffer[in_fft_cur_pos] = (sample>>8);
+		in_fft_buffer32[in_fft_cur_pos] = (sample>>8);
 		in_fft_cur_pos++;
 	}
 }
@@ -45,18 +43,11 @@ void InitFft()
 	g_fft_min = g_fft_max = 0;
 
 	in_fft_cur_pos = 0;
-	//arm_rfft_init_f32(&S_RFFT, &S_CFFT, FFT_LENGTH, 0, 0);
 
 	uint32_t ifftFlag = 0; 
 	uint32_t doBitReverse = 1;
 	arm_cfft_radix4_init_f32(&S_CFFT, FFT_LENGTH,
 	  								ifftFlag, doBitReverse); 
-/*
-	uint16_t start = TimeUs();
-	//arm_rfft_f32(&S_RFFT, in_fft_buffer, out_fft_buffer);
-	arm_cfft_radix4_f32(&S_CFFT, in_fft_buffer); 
-	fft_calculate_time =  TimeUs()-start;
-*/
 }
 
 void CalculateFft()
@@ -71,10 +62,18 @@ void CalculateFft()
 		return;
 	}
 
+	int32_t smin = INT_MAX;
+	int32_t smax = INT_MIN;
+
 	uint16_t start = TimeUs();
 	for(int i=0; i<FFT_LENGTH; i++)
 	{
-		in_fft_buffer[i*2] = in_fft_buffer32[i]*1e-2f;
+		int32_t s = in_fft_buffer32[i];
+		if(smin>s)
+			smin = s;
+		if(smax<s)
+			smax = s;
+		in_fft_buffer[i*2] = s;
 		in_fft_buffer[i*2+1] = 0;
 	}
 	
@@ -85,10 +84,11 @@ void CalculateFft()
 	for(int i=0; i<FFT_LENGTH; i++)
 	{
 		sum += out_fft_buffer[i];
-		fft_to_display[i] = lround(out_fft_buffer[i]);
+		fft_to_display[i] = lround(out_fft_buffer[i]*1e-2f);
 	}
 	
-	g_fft_min = sum;
+	//g_fft_min = lround(sum/(float)FFT_LENGTH);
+	g_fft_min = smax-smin;
 	g_fft_max = (uint16_t)(TimeUs()-start);
 
 	//uint16_t start = TimeUs();
