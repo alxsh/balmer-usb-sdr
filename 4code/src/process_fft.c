@@ -6,7 +6,6 @@
 #include <limits.h>
 #include <math.h>
 
-#define FFT_LENGTH 256
 
 
 //static arm_rfft_instance_f32 S_RFFT;
@@ -19,13 +18,16 @@ static int in_fft_cur_pos = 0;
 int32_t g_fft_min = 0;
 int32_t g_fft_max = 0;
 
+uint16_t fft_to_display[FFT_LENGTH];
+
 void CalculateFft();
 
 void OnSoundDataFft(int32_t sample)
 {
 	if(in_fft_cur_pos<FFT_LENGTH)
 	{
-		in_fft_buffer32[in_fft_cur_pos] = (sample>>8);
+		in_fft_buffer32[in_fft_cur_pos*2] = (sample>>8);
+		in_fft_buffer32[in_fft_cur_pos*2+1] = 0.0f;
 		//in_fft_buffer[in_fft_cur_pos] = (sample>>8);
 		in_fft_cur_pos++;
 	}
@@ -35,16 +37,12 @@ void InitFft()
 {
 	for(int i=0; i<FFT_LENGTH; i++)
 	{
-		in_fft_buffer[i] = 0;
+		in_fft_buffer[i*2+0] = 0.0f;
+		in_fft_buffer[i*2+1] = 0.0f;
+		fft_to_display[0] = 0;
 	}
 
-	float sum = 0.0f;
-	for(int i=0; i<FFT_LENGTH; i++)
-	{
-		sum += in_fft_buffer[i];
-	}
-
-	g_fft_min = g_fft_max = sum;
+	g_fft_min = g_fft_max = 0;
 
 	in_fft_cur_pos = 0;
 	//arm_rfft_init_f32(&S_RFFT, &S_CFFT, FFT_LENGTH, 0, 0);
@@ -65,11 +63,18 @@ void CalculateFft()
 {
 	if(in_fft_cur_pos<FFT_LENGTH)
 		return;
+
+	if(0)
+	{
+		DelayUs(300);
+		in_fft_cur_pos = 0;
+		return;
+	}
+
 	uint16_t start = TimeUs();
-	//DelayUs(100);
 	for(int i=0; i<FFT_LENGTH; i++)
 	{
-		in_fft_buffer[i*2] = in_fft_buffer32[i]*1e-4f;
+		in_fft_buffer[i*2] = in_fft_buffer32[i]*1e-2f;
 		in_fft_buffer[i*2+1] = 0;
 	}
 	
@@ -80,6 +85,7 @@ void CalculateFft()
 	for(int i=0; i<FFT_LENGTH; i++)
 	{
 		sum += out_fft_buffer[i];
+		fft_to_display[i] = lround(out_fft_buffer[i]);
 	}
 	
 	g_fft_min = sum;

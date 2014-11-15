@@ -1,6 +1,8 @@
 #include "spi_data_process.h"
 #include "ili/UTFT.h"
 #include "../../4code/inc/spi_commands.h"
+#include "waterfall.h"
+
 
 uint8_t last_command = 0;
 uint8_t last_receive_length = 33;
@@ -12,6 +14,7 @@ extern uint8_t g_slave_ready;
 
 int32_t g_fft_min = 0;
 int32_t g_fft_max = 0;
+uint16_t g_fft_line_offset = 0;
 
 
 void printCmd()
@@ -66,8 +69,30 @@ void SpiCommandReceive(uint8_t command, uint8_t receive_length, uint8_t* receive
 		{
 			g_fft_min = *(int32_t*)(receive_buffer+0);
 			g_fft_max = *(int32_t*)(receive_buffer+4);
+
+            SpiAdd8(g_fft_line_offset);
+            SpiSendCommand(SCOMMAND_FFT_LINE);
 		}
-	}
+	} else
+    if(command==SCOMMAND_FFT_LINE)
+    {
+        for(int i=0; i<32; i++)
+        {
+            int idx = i+g_fft_line_offset;
+            if(idx<WATERFALL_WIDTH)
+                w_line[idx] = ((uint16_t*)receive_buffer)[i];
+        }
+
+        g_fft_line_offset+=32;
+        if(g_fft_line_offset<256)
+        {
+            SpiAdd8(g_fft_line_offset);
+            SpiSendCommand(SCOMMAND_FFT_LINE);
+        } else
+        {
+            g_fft_line_offset = 0;
+        }
+    }
 /*
 	if(g_spi_retry>0)
 	{
