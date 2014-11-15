@@ -432,6 +432,10 @@ Vpit = 4.95
 			знаем сколько воспроизвелось при помощи DAC
 			высчитываем разницу и на столько корректируем g_cur_pos
 
+	- scroll --ok
+		VSCRDEF (Vertical Scrolling Definition) 33h
+		VSCRSADD (Vertical Scrolling Start Address) 37h
+
 	- сделать "панораму"
 		- найти FFT --ok
 		- замерить, сколько оно времени кушает --ok
@@ -441,6 +445,4 @@ Vpit = 4.95
 		- как только наберется 512 точек, зупускать FFT
 			передавать по SPI и показывать на экране
 
-	- scroll
-		VSCRDEF (Vertical Scrolling Definition) 33h
-		VSCRSADD (Vertical Scrolling Start Address) 37h
+	- float операции приаодят к шуму вместо данных

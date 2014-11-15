@@ -37,14 +37,15 @@ sources = [
 		]
 },
 {
-	"base" : "../../SoundCard/code/Libraries/CMSIS/DSP_Lib/Source/TransformFunctions",
+	"base" : "../../SoundCard/code/Libraries/CMSIS/DSP_Lib/Source",
 	"output" : "FFT",
 	"files" : [
-		"../CommonTables/arm_common_tables.c",
-		"arm_cfft_radix4_f32.c",
-		"arm_cfft_radix4_init_f32.c",
-		"arm_rfft_init_f32.c",
-		"arm_rfft_f32.c"
+		"CommonTables/arm_common_tables.c",
+		"ComplexMathFunctions/arm_cmplx_mag_f32.c",
+		"TransformFunctions/arm_cfft_radix4_f32.c",
+		"TransformFunctions/arm_cfft_radix4_init_f32.c",
+		"TransformFunctions/arm_rfft_init_f32.c",
+		"TransformFunctions/arm_rfft_f32.c"
 		]
 }
 ]

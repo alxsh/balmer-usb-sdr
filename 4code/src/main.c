@@ -15,8 +15,8 @@ int main(void)
   SysTick_Config(RCC_Clocks.HCLK_Frequency / 1000);
 
   DelayInit();
-  cs4272_Init();
   InitFft();
+  cs4272_Init();
   SpiInit();
 
   DacInit();

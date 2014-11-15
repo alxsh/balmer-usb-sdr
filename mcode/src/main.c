@@ -28,7 +28,8 @@ extern uint8_t last_command;
 extern uint8_t last_receive_length;
 extern uint32_t last_receive_data;
 
-extern uint8_t g_slave_ready;
+
+void printCmd();
 
 /*******************************************************************************/
                                   
@@ -56,25 +57,16 @@ int main(void)
     UTFT_clrScr();
 
     WaterfallInit();
-    
+
     UTFT_setColor(0, 255, 0);
     UTFT_setBackColor(0, 0, 0);
 
     UTFT_setFont(BigFont);
     //UTFT_verticalScrollDefinition(0, 320, 0);
-    UTFT_print("SDR!", UTFT_CENTER, 16, 0);
-    /*
-    for(int i=0; i<160; i++)
-    {
-      WaterfallDraw();
-    }
-    */
-
-    int i = 0;
+    UTFT_print("SDR!", UTFT_CENTER, 0, 0);
 
     while(1)
     {
-        UTFT_setColor(0, 128, 255);
         if (bDeviceState == CONFIGURED)
         {
           CDC_Receive_DATA();
@@ -92,36 +84,8 @@ int main(void)
           }
         }
 
-        if(true)
-        {
-          WaterfallDraw();
-          //UTFT_verticalScroll(i);
-          i++;
-          DelayMs(100);
-          continue;
-        }
-
         WaterfallDraw();
-
-        UTFT_setFont(BigFont);
-        
-        UTFT_printNumI(g_spi_sended, 16, 32, 5, ' ');
-        UTFT_print("Cmd", 0, 48, 0);
-        UTFT_printNumI(last_command, 16*4, 48, 3, ' ');
-        UTFT_print("Len", 0, 16*4, 0);
-        UTFT_printNumI(last_receive_length, 16*4, 16*4, 3, ' ');
-
-        UTFT_printNumI(g_slave_ready, 16*11, 64, 2, ' ');
-
-        UTFT_print("D=", 0, 16*5, 0);
-        UTFT_printNumI(last_receive_data, 16*3, 16*5, 5, ' ');
-        
-
-        if(SpiBusy())
-        {
-          UTFT_setColor(255, 255, 0);
-          UTFT_print("B", 16*10, 48, 0); 
-        }
+        printCmd();
         
         /*
         i++;
@@ -133,7 +97,6 @@ int main(void)
         */
         DelayMs(100);
         SpiSendCommand(SCOMMAND_SOUND_BUF_DELTA);
-
     }
 }
 
