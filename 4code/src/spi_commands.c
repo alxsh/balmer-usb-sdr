@@ -27,6 +27,14 @@ void SpiCommandReceive(uint8_t command, uint8_t receive_length, uint8_t* receive
 		//SpiAdd32(g_sound_quant_time);
 		SpiAdd32(g_fft_max);
 	} else
+	if(command==SCOMMAND_FFT_LINE)
+	{
+		uint8_t offset = receive_buffer[0];
+		for(int i=0; i<32; i++)
+		{
+			SpiAdd16(fft_to_display[offset+i]);
+		}
+	} else
 	{
 		for(int i=0; i<receive_length; i++)
 		{
