@@ -9,8 +9,6 @@ uint16_t DacGetBufferSize();
 void CalculateFft();
 
 static uint16_t g_cur_pos = DAC_BUFFER_SIZE/2;
-int g_sound_min = 1<<24;
-int g_sound_max = -(1<<24);
 static uint16_t g_dma_cur_pos = 0;
 static uint16_t prev_time_ms = 0;
 
