@@ -53,6 +53,18 @@ uint32_t DacSampleTicks(void)
 {
 	return g_dac_period/SinusBufferSize;
 }
+/*
+static void DacSquareCalculate()
+{
+	for(int i=0; i<SinusBufferSize; i++)
+	{
+		if(i<(SinusBufferSize/2))
+			g_sinusBuffer[i] = DAC_ZERO+g_dac_amplitude;
+		else
+			g_sinusBuffer[i] = DAC_ZERO-g_dac_amplitude;
+	}
+}
+*/
 
 void DacSinusCalculate()
 {
@@ -67,7 +79,6 @@ void DacSinusCalculate()
 
 void DacInit(void)
 {  
-	DacSinusCalculate();
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_DAC, ENABLE);
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_DMA1, ENABLE);
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
@@ -79,7 +90,9 @@ void DacInit(void)
 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
 	GPIO_Init(GPIOA, &GPIO_InitStructure);
 
-  	DAC_InitTypeDef DAC_InitStructure;
+	DAC_InitTypeDef DAC_InitStructure;
+
+	DAC_StructInit(&DAC_InitStructure);
 	DAC_InitStructure.DAC_Trigger = DAC_Trigger_T2_TRGO;
 	DAC_InitStructure.DAC_WaveGeneration = DAC_WaveGeneration_None;
 	DAC_InitStructure.DAC_OutputBuffer = DAC_OutputBuffer_Enable;
@@ -97,10 +110,11 @@ void DacSetFrequency(uint32_t frequency)
 
 static void DacDeinitDmaAndTimer()
 {
-	DMA_DeInit(DMA1_Stream5);
+	//DMA_DeInit(DMA1_Stream5);
+	DMA_Cmd(DMA1_Stream5, DISABLE);
 	TIM_Cmd(TIM2, DISABLE);
 
-	DAC_SetChannel1Data(DAC_Align_12b_R, DAC_ZERO);
+	//DAC_SetChannel1Data(DAC_Align_12b_R, DAC_ZERO);
 }
 
 static void DacInitDmaAndTimer()
@@ -132,7 +146,6 @@ static void DacInitDmaAndTimer()
 	DAC_Cmd(DAC_Channel_1, ENABLE);
 	DAC_DMACmd(DAC_Channel_1, ENABLE);
 
-
 	//168 MHz / TIM_Prescaler / TIM_Period
 	TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
 	TIM_TimeBaseStructInit(&TIM_TimeBaseStructure);
@@ -141,7 +154,7 @@ static void DacInitDmaAndTimer()
 	TIM_TimeBaseStructure.TIM_ClockDivision = 0;
 	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
 	TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStructure);
-	TIM_SetCounter(TIM2, 0);
+	//TIM_SetCounter(TIM2, 0);
 	TIM_SelectOutputTrigger(TIM2, TIM_TRGOSource_Update);
 
 	g_dac_period = period * prescaler * SinusBufferSize;
@@ -162,6 +175,7 @@ void DacSetPeriod(uint32_t sinusPeriod, uint16_t amplitude)
 	SinusBufferSize = sinusPeriod;
 
 	DacSinusCalculate();
+	//DacSquareCalculate();
 	DacInitDmaAndTimer();
 }
 
