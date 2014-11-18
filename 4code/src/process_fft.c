@@ -12,7 +12,7 @@
 static arm_cfft_radix4_instance_f32 S_CFFT;
 static int32_t in_fft_buffer32[FFT_LENGTH];
 static float in_fft_buffer[FFT_LENGTH*2];
-static float out_fft_buffer[FFT_LENGTH];
+static float out_fft_buffer[FFT_LENGTH*2];
 uint16_t fft_calculate_time = 0;
 static int in_fft_cur_pos = 0;
 int32_t g_fft_min = 0;
@@ -48,6 +48,7 @@ void InitFft()
 	uint32_t doBitReverse = 1;
 	arm_cfft_radix4_init_f32(&S_CFFT, FFT_LENGTH,
 	  								ifftFlag, doBitReverse); 
+
 }
 
 void CalculateFft()
