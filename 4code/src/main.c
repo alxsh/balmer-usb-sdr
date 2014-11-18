@@ -7,6 +7,7 @@
 #include "process_sound.h"
 
 RCC_ClocksTypeDef RCC_Clocks;
+extern int32_t g_fft_min;
 
 int main(void)
 {  
@@ -16,10 +17,10 @@ int main(void)
 
   DelayInit();
   InitFft();
-  cs4272_Init();
   SpiInit();
-
   DacInit();
+  g_fft_min = cs4272_Init();
+
   //DacSetPeriod(48, 600);
   DacInitFullBuffer();
   DacStart();

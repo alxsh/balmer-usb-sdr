@@ -133,7 +133,7 @@ void SoundQuant()
 		DacCorrectWritePos();
 	}
 
-	CalculateFft();
+	//CalculateFft();
 
 	uint16_t quant_time = TimeUs()-start;
 	if(quant_time>5)
