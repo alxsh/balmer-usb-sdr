@@ -1,4 +1,4 @@
-#define FFT_LENGTH 512
+#define FFT_LENGTH 1024
 
 
 void OnSoundData(int32_t sample);
