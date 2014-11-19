@@ -80,7 +80,7 @@ void SpiCommandReceive(uint8_t command, uint8_t receive_length, uint8_t* receive
         {
             int idx = i+g_fft_line_offset;
             if(idx<WATERFALL_WIDTH)
-                w_line[idx] = ((uint16_t*)receive_buffer)[i];
+                w_line[idx] = AmplitudeToColor(((uint16_t*)receive_buffer)[i]);
         }
 
         g_fft_line_offset+=32;

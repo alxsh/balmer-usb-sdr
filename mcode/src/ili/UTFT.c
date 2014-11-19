@@ -518,6 +518,11 @@ void UTFT_clrScr()
     TFT_CS_HIGH;
 }
 
+word UTFT_color(byte r, byte g, byte b)
+{
+	return ((r&248)<<8 | (g&252)<<3 | (b&248)>>3);
+}
+
 void UTFT_fillScr(byte r, byte g, byte b)
 {
 	word color = ((r&248)<<8 | (g&252)<<3 | (b&248)>>3);

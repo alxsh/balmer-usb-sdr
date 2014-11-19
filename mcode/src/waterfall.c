@@ -23,6 +23,44 @@ void WaterfallInit()
     }
 }
 
+//На входе - амплитуда в логарифмическом масштабе
+/*
+uint16_t AmplitudeToColor(uint16_t amp)
+{
+    uint16_t cmin = 80;
+    if(amp<cmin)
+        return 0;
+    amp-= cmin;
+    if(amp<32)
+        return (amp);
+    amp -= 32;
+    if(amp<64)
+        return (amp)<<5;
+    amp -= 64;
+    if(amp<64)
+        return ((amp)>>1)<<11;
+
+    return VGA_WHITE;
+}
+*/
+uint16_t AmplitudeToColor(uint16_t amp)
+{
+    uint16_t cmin = 80;
+    if(amp<cmin)
+        return 0;
+    amp-= cmin;
+    if(amp<32)//синее
+        return UTFT_color(0, 0, amp<<3);
+    amp -= 32;
+    if(amp<64)//добавляем зеленое, убираем синее
+        return UTFT_color(0, amp<<2, (63-amp)<<2);
+    amp -= 64;
+    if(amp<64)//добавляем красное, убираем зеленое
+        return UTFT_color(amp<<2, (63-amp)<<2, 0);
+
+    return VGA_WHITE;
+}
+
 void WaterfallDraw()
 {
 	if(w_ycur<0)
