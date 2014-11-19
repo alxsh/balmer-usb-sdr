@@ -116,6 +116,9 @@ int	 UTFT_getDisplayYSize();
 void UTFT_verticalScrollDefinition(uint16_t topFixedArea, uint16_t verticalScrollArea, uint16_t bottomFixedArea);
 void UTFT_verticalScroll(uint16_t vsp);
 
+//R,G,B to hi color
+word UTFT_color(byte r, byte g, byte b);
+
 extern uint8_t SmallFont[];
 extern uint8_t BigFont[];
 extern uint8_t SevenSegNumFont[];

@@ -82,18 +82,24 @@ void CalculateFft()
 	arm_cmplx_mag_f32(in_fft_buffer, out_fft_buffer, FFT_LENGTH);  
 
 	int32_t omax = 0;
+	float fmul = 10.0f/logf(2);
 	for(int i=0; i<FFT_LENGTH; i++)
 	{
-		int32_t o = lround(out_fft_buffer[i]);
+		//int32_t o = lround(out_fft_buffer[i]);
+		//fft_to_display[i] = lround(out_fft_buffer[i]*1e-2f);
+
+		float f = out_fft_buffer[i];
+		int32_t o = lround(logf(f+1)*fmul);
+		fft_to_display[i] = o;
+
 		if(omax < o)
 			omax = o;
-		fft_to_display[i] = lround(out_fft_buffer[i]*1e-2f);
 	}
 	
 	//g_fft_min = lround(sum/(float)FFT_LENGTH);
 	g_fft_min = smax-smin;
-	g_fft_max = (uint16_t)(TimeUs()-start);
-	//g_fft_max = omax;
+	//g_fft_max = (uint16_t)(TimeUs()-start);
+	g_fft_max = omax;
 
 	//uint16_t start = TimeUs();
 	//arm_rfft_f32(&S_RFFT, in_fft_buffer, out_fft_buffer);
