@@ -10224,7 +10224,7 @@ Source: http://www.analog.com/static/imported-files/data_sheets/AD8603_8607_8609
 <junction x="218.44" y="0"/>
 </segment>
 </net>
-<net name="N$16" class="0">
+<net name="AINB+" class="0">
 <segment>
 <pinref part="IC4" gate="G$1" pin="AINB+"/>
 <wire x1="177.8" y1="-2.54" x2="213.36" y2="-2.54" width="0.1524" layer="91"/>
@@ -10237,7 +10237,7 @@ Source: http://www.analog.com/static/imported-files/data_sheets/AD8603_8607_8609
 <junction x="213.36" y="-2.54"/>
 </segment>
 </net>
-<net name="N$17" class="0">
+<net name="AINA+" class="0">
 <segment>
 <pinref part="IC4" gate="G$1" pin="AINA+"/>
 <wire x1="177.8" y1="-5.08" x2="208.28" y2="-5.08" width="0.1524" layer="91"/>
