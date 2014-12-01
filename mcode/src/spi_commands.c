@@ -41,15 +41,15 @@ void printCmd()
 
     UTFT_print("D=", 0, 16*y, 0);
     UTFT_printNumI(last_receive_data, 16*3, 16*y, 5, ' ');
-    y++;    
+    y++;
 
     UTFT_print("MI=", 0, 16*y, 0);
     UTFT_printNumI(g_fft_min, 16*3, 16*y, 6, ' ');
-    y++;    
+    y++;
 
     UTFT_print("MA=", 0, 16*y, 0);
     UTFT_printNumI(g_fft_max, 16*3, 16*y, 6, ' ');
-    y++;    
+    y++; 
 }
 
 

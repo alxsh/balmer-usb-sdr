@@ -1,4 +1,3 @@
-
 #include "delay.h"
 #include "spi.h"
 #include "spi_data_process.h"

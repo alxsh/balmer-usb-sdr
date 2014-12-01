@@ -8356,11 +8356,11 @@ Grid 2.54 mm&lt;p&gt;
 <part name="GND8" library="supply1" deviceset="GND" device=""/>
 <part name="R28" library="rcl" deviceset="R-EU_" device="R0603" value="10K"/>
 <part name="R29" library="rcl" deviceset="R-EU_" device="R0603" value="10K"/>
-<part name="R22" library="rcl" deviceset="R-EU_" device="R0603" value="22K"/>
-<part name="R23" library="rcl" deviceset="R-EU_" device="R0603" value="22K"/>
+<part name="R22" library="rcl" deviceset="R-EU_" device="R0603" value="68K"/>
+<part name="R23" library="rcl" deviceset="R-EU_" device="R0603" value="68K"/>
 <part name="GND9" library="supply1" deviceset="GND" device=""/>
-<part name="R18" library="rcl" deviceset="R-EU_" device="R0603" value="22K"/>
-<part name="R19" library="rcl" deviceset="R-EU_" device="R0603" value="22K"/>
+<part name="R18" library="rcl" deviceset="R-EU_" device="R0603" value="68K"/>
+<part name="R19" library="rcl" deviceset="R-EU_" device="R0603" value="68K"/>
 <part name="GND10" library="supply1" deviceset="GND" device=""/>
 <part name="C38" library="rcl" deviceset="C-EU" device="C0805" value="10mk"/>
 <part name="C37" library="rcl" deviceset="C-EU" device="C0805" value="10mk"/>
