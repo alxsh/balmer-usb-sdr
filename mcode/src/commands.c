@@ -3,6 +3,8 @@
 #include "ili/UTFT.h"
 #include "spi_data_process.h"
 
+void OnSetFreq(uint32_t freq);
+
 uint16_t g_spi_sended = 0;
 uint16_t g_spi_retry = 0;
 
@@ -33,6 +35,9 @@ void PacketReceive(volatile uint8_t* data, uint32_t size)
 			SpiAdd16(g_spi_sended);
 			SpiSendCommand(2);
 		}
+		return;
+	case 3://COMMAND_SET_FREQ
+		OnSetFreq(*(uint32_t*)(data+0));
 		return;
 
 	case 0://COMMAND_NONE

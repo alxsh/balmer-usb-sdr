@@ -4,6 +4,7 @@
 #include "usb_pwr.h"
 #include "command.h"
 #include "delay.h"
+#include "dds.h"
 
 #include "ili/hw_ili9341.h"
 #include "ili/UTFT.h"
@@ -53,6 +54,8 @@ int main(void)
     //UTFT_InitLCD(UTFT_LANDSCAPE);
     UTFT_InitLCD(UTFT_PORTRAIT);
 
+    DdsInit();
+
     UTFT_setBackColor(0, 0, 0);
     UTFT_clrScr();
 
@@ -64,6 +67,8 @@ int main(void)
     UTFT_setFont(BigFont);
     //UTFT_verticalScrollDefinition(0, 320, 0);
     UTFT_print("SDR!", UTFT_CENTER, 0, 0);
+
+    DdsSetFreq(2000000);
 
     while(1)
     {
@@ -77,7 +82,7 @@ int main(void)
             {
               if(Receive_length>0)
               {
-                DataReceive((uint8_t*)Receive_Buffer, Receive_length);;
+                DataReceive((uint8_t*)Receive_Buffer, Receive_length);
               }
             }
             Receive_length = 0;
@@ -99,6 +104,18 @@ int main(void)
         SpiSendCommand(SCOMMAND_SOUND_BUF_DELTA);
     }
 }
+
+void OnSetFreq(uint32_t freq)
+{
+    UTFT_setFont(BigFont);
+    int y=7;
+    UTFT_setColor(255, 255, 255);
+    UTFT_printNumI(freq/1000, 16*2, 16*y, 5, ' ');
+    UTFT_print("KHz", 16*8, 16*y, 0);
+    DdsSetFreq(freq*2);
+}
+
+
 
 #ifdef  USE_FULL_ASSERT
 

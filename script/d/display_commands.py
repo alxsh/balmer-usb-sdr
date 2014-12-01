@@ -8,12 +8,16 @@ from serial_protocol import receive
 COMMAND_NONE = 0
 COMMAND_PRINT_INT = 1
 COMMAND_SEND_SPI = 2
+COMMAND_SET_FREQ = 3
 
 def connect():
 	if not serial_protocol.connect():
 		print "Cannot connect to device"
 		return False
 	return True
+
+def close():
+	serial_protocol.close()
 
 def command(comd, data=None):
 	serial_protocol.send(comd, data)
@@ -35,15 +39,20 @@ def command_spi_send(data):
 	command(COMMAND_SEND_SPI, struct.pack("=H", data))
 	return;
 
+def command_freq(freq):
+	command(COMMAND_SET_FREQ, struct.pack("=I", freq))
+	return;
+
 def main():
 	if not connect():
 		return
 
 	#command_none()
 	#command_print_int(123, 17, 38)
-	command_spi_send(1277)
+	#command_spi_send(1277)
+	command_freq(123000)
 
-	serial_protocol.close()
+	close()
 	pass
 
 if __name__ == "__main__":

@@ -7,6 +7,7 @@ DEPS += \
 	output/CMSIS/startup_stm32l1xx_md.d \
 	output/base/src/commands.d \
 	output/base/src/data_process.d \
+	output/base/src/dds.d \
 	output/base/src/delay.d \
 	output/base/src/main.d \
 	output/base/src/my_hardware.d \
@@ -55,6 +56,7 @@ OBJS += \
 	output/CMSIS/startup_stm32l1xx_md.o \
 	output/base/src/commands.o \
 	output/base/src/data_process.o \
+	output/base/src/dds.o \
 	output/base/src/delay.o \
 	output/base/src/main.o \
 	output/base/src/my_hardware.o \
@@ -109,6 +111,10 @@ output/base/src/commands.o: ./src/commands.c
 
 output/base/src/data_process.o: ./src/data_process.c
 	@echo 'Building target: data_process.c'
+	@$(CC) $(C_FLAGS) -o "$@" "$<"
+
+output/base/src/dds.o: ./src/dds.c
+	@echo 'Building target: dds.c'
 	@$(CC) $(C_FLAGS) -o "$@" "$<"
 
 output/base/src/delay.o: ./src/delay.c
