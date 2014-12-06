@@ -2,13 +2,13 @@
   ******************************************************************************
   * @file    usb_endp.c
   * @author  MCD Application Team
-  * @version V3.4.0
-  * @date    29-June-2012
+  * @version V4.0.0
+  * @date    21-January-2013
   * @brief   Endpoint routines
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT 2013 STMicroelectronics</center></h2>
   *
   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
   * You may not use this file except in compliance with the License.
@@ -33,51 +33,21 @@
 #include "hw_config.h"
 #include "usb_istr.h"
 #include "usb_pwr.h"
-#include "command.h"
-#include <string.h>
+#include "data_process.h"
 
-uint8_t  USB_Tx_Buffer [VIRTUAL_COM_PORT_DATA_SIZE]; 
-uint32_t USB_Tx_length  = 0;
+/* Private typedef -----------------------------------------------------------*/
+/* Private define ------------------------------------------------------------*/
 
-uint8_t USB_Rx_Buffer[VIRTUAL_COM_PORT_DATA_SIZE];
-
-void USBAdd(uint8_t* data, uint32_t size)
-{
-  uint32_t i;
-  if(USB_Tx_length+size>VIRTUAL_COM_PORT_DATA_SIZE)
-    size = VIRTUAL_COM_PORT_DATA_SIZE - USB_Tx_length;
-  for (i=0; i<size; i++)
-    USB_Tx_Buffer[USB_Tx_length++] = data[i];
-}
-
-void USBAddStr(char* data)
-{
-  USBAdd((uint8_t*)data, strlen(data));
-}
-
-void USBAdd8(uint8_t data)
-{
-  USBAdd((uint8_t*)&data, sizeof(data));
-}
-
-void USBAdd16(uint16_t data)
-{
-  USBAdd((uint8_t*)&data, sizeof(data));
-}
-
-void USBAdd32(uint32_t data)
-{
-  USBAdd((uint8_t*)&data, sizeof(data));
-}
-
-void USBSend(void)
-{
-  USB_SIL_Write(EP1_IN, USB_Tx_Buffer, USB_Tx_length);
-  //#ifndef USE_STM3210C_EVAL
-  SetEPTxValid(ENDP1); 
-  //#endif
-  USB_Tx_length = 0;
-}
+/* Interval between sending IN packets in frame number (1 frame = 1ms) */
+#define VCOMPORT_IN_FRAME_INTERVAL             5
+/* Private macro -------------------------------------------------------------*/
+/* Private variables ---------------------------------------------------------*/
+extern __IO uint32_t packet_sent;
+extern __IO uint32_t packet_receive;
+extern __IO uint8_t Receive_Buffer[64];
+uint32_t Receive_length;
+/* Private function prototypes -----------------------------------------------*/
+/* Private functions ---------------------------------------------------------*/
 
 /*******************************************************************************
 * Function Name  : EP1_IN_Callback
@@ -86,9 +56,10 @@ void USBSend(void)
 * Output         : None.
 * Return         : None.
 *******************************************************************************/
+
 void EP1_IN_Callback (void)
 {
-  //USBSend();
+  packet_sent = 1;
 }
 
 /*******************************************************************************
@@ -100,33 +71,10 @@ void EP1_IN_Callback (void)
 *******************************************************************************/
 void EP3_OUT_Callback(void)
 {
-  uint16_t USB_Rx_Cnt;
-  
-  /* Get the received data buffer and update the counter */
-  USB_Rx_Cnt = USB_SIL_Read(EP3_OUT, USB_Rx_Buffer);
-  
-  /* USB data will be immediately processed, this allow next USB traffic being 
-  NAKed till the end of the USART Xfer */
-  USBCommandReceive(USB_Rx_Buffer, USB_Rx_Cnt);
-
-//#ifndef STM32F10X_CL
-  /* Enable the receive of data on EP3 */
-  SetEPRxValid(ENDP3);
-//#endif /* STM32F10X_CL */
+  packet_receive = 1;
+  Receive_length = GetEPRxCount(ENDP3);
+  PMAToUserBufferCopy((unsigned char*)Receive_Buffer, ENDP3_RXADDR, Receive_length);
+  //DataReceive((uint8_t*)Receive_Buffer, Receive_length);
 }
 
-
-/*******************************************************************************
-* Function Name  : SOF_Callback / INTR_SOFINTR_Callback
-* Description    :
-* Input          : None.
-* Output         : None.
-* Return         : None.
-*******************************************************************************/
-#ifdef STM32F10X_CL
-void INTR_SOFINTR_Callback(void)
-#else
-void SOF_Callback(void)
-#endif /* STM32F10X_CL */
-{
-}
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

@@ -25,6 +25,7 @@ endif
 
 C_DEFINES+= -DSTM32L1XX_MD
 C_DEFINES+= -DHSE_VALUE=8000000
+C_DEFINES+= -std=c99
 
 #balmer compiler flags to remove unused functions
 C_FLAGS += -fdata-sections -ffunction-sections

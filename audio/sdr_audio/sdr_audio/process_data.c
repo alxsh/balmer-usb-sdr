@@ -146,8 +146,8 @@ float IQ_decoder(float I, float Q)
     
     uint32_t idx = freq_idx%FREQ_SAMPLES;
     
-    float out = I*freq_cos[idx] + Q*freq_sin[idx];//SSB Upper Side Band
-    //float out = I*freq_cos[idx] - Q*freq_sin[idx];//SSB Lower Side Band
+    //float out = I*freq_cos[idx] + Q*freq_sin[idx];//SSB Upper Side Band
+    float out = I*freq_cos[idx] - Q*freq_sin[idx];//SSB Lower Side Band
     
     freq_idx++;
     return out;

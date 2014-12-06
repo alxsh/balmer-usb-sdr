@@ -2,13 +2,13 @@
   ******************************************************************************
   * @file    usb_prop.c
   * @author  MCD Application Team
-  * @version V3.4.0
-  * @date    29-June-2012
+  * @version V4.0.0
+  * @date    21-January-2013
   * @brief   All processing related to Virtual Com Port Demo
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT 2013 STMicroelectronics</center></h2>
   *
   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
   * You may not use this file except in compliance with the License.
@@ -133,9 +133,6 @@ void Virtual_Com_Port_init(void)
   /* Perform basic device initialization operations */
   USB_SIL_Init();
 
-  /* configure the USART to the default settings */
-  //USART_Config_Default();
-
   bDeviceState = UNCONNECTED;
 }
 
@@ -156,19 +153,6 @@ void Virtual_Com_Port_Reset(void)
 
   /* Set Virtual_Com_Port DEVICE with the default Interface*/
   pInformation->Current_Interface = 0;
-
-#ifdef STM32F10X_CL     
-  /* EP0 is already configured by USB_SIL_Init() function */
-  
-  /* Init EP1 IN as Bulk endpoint */
-  OTG_DEV_EP_Init(EP1_IN, OTG_DEV_EP_TYPE_BULK, VIRTUAL_COM_PORT_DATA_SIZE);
-  
-  /* Init EP2 IN as Interrupt endpoint */
-  OTG_DEV_EP_Init(EP2_IN, OTG_DEV_EP_TYPE_INT, VIRTUAL_COM_PORT_INT_SIZE);
-
-  /* Init EP3 OUT as Bulk endpoint */
-  OTG_DEV_EP_Init(EP3_OUT, OTG_DEV_EP_TYPE_BULK, VIRTUAL_COM_PORT_DATA_SIZE);  
-#else 
 
   SetBTABLE(BTABLE_ADDRESS);
 
@@ -202,8 +186,7 @@ void Virtual_Com_Port_Reset(void)
 
   /* Set this device to response on default address */
   SetDeviceAddress(0);
-#endif /* STM32F10X_CL */
-
+  
   bDeviceState = ATTACHED;
 }
 
@@ -248,7 +231,6 @@ void Virtual_Com_Port_Status_In(void)
 {
   if (Request == SET_LINE_CODING)
   {
-    //USART_Config();
     Request = 0;
   }
 }
