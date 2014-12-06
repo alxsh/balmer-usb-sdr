@@ -2,13 +2,13 @@
   ******************************************************************************
   * @file    usb_desc.c
   * @author  MCD Application Team
-  * @version V3.4.0
-  * @date    29-June-2012
+  * @version V4.0.0
+  * @date    21-January-2013
   * @brief   Descriptors for Virtual Com Port Demo
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT 2013 STMicroelectronics</center></h2>
   *
   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
   * You may not use this file except in compliance with the License.
@@ -37,14 +37,14 @@ const uint8_t Virtual_Com_Port_DeviceDescriptor[] =
     USB_DEVICE_DESCRIPTOR_TYPE,     /* bDescriptorType */
     0x00,
     0x02,   /* bcdUSB = 2.00 */
-    0xFF, //0x02,   /* bDeviceClass: CDC */
+    0x02,   /* bDeviceClass: CDC */
     0x00,   /* bDeviceSubClass */
     0x00,   /* bDeviceProtocol */
     0x40,   /* bMaxPacketSize0 */
-    0xC0,
-    0x16,   /* idVendor = 0x16C0 */
-    0xDC,
-    0x05,   /* idProduct = 0x05DC */
+    0x83,
+    0x04,   /* idVendor = 0x0483 */
+    0x40,
+    0x57,   /* idProduct = 0x7540 */
     0x00,
     0x02,   /* bcdDevice = 2.00 */
     1,              /* Index of string descriptor describing manufacturer */
@@ -72,7 +72,7 @@ const uint8_t Virtual_Com_Port_ConfigDescriptor[] =
     0x00,   /* bInterfaceNumber: Number of Interface */
     0x00,   /* bAlternateSetting: Alternate setting */
     0x01,   /* bNumEndpoints: One endpoints used */
-    0x00, //0x02,   /* bInterfaceClass: Communication Interface Class */
+    0x02,   /* bInterfaceClass: Communication Interface Class */
     0x02,   /* bInterfaceSubClass: Abstract Control Model */
     0x01,   /* bInterfaceProtocol: Common AT commands */
     0x00,   /* iInterface: */
@@ -113,7 +113,7 @@ const uint8_t Virtual_Com_Port_ConfigDescriptor[] =
     0x01,   /* bInterfaceNumber: Number of Interface */
     0x00,   /* bAlternateSetting: Alternate setting */
     0x02,   /* bNumEndpoints: Two endpoints used */
-    0x00,//0x0A,   /* bInterfaceClass: CDC */
+    0x0A,   /* bInterfaceClass: CDC */
     0x00,   /* bInterfaceSubClass: */
     0x00,   /* bInterfaceProtocol: */
     0x00,   /* iInterface: */
@@ -168,7 +168,7 @@ uint8_t Virtual_Com_Port_StringSerial[VIRTUAL_COM_PORT_SIZ_STRING_SERIAL] =
   {
     VIRTUAL_COM_PORT_SIZ_STRING_SERIAL,           /* bLength */
     USB_STRING_DESCRIPTOR_TYPE,                   /* bDescriptorType */
-    'S', 0, 'T', 0, 'M', 0, '3', 0, '2', 0, '1', 0, '0', 0
+    'S', 0, 'T', 0, 'M', 0, '3', 0, '2', 0
   };
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

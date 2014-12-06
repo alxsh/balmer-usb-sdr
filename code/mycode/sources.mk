@@ -5,7 +5,8 @@
 
 DEPS += \
 	output/CMSIS/startup_stm32l1xx_md.d \
-	output/base/src/command.d \
+	output/base/src/commands.d \
+	output/base/src/data_process.d \
 	output/base/src/dds.d \
 	output/base/src/delay.d \
 	output/base/src/main.d \
@@ -45,7 +46,8 @@ DEPS += \
 
 OBJS += \
 	output/CMSIS/startup_stm32l1xx_md.o \
-	output/base/src/command.o \
+	output/base/src/commands.o \
+	output/base/src/data_process.o \
 	output/base/src/dds.o \
 	output/base/src/delay.o \
 	output/base/src/main.o \
@@ -87,8 +89,12 @@ output/CMSIS/startup_stm32l1xx_md.o: ../Libraries/CMSIS/Device/ST/STM32L1xx/Sour
 	@echo 'Building target: startup_stm32l1xx_md.S'
 	@$(CC) $(ASM_FLAGS) -o "$@" "$<"
 
-output/base/src/command.o: ./src/command.c
-	@echo 'Building target: command.c'
+output/base/src/commands.o: ./src/commands.c
+	@echo 'Building target: commands.c'
+	@$(CC) $(C_FLAGS) -o "$@" "$<"
+
+output/base/src/data_process.o: ./src/data_process.c
+	@echo 'Building target: data_process.c'
 	@$(CC) $(C_FLAGS) -o "$@" "$<"
 
 output/base/src/dds.o: ./src/dds.c

@@ -5,8 +5,14 @@
 #include "command.h"
 #include "delay.h"
 #include "dds.h"
+#include "data_process.h"
 
 RCC_ClocksTypeDef RCC_Clocks;
+
+extern __IO uint32_t packet_sent;
+extern __IO uint32_t packet_receive;
+extern __IO uint8_t Receive_Buffer[64];
+extern uint32_t Receive_length;
 
 /*******************************************************************************/
                                   
@@ -24,9 +30,31 @@ int main(void)
   UsbInitClockAndSystem();
   while(1)
   {
+    if (bDeviceState == CONFIGURED)
+    {
+      CDC_Receive_DATA();
+      //Check to see if we have data yet
+      if (Receive_length  != 0)
+      {
+        if (packet_sent == 1)
+        {
+          if(Receive_length>0)
+          {
+            DataReceive((uint8_t*)Receive_Buffer, Receive_length);
+          }
+        }
+        Receive_length = 0;
+      }
+    }
   }
 
 }
+
+void OnSetFreq(uint32_t freq)
+{
+    DdsSetFreq(freq*2);
+}
+
 
 #ifdef  USE_FULL_ASSERT
 

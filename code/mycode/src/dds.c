@@ -72,3 +72,10 @@ void DdsSetWord(uint32_t data)
 	DelayUs(DELAY_COUNT);
 	GPIO_ResetBits(DDS_GPIO, DDS_FQ_UD);
 }
+
+void DdsSetFreq(uint32_t freq)
+{
+	uint64_t CLKIN = 125000000; //125 МГц
+	uint32_t data = (uint32_t)((((uint64_t)freq)<<32)/CLKIN);
+	DdsSetWord(data);
+}

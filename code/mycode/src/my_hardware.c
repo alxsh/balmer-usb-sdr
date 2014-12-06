@@ -10,6 +10,10 @@
 /* Private variables ---------------------------------------------------------*/
 ErrorStatus HSEStartUpStatus;
 
+__IO uint32_t packet_sent=1;
+__IO uint32_t packet_receive=1;
+uint8_t Receive_Buffer[64];
+
 /* Extern variables ----------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
 void Set_USBClock(void);
@@ -234,4 +238,45 @@ void Get_SerialNum(void)
     IntToUnicode (Device_Serial0, &Virtual_Com_Port_StringSerial[2] , 8);
     IntToUnicode (Device_Serial1, &Virtual_Com_Port_StringSerial[18], 4);
   }
+}
+
+/*******************************************************************************
+* Function Name  : Send DATA .
+* Description    : send the data received from the STM32 to the PC through USB  
+* Input          : None.
+* Output         : None.
+* Return         : None.
+*******************************************************************************/
+uint32_t CDC_Send_DATA (uint8_t *ptrBuffer, uint8_t Send_length)
+{
+  /*if max buffer is Not reached*/
+  if(Send_length < VIRTUAL_COM_PORT_DATA_SIZE)     
+  {
+    /*Sent flag*/
+    packet_sent = 0;
+    /* send  packet to PMA*/
+    UserToPMABufferCopy((unsigned char*)ptrBuffer, ENDP1_TXADDR, Send_length);
+    SetEPTxCount(ENDP1, Send_length);
+    SetEPTxValid(ENDP1);
+  }
+  else
+  {
+    return 0;
+  } 
+  return 1;
+}
+
+/*******************************************************************************
+* Function Name  : Receive DATA .
+* Description    : receive the data from the PC to STM32 and send it through USB
+* Input          : None.
+* Output         : None.
+* Return         : None.
+*******************************************************************************/
+uint32_t CDC_Receive_DATA(void)
+{ 
+  /*Receive flag*/
+  packet_receive = 0;
+  SetEPRxValid(ENDP3); 
+  return 1 ;
 }
