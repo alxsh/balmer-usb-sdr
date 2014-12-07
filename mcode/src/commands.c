@@ -2,8 +2,10 @@
 #include "data_process.h"
 #include "ili/UTFT.h"
 #include "spi_data_process.h"
+#include "../../4code/inc/spi_commands.h"
 
 void OnSetFreq(uint32_t freq);
+void OnSideBand(uint8_t usb);
 
 uint16_t g_spi_sended = 0;
 uint16_t g_spi_retry = 0;
@@ -38,6 +40,10 @@ void PacketReceive(volatile uint8_t* data, uint32_t size)
 		return;
 	case 3://COMMAND_SET_FREQ
 		OnSetFreq(*(uint32_t*)(data+0));
+		return;
+
+	case 4://COMMAND_SIDE_BAND
+		OnSideBand(data[0]);
 		return;
 
 	case 0://COMMAND_NONE

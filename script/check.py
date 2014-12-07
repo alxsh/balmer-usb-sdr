@@ -26,7 +26,7 @@ def check_sc():
 		print sin(a)*cos(b) - 0.5*(sin(a+b)+sin(a-b))
 
 
-def round_f(fdisc, frun, qmax):
+def round_f(fdisc, fmin, fmax, qmax):
 	'''
 	Ищем по возможности круглое число
 	fdisc - частота дискретизации
@@ -35,16 +35,19 @@ def round_f(fdisc, frun, qmax):
 	delta_min = 100
 	imin = 1
 	period_disc = 1.0/fdisc
-	period_run = 1.0/frun
-	for i in xrange(1, qmax):
-		period_cur = period_disc*i
-		cur_min = (period_cur%period_run)/period_run
-		if cur_min<delta_min:
-			delta_min = cur_min
-			imin = i
-			print "imin=", imin, "delta_min=",delta_min
+
+	for frun in xrange(fmin, fmax+1):
+		period_run = 1.0/frun
+		for i in xrange(1, qmax):
+			period_cur = period_disc*i
+			cur_min = (period_cur%period_run)/period_run
+			if cur_min<delta_min:
+				delta_min = cur_min
+				imin = i
+				print "frun=", frun, "imin=", imin, "delta_min=",delta_min
 
 	pass
 
 #check_sc()
-round_f(48000, 9800, 10000)
+#round_f(48000, 9800, 9800, 10000)
+round_f(48000, 9760, 9999, 1000)

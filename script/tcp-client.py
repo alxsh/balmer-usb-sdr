@@ -1,6 +1,12 @@
 #!/usr/bin/python
 import socket, sys
-import usb_commands
+
+use_com_port = True
+if use_com_port:
+	import d.display_commands
+else:
+	import usb_commands
+
 
 # AA7AS - SdrDx sample TCP client
 
@@ -31,7 +37,10 @@ def process(content):
 	elif cmd == 'freq':          # catch change in center frequency
 		freq = float(data)
 		print "freq=", freq
-		usb_commands.setFreq(freq*2)
+		if use_com_port:
+			d.display_commands.command_freq(freq)
+		else:
+			usb_commands.setFreq(freq*2)
 
 	return 1 # keep going         # otherwise, don't exit
 
@@ -87,8 +96,12 @@ s.send("poll:0"+chr(0)) # ask SdrDx for freq, mode
 #
 # You should not need to change the code below here
 # ------------------------------------------------------------
-if not usb_commands.findDevice():
-    sys.exit(0)
+if use_com_port:
+	if not d.display_commands.connect():
+		sys.exit(0)
+else:
+	if not usb_commands.findDevice():
+		sys.exit(0)
 
 
 data = ''
