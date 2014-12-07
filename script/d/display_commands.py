@@ -9,6 +9,7 @@ COMMAND_NONE = 0
 COMMAND_PRINT_INT = 1
 COMMAND_SEND_SPI = 2
 COMMAND_SET_FREQ = 3
+COMMAND_SIDE_BAND = 4
 
 def connect():
 	if not serial_protocol.connect():
@@ -42,6 +43,16 @@ def command_spi_send(data):
 def command_freq(freq):
 	command(COMMAND_SET_FREQ, struct.pack("=I", freq))
 	return;
+
+def command_side_band(upper_side_band):
+	if upper_side_band:
+		ub = 1
+	else:
+		ub = 0
+	print "usb=", ub
+	command(COMMAND_SIDE_BAND, struct.pack("=B", ub))
+	return;
+
 
 def main():
 	if not connect():

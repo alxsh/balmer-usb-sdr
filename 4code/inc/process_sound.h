@@ -1,7 +1,8 @@
 #define FFT_LENGTH 1024
+//#define FFT_LENGTH 256
 
 
-void OnSoundData(int32_t sample);
+void OnSoundData(int32_t sampleQ, int32_t sampleI);
 void SoundQuant();
 
 void InitFft();

@@ -1,6 +1,7 @@
 #include "dac.h"
 #include "cs4272.h"
 #include "process_sound.h"
+#include "process_data.h"
 #include "arm_math.h"
 #include "delay.h"
 
@@ -21,7 +22,7 @@ static uint32_t summary_dac_samples = 0;
 static uint16_t adc_cur_pos_momental = 0;
 static uint16_t dac_cur_pos_momental = 0;
 
-void OnSoundDataFft(int32_t sample);
+void OnSoundDataFft(int32_t sampleQ, int32_t sampleI);
 
 void UpdateSummarySamples(uint16_t adc_pos);
 
@@ -69,10 +70,26 @@ void DacCorrectWritePos()
 
 }
 
-void OnSoundData(int32_t sample)
+void OnSoundData(int32_t sampleQ, int32_t sampleI)
 {
 	uint16_t* out_buffer = DacGetBuffer();
-	int s = (sample>>(14))+DAC_ZERO;;
+
+	int s;
+	if(0)
+	{
+		s = (sampleQ>>(14))+DAC_ZERO;
+	} else
+	{
+		float fI = sampleI;
+		float fQ = sampleQ;
+		//float mul = 1e-5f;
+		float mul = 2e-5f;
+		float f = IQ_decoder(fI*mul, fQ*mul);
+		s = lround(f)+DAC_ZERO;
+		//s = lround(sampleQ*6e-5f)+DAC_ZERO;
+	}
+
+
 	if(s<0)
 		s = 0;
 	if(s>4095)
@@ -81,7 +98,7 @@ void OnSoundData(int32_t sample)
 
 	g_cur_pos = (g_cur_pos+1)%DAC_BUFFER_SIZE;
 
-	OnSoundDataFft(sample);
+	OnSoundDataFft(sampleQ, sampleI);
 }
 
 void CopySoundData(uint16_t start, uint16_t count)
@@ -89,8 +106,9 @@ void CopySoundData(uint16_t start, uint16_t count)
 	uint16_t* data4 = sound_buffer+start;
 	for(int idx=0; idx<count; idx+=4, data4+=4)
 	{
-		int32_t sample = (((int32_t)data4[0])<<16)+data4[1];
-		OnSoundData(sample);
+		int32_t sampleQ = (((int32_t)data4[0])<<16)+data4[1];
+		int32_t sampleI = (((int32_t)data4[2])<<16)+data4[3];
+		OnSoundData(sampleQ, sampleI);
 	}
 }
 

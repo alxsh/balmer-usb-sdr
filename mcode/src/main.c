@@ -29,6 +29,8 @@ extern uint8_t last_command;
 extern uint8_t last_receive_length;
 extern uint32_t last_receive_data;
 
+bool side_band_changed = false;
+uint8_t upper_side_band = 1;
 
 void printCmd();
 
@@ -101,7 +103,16 @@ int main(void)
         UTFT_printNumI(i*3, 40, 240, 0, ' ');
         */
         DelayMs(100);
-        SpiSendCommand(SCOMMAND_SOUND_BUF_DELTA);
+
+        if(side_band_changed)
+        {
+          side_band_changed = false;
+          SpiAdd8(upper_side_band);
+          SpiSendCommand(SCOMMAND_SIDE_BAND);
+        } else
+        {
+          SpiSendCommand(SCOMMAND_SOUND_BUF_DELTA);
+        }
     }
 }
 
@@ -113,6 +124,12 @@ void OnSetFreq(uint32_t freq)
     UTFT_printNumI(freq/1000, 16*2, 16*y, 5, ' ');
     UTFT_print("KHz", 16*8, 16*y, 0);
     DdsSetFreq(freq*2);
+}
+
+void OnSideBand(uint8_t usb)
+{
+  side_band_changed = true;
+  upper_side_band = usb;
 }
 
 

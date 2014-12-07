@@ -31,7 +31,7 @@ class FormMain(QtGui.QMainWindow):
 		self.serial_combo_box.addItem('980')
 		self.serial_combo_box.addItem('3592')
 		self.serial_combo_box.addItem('5322')
-		self.serial_combo_box.addItem('3980') #test
+		self.serial_combo_box.addItem('9590') #test
 		self.serial_combo_box.addItem('7117')
 		self.serial_combo_box.addItem('10092')
 		#self.serial_combo_box.addItem('14142')
@@ -70,6 +70,12 @@ class FormMain(QtGui.QMainWindow):
 		hbox.addWidget(self.freq_slider_low)
 
 		vbox.addLayout(hbox)
+
+		self.checkBoxonUpperSideBand = QtGui.QCheckBox(u'Upper Side Band')
+		self.checkBoxonUpperSideBand.clicked.connect(self.OnUpperSideBand)
+		vbox.addWidget(self.checkBoxonUpperSideBand)
+		display_commands.command_side_band(False)
+
 
 		button_close = QtGui.QPushButton(u'Закончить.')
 		button_close.clicked.connect(self.close)
@@ -116,6 +122,11 @@ class FormMain(QtGui.QMainWindow):
 	def OnSliderReleased(self):
 		index = self.freq_slider.value()
 		self.UpdateFreq()
+		pass
+
+	def OnUpperSideBand(self):
+		upper = self.checkBoxonUpperSideBand.isChecked()
+		display_commands.command_side_band(upper)
 		pass
 
 	def closeEvent(self, event):

@@ -2,11 +2,10 @@
 //  process_data.c
 //  sdr_audio
 //
-//  Created by Apple on 05.09.14.
-//  Copyright (c) 2014 Apple. All rights reserved.
+//  Created by balmer@inbox.ru on 05.09.14.
+//  Copyright (c) 2014 balmer@inbox.ru. All rights reserved.
 //
 
-#include <stdio.h>
 #include <math.h>
 
 #include "process_data.h"
@@ -19,9 +18,10 @@
 #define FREQ_SAMPLES 480
 
 float lastMax[LAST_MAX_SIZE];
-float freq_sin[FREQ_SAMPLES];
-float freq_cos[FREQ_SAMPLES];
-uint32_t freq_idx = 0;
+static float freq_sin[FREQ_SAMPLES];
+static float freq_cos[FREQ_SAMPLES];
+static uint32_t freq_idx = 0;
+bool upper_side_band = true;
 
 IirData data_I;
 IirData data_Q;
@@ -118,22 +118,17 @@ void processData(float* sampleBlockInput, float* sampleBlockOutput, int frames)
     
     outDelta = sqrt(outDelta)/frames;
     
-    if((quant_idx++%100)==0)
-    {
-        printf("mul=%e, max=%e , mid=%e delta=%e\n", mul, outMax/mul, outMid/mul, outDelta/mul);
-        //printf("max=%e\n" ,curMax);
-    }
-
     pushLastMax(curMax);
 }
 
 void IQ_decoder_init()
 {
-    double df = (2*M_PI*FREQ)/SAMPLE_RATE;
+    freq_idx = 0;
+    float df = (2*M_PI*FREQ)/SAMPLE_RATE;
     for(int i=0; i<FREQ_SAMPLES; i++)
     {
-        freq_sin[i] = sin(df*i);
-        freq_cos[i] = cos(df*i);
+        freq_sin[i] = sinf(df*i);
+        freq_cos[i] = cosf(df*i);
     }
     iirInit(&data_I);
     iirInit(&data_Q);
@@ -141,16 +136,24 @@ void IQ_decoder_init()
 
 float IQ_decoder(float I, float Q)
 {
-//    return I;
+    //return I*1.1f+Q*1.2f;
     I = iir(I, &data_I);
     Q = iir(Q, &data_Q);
+    //return Q;
     
     uint32_t idx = freq_idx%FREQ_SAMPLES;
     
-    float out = I*freq_cos[idx] + Q*freq_sin[idx];//SSB Upper Side Band
-    //float out = I*freq_cos[idx] - Q*freq_sin[idx];//SSB Lower Side Band
+    float out;
+    if(upper_side_band)
+        out = I*freq_cos[idx] + Q*freq_sin[idx];//SSB Upper Side Band
+    else
+        out = I*freq_cos[idx] - Q*freq_sin[idx];//SSB Lower Side Band
     
     freq_idx++;
     return out;
 }
 
+void setUpperSideBand(bool usb)
+{
+    upper_side_band = usb;
+}

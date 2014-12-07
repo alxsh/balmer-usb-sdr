@@ -5,10 +5,12 @@
 
 DEPS += \
 	output/CMSIS/startup_stm32f4xx.d \
+	output/base/src/chebyshev_10KHz.d \
 	output/base/src/cs4272.d \
 	output/base/src/dac.d \
 	output/base/src/delay.d \
 	output/base/src/main.d \
+	output/base/src/process_data.d \
 	output/base/src/process_fft.d \
 	output/base/src/process_sound.d \
 	output/base/src/spi.d \
@@ -36,10 +38,12 @@ DEPS += \
 
 OBJS += \
 	output/CMSIS/startup_stm32f4xx.o \
+	output/base/src/chebyshev_10KHz.o \
 	output/base/src/cs4272.o \
 	output/base/src/dac.o \
 	output/base/src/delay.o \
 	output/base/src/main.o \
+	output/base/src/process_data.o \
 	output/base/src/process_fft.o \
 	output/base/src/process_sound.o \
 	output/base/src/spi.o \
@@ -69,6 +73,10 @@ output/CMSIS/startup_stm32f4xx.o: ../../SoundCard/code/Libraries/CMSIS/ST/STM32F
 	@echo 'Building target: startup_stm32f4xx.S'
 	@$(CC) $(ASM_FLAGS) -o "$@" "$<"
 
+output/base/src/chebyshev_10KHz.o: ./src/chebyshev_10KHz.c
+	@echo 'Building target: chebyshev_10KHz.c'
+	@$(CC) $(C_FLAGS) -o "$@" "$<"
+
 output/base/src/cs4272.o: ./src/cs4272.c
 	@echo 'Building target: cs4272.c'
 	@$(CC) $(C_FLAGS) -o "$@" "$<"
@@ -83,6 +91,10 @@ output/base/src/delay.o: ./src/delay.c
 
 output/base/src/main.o: ./src/main.c
 	@echo 'Building target: main.c'
+	@$(CC) $(C_FLAGS) -o "$@" "$<"
+
+output/base/src/process_data.o: ./src/process_data.c
+	@echo 'Building target: process_data.c'
 	@$(CC) $(C_FLAGS) -o "$@" "$<"
 
 output/base/src/process_fft.o: ./src/process_fft.c

@@ -22,11 +22,11 @@ uint16_t fft_to_display[FFT_LENGTH];
 
 void CalculateFft();
 
-void OnSoundDataFft(int32_t sample)
+void OnSoundDataFft(int32_t sampleQ, int32_t sampleI)
 {
 	if(in_fft_cur_pos<FFT_LENGTH)
 	{
-		in_fft_buffer32[in_fft_cur_pos] = (sample>>8);
+		in_fft_buffer32[in_fft_cur_pos] = (sampleQ>>8);
 		in_fft_cur_pos++;
 	}
 }

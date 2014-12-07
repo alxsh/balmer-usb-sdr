@@ -5,6 +5,7 @@
 #include "cs4272.h"
 #include "spi_data_process.h"
 #include "process_sound.h"
+#include "process_data.h"
 
 RCC_ClocksTypeDef RCC_Clocks;
 extern int32_t g_fft_min;
@@ -19,6 +20,7 @@ int main(void)
   InitFft();
   SpiInit();
   DacInit();
+  processDataInit();
   g_fft_min = cs4272_Init();
 
   //DacSetPeriod(48, 600);

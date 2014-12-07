@@ -330,8 +330,9 @@ void OnSoundReceive()
 		data4[x4count++] = app;
 		if(x4count==4)
 		{
-			int32_t sample = (((int32_t)data4[0])<<16)+data4[1];
-			OnSoundData(sample);
+			int32_t sampleQ = (((int32_t)data4[0])<<16)+data4[1];
+			int32_t sampleI = (((int32_t)data4[2])<<16)+data4[3];
+			OnSoundData(sampleQ, sampleI);
 			x4count = 0;
 		}
 	}
