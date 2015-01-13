@@ -32,7 +32,8 @@ class FormMain(QtGui.QMainWindow):
 		self.serial_combo_box.addItem('3592')
 		self.serial_combo_box.addItem('5322')
 		self.serial_combo_box.addItem('9590') #test
-		self.serial_combo_box.addItem('7117')
+		self.serial_combo_box.addItem('7100')
+		#self.serial_combo_box.addItem('7117')
 		self.serial_combo_box.addItem('10092')
 		#self.serial_combo_box.addItem('14142')
 		self.serial_combo_box.addItem('14130')
@@ -52,7 +53,7 @@ class FormMain(QtGui.QMainWindow):
 		self.freq_slider.setMinimumWidth(512)
 		self.freq_slider.valueChanged.connect(self.OnSliderValueChanged)
 		self.freq_slider.sliderReleased.connect(self.OnSliderReleased)
-		self.freq_slider.setRange (0, 100)
+		self.freq_slider.setRange (0, 200)
 		hbox.addWidget(self.freq_slider)
 
 		vbox.addLayout(hbox)
@@ -92,15 +93,17 @@ class FormMain(QtGui.QMainWindow):
 		F = int(self.serial_combo_box.currentText())*1000
 		F += index1KHz*1000
 		F += index10Hz*10
-		#Fcor = +9800
-		Fcor = 0
+		Fcor = 9900
 
 		if self.F>0 and self.F==F:
 			return
+
+		if self.checkBoxonUpperSideBand.isChecked():
+			Fcor = -Fcor
+
 		self.freq_label.setText(str(int(F))+' Hz');
 		print "freq=", F
-		#usb_commands.setFreq((F-Fcor)*2)
-		display_commands.command_freq(F)
+		display_commands.command_freq(F + Fcor)
 
 		self.F = F
 		pass
@@ -127,6 +130,7 @@ class FormMain(QtGui.QMainWindow):
 	def OnUpperSideBand(self):
 		upper = self.checkBoxonUpperSideBand.isChecked()
 		display_commands.command_side_band(upper)
+		self.UpdateFreq()
 		pass
 
 	def closeEvent(self, event):
