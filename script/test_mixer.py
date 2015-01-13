@@ -145,15 +145,15 @@ def myplot(xdata, ydata):
 
 def test0():
 	sg = SinGen(1000)
-	mx = Mixer(SinGen(1100))
-	#mx = Mixer2(SquareGen(1100))
+	#mx = Mixer(SinGen(1100))
+	mx = Mixer2(SquareGen(1100, fill=0.25))
 	f5 = Filter5KHz()
 	#sg = SquareGen(1, 0, 0.3)
 	timedata = []
 	ydata = []
 	for itime in xrange(600):
 		time = itime*1e-5
-		xin = sg.go(time)
+		xin = 1 #sg.go(time)
 		y = mx.go(time, xin)
 		#y = f5.iir(xin)
 
@@ -168,11 +168,15 @@ def test1():
 	Потом применяем к нему миксер, пропускаем через Filter20KHz
 	Берем каждый сотый сэмпл. Получаем сигнал с квантизацией 100 КГц
 	'''
-	sg = SinGen(500e3)
-	#mx = Mixer(SinGen(501.2e3))
-	mx = Mixer2(SquareGen(501.2e3))
+	freq = 250e3
+	sg = SinGen(freq*5+1.2e3, phase=0.25)
+	mx = Mixer(SinGen(freq))
+	#mx = Mixer2(SquareGen(freq))
+	#mx = Mixer2(SquareGen(freq, fill=0.25))
+	
 	dt = 1e-7 #10 MHz
 	f20 = Filter20KHz()
+	f5 = Filter5KHz()
 	i100 = 0
 	timedata = []
 	ydata = []
@@ -187,6 +191,8 @@ def test1():
 		i100 += 1
 		if i100>=100:
 			i100 = 0
+
+			y = f5.iir(y)
 			timedata.append(time)
 			ydata.append(y)
 		pass
