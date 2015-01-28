@@ -15931,6 +15931,7 @@ Source: 008-0260-0_E.pdf</description>
 <part name="R5" library="rcl" deviceset="R-EU_" device="R0603" value="33"/>
 <part name="R6" library="rcl" deviceset="R-EU_" device="R0603" value="33"/>
 <part name="R7" library="rcl" deviceset="R-EU_" device="R0603" value="33"/>
+<part name="+3V1" library="supply1" deviceset="+3V3" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -16043,6 +16044,7 @@ Source: 008-0260-0_E.pdf</description>
 <instance part="R5" gate="G$1" x="-27.94" y="5.08"/>
 <instance part="R6" gate="G$1" x="-22.86" y="0"/>
 <instance part="R7" gate="G$1" x="-27.94" y="-5.08"/>
+<instance part="+3V1" gate="G$1" x="15.24" y="45.72"/>
 </instances>
 <busses>
 </busses>
@@ -16224,6 +16226,12 @@ Source: 008-0260-0_E.pdf</description>
 <pinref part="R8" gate="G$1" pin="1"/>
 <wire x1="114.3" y1="-7.62" x2="114.3" y2="-2.54" width="0.1524" layer="91"/>
 <junction x="114.3" y="-2.54"/>
+</segment>
+<segment>
+<pinref part="IC3" gate="PORTA_H" pin="PA12"/>
+<wire x1="25.4" y1="40.64" x2="15.24" y2="40.64" width="0.1524" layer="91"/>
+<wire x1="15.24" y1="40.64" x2="15.24" y2="43.18" width="0.1524" layer="91"/>
+<pinref part="+3V1" gate="G$1" pin="+3V3"/>
 </segment>
 </net>
 <net name="N$1" class="0">
